@@ -10,7 +10,7 @@
 </head>
 <body>
 	
-		<h3>All Products</h3>
+	 <h3>MyCart</h3>
 		<div class="container">
 		 	<table  class="table">
 				<thead>
@@ -27,7 +27,7 @@
 						<tr>
 							<td>${prod.name}</td>
 							<td>${prod.description}</td>	
-							<td><input type="number" min="1" max="5" class="form-control" id="prod_${prod.product_id}" placeholder="190" name="password" value = 0></td>														
+							<td><input type="number" min="1" max="5" class="form-control" id="prod_${prod.product_id}" placeholder="190" name="password" value = ${prod.quantity}></td>														
 							<td>${prod.price}</td>
 							<td><span onclick="addToCart(${prod.product_id})" type="button" class="btn btn-warning">Delete	</span></td> 		
 						</tr>
@@ -36,6 +36,7 @@
 				</tbody>
 			</table>
 		</div>	
+		<a href="/placeOrder">Place Order</a>
 	
 	
 	<script src="webjars/jquery/3.4.1/jquery.min.js"></script>

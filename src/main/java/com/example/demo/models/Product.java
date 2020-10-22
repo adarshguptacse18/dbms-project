@@ -12,6 +12,9 @@ public class Product {
     private String description;
     private int price;
     private int category_id;
+    private int quantity=0;
+    private double rating;
+    private int purchased_cnt;
 	public int getProduct_id() {
 		return product_id;
 	}
@@ -46,6 +49,24 @@ public class Product {
 	public String toString() {
 		return "Product [product_id=" + product_id + ", name=" + name + ", description=" + description + ", price="
 				+ price + ", category_id=" + category_id + "]";
+	}
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	public double getRating() {
+		return rating;
+	}
+	public void setRating(double rating) {
+		this.rating = rating;
+	}
+	public int getPurchased_cnt() {
+		return purchased_cnt;
+	}
+	public void setPurchased_cnt(int purchased_cnt) {
+		this.purchased_cnt = purchased_cnt;
 	}
 	
     

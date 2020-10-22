@@ -34,6 +34,9 @@ public class ProductDao {
                 u.setCategory_id(row.getInt("category_id"));
                 u.setDescription(row.getString("description"));
                 u.setPrice(row.getInt("price"));
+                u.setQuantity(row.getInt("quantity"));
+                u.setRating(row.getDouble("rating"));
+                u.setPurchased_cnt(row.getInt("purchased_cnt"));
                 return u;
             }
         });
@@ -74,15 +77,28 @@ public class ProductDao {
         jt.update(sql, name, price, quantity, category_id, id);
     }
 
-    public void updateProductquantity(int id, int quantity) {
+    public void setProductquantity(int id, int quantity) {
         String sql = "update product set quantity=? where product_id=?";
         jt.update(sql, quantity, id);
     }
-
+    public void updateProductquantity(int id, int quantity) {
+        String sql = "update product set quantity = quantity + ? where product_id=?";
+        jt.update(sql, quantity, id);
+    }
+    
     public void deleteproduct(int id) {
         String sql = "delete from product where product_id=?";
         jt.update(sql, id);
     }
+    public void updateProductRating(int old_rating,int new_rating,int product_id) {
+    	Product p = getproductbyId(product_id);
+    	double updated_rating = p.getRating() * p.getPurchased_cnt() -old_rating + new_rating;
+    	if(old_rating == 0) {
+    		p.setPurchased_cnt(p.getPurchased_cnt()+1);
+    	}
+    	updated_rating /= p.getPurchased_cnt();
+    	jt.update("update product set rating = ? , purchased_cnt = ? where product_id = ?",updated_rating,p.getPurchased_cnt(),product_id);               
+     }
    
 
 }
