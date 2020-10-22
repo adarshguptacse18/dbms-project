@@ -9,6 +9,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -108,9 +109,14 @@ public class Ordersdao {
     	String sql = "insert into review (product_id,customer_id,message) value (?,?,?)";
     	jt.update(sql,r.getProduct_id(),r.getCustomer_id(),r.getMessage());
     }
+    public void updateReview(Review r) {
+    	String sql = "update review set message = ? where customer_id = ? and product_id = ?";
+    	jt.update(sql,r.getMessage(),r.getCustomer_id(),r.getProduct_id());
+    }
     public void updateRating(int order_id,int product_id,int rating) {
-    	Review r = jt.queryForObject("select * from review where product_id = ? and order_id = ?", Review.class,product_id);
-    	jt.update("update review set rating = ? where order_id = ? and product_id = ?",rating,order_id,product_id);
+    	Review r= jt.queryForObject("select * from order_items where product_id = ? and order_id = ?", new Object[]{product_id,order_id},new BeanPropertyRowMapper<Review>(Review.class));
+    	System.out.println(r);
+    	jt.update("update order_items set rating = ? where order_id = ? and product_id = ?",rating,order_id,product_id);
     	productdao.updateProductRating(r.getRating(), rating, product_id);
     	
     }

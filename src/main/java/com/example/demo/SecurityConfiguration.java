@@ -33,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/user","/addToCart").hasAnyRole("ADMIN","USER","VENDOR")
 			.antMatchers("/vendor").hasAnyRole("ADMIN","VENDOR")
 			.antMatchers("/").permitAll()
-			.and().formLogin();
+			.and().formLogin().loginPage("/login");
 	}
 	
 	@Bean

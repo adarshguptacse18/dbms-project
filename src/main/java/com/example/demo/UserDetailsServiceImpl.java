@@ -31,12 +31,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         grantList.add(authority);
         System.out.println(user.getPassword());
         return new MyUserDetails(user.getId(), user.getUsername(), user.getPassword(), grantList);
-//    	return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),grantList);
-
-//        UserDetails userDetails = (UserDetails) new org.springframework.security.core.userdetails.User(
-//                user.getUsername(), user.getPassword(), grantList);
-//
-//        return userDetails;
     }
 
 }

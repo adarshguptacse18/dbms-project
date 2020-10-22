@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.dao.CartDao;
 import com.example.demo.dao.CustomerDao;
@@ -26,9 +24,11 @@ import com.example.demo.dao.ProductDao;
 import com.example.demo.dao.TransactionDao;
 import com.example.demo.dao.Userdao;
 import com.example.demo.models.Address;
+import com.example.demo.models.Category;
 import com.example.demo.models.MyUserDetails;
 import com.example.demo.models.Orders;
 import com.example.demo.models.Product;
+import com.example.demo.models.Review;
 import com.example.demo.models.Transaction;
 import com.example.demo.models.User;
 
@@ -39,9 +39,6 @@ public class HomeController {
 	
 	@Autowired
 	ProductDao productdao;
-	
-	@Autowired
-	CustomerDao customerdao;
 	
 	@Autowired
 	CartDao cartdao;
@@ -64,7 +61,6 @@ public class HomeController {
 	public int getCustomerId() {
 		return ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 	}
-	
 	@GetMapping("/user")
 	@ResponseBody
 	public String user(Principal p) {
@@ -108,7 +104,7 @@ public class HomeController {
 		user.setRole("ROLE_USER");
 		userdao.save(user.getUsername(), user.getPassword(), user.getRole());
 		user= userdao.findByUsername(user.getUsername());
-		customerdao.save(user.getId(), 1234);
+		custdao.save(user.getId(), 1234);
 		return "redirect:/";
 	}
 	@PostMapping("/registerVendor")
@@ -147,21 +143,21 @@ public class HomeController {
 	@GetMapping("/addToCart")
 	@ResponseBody
 	public String addToCart(@RequestParam("product_id") int product_id,Principal p,@RequestParam("quantity") int quantity) {
-		int cart_id = customerdao.getCartId(getCustomerId());
+		int cart_id = custdao.getCartId(getCustomerId());
 		cartdao.save(cart_id, product_id, quantity);
 		return "Product Added" + cart_id;
 	}
 	
 //	@GetMapping("/myCart")
 //	public String showMyCart(ModelMap map) {
-//		List<Product> prods = cartdao.getProducts(customerdao.getCartId(((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()));
+//		List<Product> prods = cartdao.getProducts(custdao.getCartId(((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()));
 //		map.addAttribute("prods",prods);
 //		return "myCart";
 //	}
 	@GetMapping("/myCart")
 	@ResponseBody
 	public List<Product> showMyCart(ModelMap map) {
-		List<Product> prods = cartdao.getProducts(customerdao.getCartId(((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()));
+		List<Product> prods = cartdao.getProducts(custdao.getCartId(((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()));
 //		map.addAttribute("prods",prods);
 //		return "myCart";
 		return prods;
@@ -183,7 +179,7 @@ public class HomeController {
 	@GetMapping("/payment")
 	public String payment(ModelMap model,int address_id, Principal principal) {
 		 List<Product> err_products = new ArrayList<Product>();
-			List<Product> prods = cartdao.getProducts(customerdao.getCartId(((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()));
+			List<Product> prods = cartdao.getProducts(custdao.getCartId(((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()));
 	        Double price = 0.0;
 	        for(Product p: prods) {
 	                    int product_id = p.getProduct_id();
@@ -204,7 +200,7 @@ public class HomeController {
 	       Orders o = new Orders();
 	       o.setProds(prods);
 	       o.setAmount(price);
-	       Address a = customerdao.getAddressById(address_id);
+	       Address a = custdao.getAddressById(address_id);
 	       o.setHouse_no(a.getHouse_no());
 	       o.setStreet_no(a.getStreet_no());
 	       o.setLocality_and_city(a.getLocality_and_city());
@@ -254,13 +250,55 @@ public class HomeController {
 		return o.toString();
 	}
 		
-	@RequestMapping(value = "/addfeedback/{order_id}", method = RequestMethod.GET)
-    public ModelAndView addfeedback(Principal principal, @PathVariable("order_id") int order_id) {
-        ModelAndView model = new ModelAndView("feedback");
-//        Feedback feedback = new Feedback();
-//        feedback.setOrder_id(order_id);
-//        model.addObject("feedback", feedback);
-        return model;
+	@PostMapping("/addReview/{product_id}")
+	@ResponseBody	
+    public String addReview(Principal principal, @PathVariable("product_id") int product_id,String message) {
+		Review r = new Review();
+		r.setCustomer_id(getCustomerId());
+		r.setMessage(message);
+		r.setProduct_id(product_id);
+		ordersdao.saveReview(r);
+		return "review added";
+    }
+	@PostMapping("/updateReview/{product_id}")
+	@ResponseBody	
+    public String updateReview(Principal principal, @PathVariable("product_id") int product_id,String message) {
+		Review r = new Review();
+		r.setCustomer_id(getCustomerId());
+		r.setMessage(message);
+		r.setProduct_id(product_id);
+		ordersdao.updateReview(r);
+		return "review updated";
     }
 	
+	@PostMapping("/rateOrder/{order_id}/{product_id}")
+	@ResponseBody
+	public String rateProduct(@PathVariable("order_id") int order_id, @PathVariable("product_id") int product_id,int rating) {
+		ordersdao.updateRating(order_id, product_id, rating);
+		return "updated";
+	}
+	
+	@PostMapping("/addCategory")
+	@ResponseBody
+	public String rateProduct(@RequestParam("category_name")String category_name) {
+		productdao.addCategory(category_name);
+		return "Category Added";	
+	}
+	
+	@GetMapping("/getAllCategories")
+	@ResponseBody
+	public List<Category> getAllCategories() {
+		return productdao.showAllCategory();
+	}
+	
+	@GetMapping("/login")
+	public String login(ModelMap model,String error,String logout) {
+		if(error!=null) {
+			model.addAttribute("error", "Invalid Credentials");
+		}
+		if(logout!=null) {
+			model.addAttribute("logout", "You have been logged out successfully");
+		}
+		return "login";
+	}
 }

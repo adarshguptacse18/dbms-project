@@ -7,11 +7,14 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.models.Category;
 import com.example.demo.models.Product;
+import com.example.demo.models.Review;
 
 @Transactional
 @Repository
@@ -99,6 +102,14 @@ public class ProductDao {
     	updated_rating /= p.getPurchased_cnt();
     	jt.update("update product set rating = ? , purchased_cnt = ? where product_id = ?",updated_rating,p.getPurchased_cnt(),product_id);               
      }
-   
+    
+    public void addCategory(String name) {
+    	jt.update("insert into category (category_name) value (?) ",name );
+    }
+    public List<Category> showAllCategory() {
+//    	List<Category> category = jt.queryForList("select * from category",new BeanPropertyRowMapper<Category>(Category.class)) 
+    	List<Category> r= jt.query("select * from category",new BeanPropertyRowMapper<Category>(Category.class));
+    	return r;
+    }
 
 }
