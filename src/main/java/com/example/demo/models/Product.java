@@ -1,11 +1,5 @@
 package com.example.demo.models;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
 public class Product {
 	private int product_id;
     private String name;

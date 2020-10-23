@@ -25,7 +25,7 @@
 						    </div>
 					</c:if>
 					<c:if test="${not empty logout}">
-							<div class="alert alert-danger alert-dismissible fade show">
+							 <div class="alert alert-warning alert-dismissible fade show">
 							    <button type="button" class="close" data-dismiss="alert">&times;</button>
 							    ${logout}
 						    </div>
@@ -46,9 +46,9 @@
                 
                     <div class="form-group">
                         <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Login</button><br><br>
-                        <a class="btn btn-lg btn-warning btn-block text-uppercase" href="{% url 'password_reset' %}">Forgot Password?</a>
+                        <a class="btn btn-lg btn-warning btn-block text-uppercase" href="/forget_password">Forgot Password?</a>
                     </div>
-                    <small><p class="text-center">Not registered yet! <a href=""><b>Register Now!</b></a></p></small>
+                    <small><p class="text-center">Not registered yet! <a href="/register"><b>Register Now!</b></a></p></small>
                 </form>
             </div>
             </div>
