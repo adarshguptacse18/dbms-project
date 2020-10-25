@@ -10,42 +10,39 @@
 <title>Insert title here</title>
 </head>
 <body>
+
+	
+	 <h3>My Orders</h3>
 		<div class="container">
-			 <h5>Order Id : ${order.order_id }</h5>
-			 <dl> Total Amount: Rs.${order.amount }</dl>
-			 <dl>Status : ${order.status }</dl>
 		 	<table  class="table">
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Description</th>
-						<th>Quantity</th>
-						<th>Price</th>
+						<th>Order Date</th>
+						<th>Total Amount</th>
+						<th>Status</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${order.prods}" var="prod">
-						<tr id="prod_row_${prod.product_id}">
-							<td>${prod.name}</td>
-							<td>${prod.description}</td>	
-							<td><input type="number" class="form-control" id="prod_${prod.product_id}" placeholder="190" name="password" value = ${prod.quantity} disabled></td>														
-							<td>${prod.price}</td>
+					<c:forEach items="${orders}" var="order">
+						<tr id="prod_row_${order.order_id}">
+							<td>${order.date}</td>
+							<td>${order.amount}</td>	
+							<td>${order.status}</td>
+							<td><a href="/viewOrder/${order.order_id}" type="button" class="btn btn-warning">View Details</span></td> 		
 						</tr>
 					</c:forEach>
 					
 				</tbody>
 			</table>
-			<c:if test="${order.status!='CANCELLED' }">
-				<a href="/cancelOrder/${order.order_id}" type="button" class="btn btn-danger">Cancel Order</a>
-			</c:if>
 				
 		</div>	
 		
 	
 	
-	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+	<script src="webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<link href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 		<script>
 		function deleteFromCart(id){
 			var quantity= document.getElementById('prod_'+id).value;

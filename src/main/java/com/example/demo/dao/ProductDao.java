@@ -1,7 +1,10 @@
 package com.example.demo.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,10 +12,14 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.models.Category;
+import com.example.demo.models.Image;
 import com.example.demo.models.Product;
 import com.example.demo.models.Review;
 
@@ -22,9 +29,27 @@ public class ProductDao {
 	@Autowired
     JdbcTemplate jt;
 	
-	public void save(String name, String desc, int price, int category_id) {
+	public int save(String name, String desc, int price, int category_id) {
 		String sql="insert into product (name,description,price,category_id) values (?,?,?,?)";
-		jt.update(sql,name,desc,price,category_id);
+//		jt.update(sql,name,desc,price,category_id);
+        KeyHolder holder = new GeneratedKeyHolder();
+
+		  jt.update(new PreparedStatementCreator() {
+
+	            @Override
+	            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+	                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+	                ps.setString(1, name);
+	                ps.setString(2, desc);
+	                ps.setInt(3, price);
+	                ps.setInt(4,category_id);
+	                return ps;
+	            }
+	        }, holder);
+
+	        int newProductId = holder.getKey().intValue();
+	        return newProductId;
+
     }
 	public Product getproductbyId(int id) {
         String sql = "select * from product where product_id='" + id + "'";
@@ -111,5 +136,17 @@ public class ProductDao {
     	List<Category> r= jt.query("select * from category",new BeanPropertyRowMapper<Category>(Category.class));
     	return r;
     }
-
+    
+    public void saveReview(Review r) {
+    	String sql = "insert into review (product_id,customer_id,message) value (?,?,?)";
+    	jt.update(sql,r.getProduct_id(),r.getCustomer_id(),r.getMessage());
+    }
+    public void updateReview(Review r) {
+    	String sql = "update review set message = ? where customer_id = ? and product_id = ?";
+    	jt.update(sql,r.getMessage(),r.getCustomer_id(),r.getProduct_id());
+    }
+    public List<Review> getReviewsByProductId(int product_id){
+		List<Review> res = jt.query("select * from review where product_id = " + product_id ,new BeanPropertyRowMapper<Review>(Review.class));
+		return res;
+    }
 }

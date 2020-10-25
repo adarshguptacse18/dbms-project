@@ -39,7 +39,7 @@ public class CartDao {
 	}
 	
 	public void delete_zero_quantity() {
-		String sql = "delete from cart where quantity = 0";
+		String sql = "delete from cart where quantity <= 0";
 		jt.update(sql);
 	}
 

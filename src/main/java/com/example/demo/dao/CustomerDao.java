@@ -65,7 +65,7 @@ public class CustomerDao {
 	}
 	
 	public void addAddress(Address add) {
-		String sql = "insert into address ('customer_id','house_no','street_no','locality_and_city', 'pincode','state') value (?,?,?,?,?,?)";
+		String sql = "insert into address (customer_id,house_no,street_no,locality_and_city, pincode,state) value (?,?,?,?,?,?)";
 		jt.update(sql,add.getCustomer_id(),add.getHouse_no(),add.getStreet_no(),add.getLocality_and_city(),add.getPincode(),add.getState());
 	}
 	

@@ -1,7 +1,10 @@
 package com.example.demo.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +14,10 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.models.Orders;
@@ -31,12 +37,31 @@ public class Ordersdao {
         Date dt = new Date();
         SimpleDateFormat sdfd = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = sdfd.format(dt);
-        String sql = "insert into orders (amount,house_no,street_no,locality_and_city,pincode,state,customer_id,is_gift,order_date,status) values (?,?,?,?,?,?,?,?,?,?)";
-        jt.update(sql,order.getAmount(),order.getHouse_no(),order.getStreet_no(),order.getLocality_and_city(),order.getPincode(),order.getState(),order.getCustomer_id(),order.getIs_gift(),currentDate,order.getStatus());
-        int order_id = jt.queryForObject("select order_id from orders where customer_id = ? and status = ?",Integer.class,3,"TNI");
-        jt.update("update orders set status = ? where order_id = ?","Processing",order_id);
+        String sql = "insert into orders (amount,house_no,street_no,locality_and_city,pincode,state,customer_id,order_date,status) values (?,?,?,?,?,?,?,?,?)";
+        KeyHolder holder = new GeneratedKeyHolder();
+
+		  jt.update(new PreparedStatementCreator() {
+
+	            @Override
+	            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+	                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+	                ps.setDouble(1, order.getAmount());
+	                ps.setString(2, order.getHouse_no());
+	                ps.setString(3, order.getStreet_no());
+	                ps.setString(4,order.getLocality_and_city());
+	                ps.setString(5,order.getPincode());
+	                ps.setString(6,order.getState());
+	                ps.setInt(7,order.getCustomer_id());
+	                ps.setString(8, currentDate);
+	                ps.setString(9, order.getStatus());
+	                return ps;
+	                
+	            }
+	        }, holder);
+		  int order_id = holder.getKey().intValue();
+//        jt.update("update orders set status = ? where order_id = ?","Processing",order_id);
         for(Product p: order.getProds()) {
-        	jt.update("insert into order_items value(?,?,?)",order_id,p.getProduct_id(),p.getQuantity());
+        	jt.update("insert into order_items (order_id,product_id,quantity) value(?,?,?)",order_id,p.getProduct_id(),p.getQuantity());
         }
         return order_id;
     }
@@ -77,6 +102,10 @@ public class Ordersdao {
         String sql = "update orders set status='placed', transaction_id = ? where order_id=?";
         jt.update(sql, order_id,tr_id);
     }
+    public void updateorder(int order_id,String status) {
+        String sql = "update orders set status=? where order_id=?";
+        jt.update(sql, status, order_id);
+    }
 
     public void deleteorder(int order_id) {
         String sql = "delete from orders where order_id=?";
@@ -105,14 +134,7 @@ public class Ordersdao {
         });
     }
     
-    public void saveReview(Review r) {
-    	String sql = "insert into review (product_id,customer_id,message) value (?,?,?)";
-    	jt.update(sql,r.getProduct_id(),r.getCustomer_id(),r.getMessage());
-    }
-    public void updateReview(Review r) {
-    	String sql = "update review set message = ? where customer_id = ? and product_id = ?";
-    	jt.update(sql,r.getMessage(),r.getCustomer_id(),r.getProduct_id());
-    }
+  
     public void updateRating(int order_id,int product_id,int rating) {
     	Review r= jt.queryForObject("select * from order_items where product_id = ? and order_id = ?", new Object[]{product_id,order_id},new BeanPropertyRowMapper<Review>(Review.class));
     	System.out.println(r);

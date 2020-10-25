@@ -8,9 +8,23 @@ public class Address {
 	private String locality_and_city;
 	private String pincode;
 	private String state;
+	
+	public Address() {};
+	public Address(int customer_id, String house_no, String street_no, String locality_and_city,
+			String pincode, String state) {
+		super();
+		this.customer_id = customer_id;
+		this.house_no = house_no;
+		this.street_no = street_no;
+		this.locality_and_city = locality_and_city;
+		this.pincode = pincode;
+		this.state = state;
+	}
+
 	public int getCustomer_id() {
 		return customer_id;
 	}
+	
 	public void setCustomer_id(int customer_id) {
 		this.customer_id = customer_id;
 	}

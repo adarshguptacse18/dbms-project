@@ -1,31 +1,39 @@
 package com.example.demo.controller;
 
+import java.io.File;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.example.demo.UserDetailsServiceImpl;
 import com.example.demo.dao.CartDao;
 import com.example.demo.dao.CustomerDao;
+import com.example.demo.dao.ImageDao;
 import com.example.demo.dao.Ordersdao;
 import com.example.demo.dao.ProductDao;
 import com.example.demo.dao.TransactionDao;
 import com.example.demo.dao.Userdao;
 import com.example.demo.models.Address;
 import com.example.demo.models.Category;
+import com.example.demo.models.Image;
+import com.example.demo.models.Message;
 import com.example.demo.models.MyUserDetails;
 import com.example.demo.models.Orders;
 import com.example.demo.models.Product;
@@ -53,12 +61,51 @@ public class HomeController {
 	@Autowired
 	TransactionDao transactiondao;
 	
-	@GetMapping("/")
-	public String helloWorld() {
-		System.out.println(productdao.showAllProducts()	);
-		return "home";
+	@Autowired
+    private HttpServletRequest request;
+
+	@Autowired
+	private ImageDao imagedao;
+	
+	public static String uploadDirectory = System.getProperty("user.dir") + "/uploads";
+	
+	
+	public String imageUpload(MultipartFile file) {
+		if (!file.isEmpty()) {
+            try {
+                String uploadsDir = "/uploads/";
+                String realPathtoUploads =  request.getServletContext().getRealPath(uploadsDir);
+                if(! new File(realPathtoUploads).exists())
+                {
+                    new File(realPathtoUploads).mkdir();
+                }
+                System.out.println("realPathtoUploads ="+ realPathtoUploads);
+                String orgName = file.getOriginalFilename();
+                String filePath = realPathtoUploads + orgName ;
+                File dest = new File(filePath);
+                file.transferTo(dest);
+            } catch (Exception e) {
+            	return e.toString();
+				// TODO: handle exception
+			} 
+		}
+		return "uploadView";
+	}
+	@ModelAttribute("username")
+	protected String getUsername() {
+		Object p = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(p instanceof MyUserDetails) {
+			return ((MyUserDetails) p).getUsername();
+		}
+		return null;
 	}
 	
+//	@GetMapping("/")
+//	public String helloWorld() {
+//		System.out.println(productdao.showAllProducts()	);
+//		return "home";
+//	}
+//	
 	public int getCustomerId() {
 		return ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 	}
@@ -121,18 +168,40 @@ public class HomeController {
 		return "addProduct";
 	}
 	@PostMapping("/addProduct")
-	public String addProduct(ModelMap model, Product prod) {
-		productdao.save(prod.getName(), prod.getDescription(), prod.getPrice(), prod.getCategory_id());
+	public String addProduct(ModelMap model, Product prod,MultipartFile file) {
+		int product_id = productdao.save(prod.getName(), prod.getDescription(), prod.getPrice(), prod.getCategory_id());
+		imagedao.save(file, request, product_id);
 		return "redirect:/";
 	}
+	
+	@GetMapping("/addCategory")
+	public String addCategoryPage(ModelMap model) {
+		return "addCategory";
+	}
+	@PostMapping("/addCategory")
+	public String addCategoryssssss(ModelMap model, String category_name) {
+		productdao.addCategory(category_name);
+		return "redirect:/";
+	}
+	
 	@GetMapping("/showProducts")
 	public String showProducts(@RequestParam("category_id") int category,ModelMap model) {
 		List<Product> p=productdao.showAllProducts(category);
 		model.addAttribute("prods",p);
 		return "showProducts";
 	}
+	@GetMapping("/showOneProduct")
+	public String showOneProduct(@RequestParam("product_id") int id,ModelMap model) {
+		Product p=productdao.getproductbyId(id);
+		List<Image> images = imagedao.getAllImagesById(id);
+		List<Review> reviews = productdao.getReviewsByProductId(id);
+		model.addAttribute("prod",p);
+		model.addAttribute("images",images);
+		model.addAttribute("reviews", reviews);
+		return "showOneProduct";
+	}
 	
-	@GetMapping("/showAllProducts")
+	@GetMapping({"/showAllProducts","/"})
 	public String showAllProducts(ModelMap model) {
 		List<Product> p=productdao.showAllProducts();
 		model.addAttribute("prods",p);
@@ -143,26 +212,23 @@ public class HomeController {
 	
 	@GetMapping("/addToCart")
 	@ResponseBody
-	public String addToCart(@RequestParam("product_id") int product_id,Principal p,@RequestParam("quantity") int quantity) {
+	public Message addToCart(@RequestParam("product_id") int product_id,Principal p,@RequestParam("quantity") int quantity) {
 		int cart_id = custdao.getCartId(getCustomerId());
 		cartdao.save(cart_id, product_id, quantity);
-		return "Product Added" + cart_id;
+		return new Message(true,"Product Added");
+//		return "{'status':true,Product" + cart_id + "}";
 	}
 	
-//	@GetMapping("/myCart")
-//	public String showMyCart(ModelMap map) {
-//		List<Product> prods = cartdao.getProducts(custdao.getCartId(((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()));
-//		map.addAttribute("prods",prods);
-//		return "myCart";
-//	}
 	@GetMapping("/myCart")
-	@ResponseBody
-	public List<Product> showMyCart(ModelMap map) {
+	public String showMyCart(ModelMap model) {
 		List<Product> prods = cartdao.getProducts(custdao.getCartId(((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()));
-//		map.addAttribute("prods",prods);
-//		return "myCart";
-		return prods;
+		model.addAttribute("prods",prods);
+		double price=0;
+		for(Product p:prods) price+=p.getQuantity() * p.getPrice();
+		model.addAttribute("price", price);
+		return "myCart";
 	}
+
 
 	
 	@GetMapping("/placeOrder")
@@ -193,9 +259,12 @@ public class HomeController {
 	                    price += p.getPrice() * p.getQuantity();
 	        }
 	        if (err_products.size() != 0) {
-	            model.put("error", err_products);
+	            model.put("errorProds", err_products);
 	            model.put("products", prods);
 	            return "errorOrder";
+	        }
+	        if(prods.size()==0) {
+	        	return "redirect:/";
 	        }
 	      
 	       Orders o = new Orders();
@@ -209,9 +278,9 @@ public class HomeController {
 	       o.setState(a.getState());
 	       o.setCustomer_id(getCustomerId());
 	       o.setIs_gift(false);
-	       o.setStatus("TNI");
+	       o.setStatus("Processing");
+	       o.setDate(new Date());
 	       int order_id = ordersdao.save(o);
-	       System.out.println("a;lsdjf;lkasjdflkjasldkfjlask;jdf;lajsd");
 	       System.out.println(order_id);
 	       model.put("order_id", order_id);
 	       model.put("items", prods);
@@ -222,6 +291,7 @@ public class HomeController {
 	@RequestMapping(value="/processpayment")
 	public String processPayment(ModelMap map,@RequestParam("payment_method") String payment_method, @RequestParam("order_id") int order_id) {
 		Transaction tr= new Transaction();
+		ordersdao.updateorder(order_id, "SUCCESS");
 		Orders o = ordersdao.getorderbyId(order_id);
 		tr.setAmount(o.getAmount());
 		tr.setDate(o.getDate());
@@ -233,7 +303,7 @@ public class HomeController {
 		for(Product p : prods) {
 			productdao.updateProductquantity(p.getProduct_id(), -p.getQuantity());
 		}
-		return "redirect:/user/vieworders";
+		return "redirect:/vieworders";
 	}
 	
 	@GetMapping("/vieworders")
@@ -241,25 +311,35 @@ public class HomeController {
 		int cust_id = getCustomerId();
 		List<Orders> orders = ordersdao.getOrderByCustomer_id(cust_id);
 		m.addAttribute("orders", orders);
-		return "viewOrders";
+		return "myOrders";
 	}
 	
-	@GetMapping("/vieworder/{order_id}")
-	@ResponseBody
-	public String getOrder(@PathVariable("order_id") int order_id) {
+	
+	
+	@GetMapping("/viewOrder/{order_id}")
+	public String getOrder(@PathVariable("order_id") int order_id,ModelMap model) {
 		Orders o = ordersdao.getorderbyId(order_id);
-		return o.toString();
+		model.addAttribute("order",o);
+		return "viewOrders";
 	}
+	@GetMapping("/cancelOrder/{order_id}")
+	public String cancelOrder(@PathVariable("order_id") int order_id,ModelMap model) {
+		ordersdao.updateorder(order_id,"CANCELLED");
+		Orders o = ordersdao.getorderbyId(order_id);
+		model.addAttribute("order",o);
+		return "viewOrders";
+	}
+		
 		
 	@PostMapping("/addReview/{product_id}")
 	@ResponseBody	
-    public String addReview(Principal principal, @PathVariable("product_id") int product_id,String message) {
+    public Message addReview(Principal principal, @PathVariable("product_id") int product_id,String message) {
 		Review r = new Review();
 		r.setCustomer_id(getCustomerId());
 		r.setMessage(message);
 		r.setProduct_id(product_id);
-		ordersdao.saveReview(r);
-		return "review added";
+		productdao.saveReview(r);
+		return new Message(true,"Review Added");
     }
 	@PostMapping("/updateReview/{product_id}")
 	@ResponseBody	
@@ -268,7 +348,7 @@ public class HomeController {
 		r.setCustomer_id(getCustomerId());
 		r.setMessage(message);
 		r.setProduct_id(product_id);
-		ordersdao.updateReview(r);
+		productdao.updateReview(r);
 		return "review updated";
     }
 	
@@ -279,7 +359,7 @@ public class HomeController {
 		return "updated";
 	}
 	
-	@PostMapping("/addCategory")
+	@PostMapping("/rateProduct")
 	@ResponseBody
 	public String rateProduct(@RequestParam("category_name")String category_name) {
 		productdao.addCategory(category_name);
@@ -302,4 +382,35 @@ public class HomeController {
 		}
 		return "login";
 	}
+	
+	 
+	@GetMapping("/upload")
+	public String imageUpload() {
+		return "uploadView";
+	}
+	
+	@GetMapping("/addAddress")
+	public String addAddressPage(ModelMap model) {
+		return "addAddress";
+	}
+	@PostMapping("/addAddress")
+	public String addAddress(ModelMap model,String house_no,String street_no,String locality_and_city,String pincode,String state) {
+		Address add= new Address(getCustomerId(), house_no, street_no, locality_and_city, pincode, state);
+		custdao.addAddress(add);
+		return "redirect:/placeOrder";
+	}
+	
+//  	@PostMapping("/upload")
+//  	@ResponseBody
+//  	public Boolean UploadImageProduct(@RequestParam("file") MultipartFile file) {
+//  		return imagedao.save(file,request,1);
+//  	}
+//  	
+//  	@GetMapping("/getImageById")
+//  	@ResponseBody
+//  	public String getImageById(int product_id) {
+//  		return imagedao.getByProductId(product_id).getImage_path();
+//  	}
+//  	
+//	
 }

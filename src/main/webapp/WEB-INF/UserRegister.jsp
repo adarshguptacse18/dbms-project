@@ -15,9 +15,9 @@
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
             <div class="card card-signin my-5">
             <div class="card-body">
-                <h5 class="card-title text-center"><b>Sign In</b></h5>
+                <h5 class="card-title text-center"><b>Sign Up</b></h5>
                 
-                 <form action="/login" class="form-signin" method = "POST">
+                 <form action="/register" class="form-signin" method = "POST">
                  	<c:if test="${not empty error}">
 							<div class="alert alert-danger alert-dismissible fade show">
 							    <button type="button" class="close" data-dismiss="alert">&times;</button>

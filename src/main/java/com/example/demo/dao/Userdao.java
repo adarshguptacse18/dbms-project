@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.models.User;
@@ -20,13 +21,17 @@ public class Userdao {
 
     @Autowired
     JdbcTemplate jt;
-
+    
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    
     public void save(String username, String password, String name, String contact, String email, String house,
             String street, String city, String bank) {
         String sql = "insert into user (username, password,name,contact,email,house_no,street_name,city,account_no,role) values (?,?,?,?,?,?,?,?,?,?)";
         jt.update(sql, username, password, name, contact, email, house, street, city, bank, "customer");
     }
     public void save(String username, String password,String role) {
+    	password = bCryptPasswordEncoder.encode(password);
     	String sql="insert into user (username, password, role) values(?,?,?)";
     	jt.update(sql,username,password,role);
     }
