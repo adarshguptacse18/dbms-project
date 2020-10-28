@@ -3,6 +3,7 @@ package com.example.demo.dao;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,28 +36,39 @@ public class Userdao {
     	String sql="insert into user (username, password, role) values(?,?,?)";
     	jt.update(sql,username,password,role);
     }
+    public void save(User user) {
+    	String password = bCryptPasswordEncoder.encode(user.getPassword());
+    	user.setPassword(password);
+    	user.setRole("ROLE_USER");
+    	jt.update("insert into user (username,role,password,email,first_name,last_name) value(?,?,?,?,?,?)",user.getUsername(),user.getRole(),user.getPassword(),user.getEmail(),user.getFirst_name(),user.getLast_name());
+    }
     public User findByUsername(String username) throws UsernameNotFoundException{
         String sql = "select * from user where username='" + username + "'";
         if(jt.queryForList(sql).isEmpty()) {
         	 throw new UsernameNotFoundException(username);
         }
-        return jt.queryForObject(sql, new RowMapper<User>() {
-            public User mapRow(ResultSet row, int rowNum) throws SQLException {
-                User u = new User();
-                u.setId(row.getInt("id"));
-                u.setUsername(row.getString("username"));
-                u.setPassword(row.getString("password"));
-//                u.setName(row.getString("name"));
-//                u.setContact(row.getString("contact"));
-//                u.setEmail(row.getString("email"));
-//                u.setHouse_no(row.getString("house_no"));
-//                u.setStreet_name(row.getString("street_name"));
-//                u.setCity(row.getString("city"));
-//                u.setAccount_no(row.getString("account_no"));
-                u.setRole(row.getString("role"));
-                return u;
-            }
-        });
+        User u =(User) jt.queryForObject(sql,new BeanPropertyRowMapper<User>(User.class));
+//        if(u==null) {
+//        	throw new UsernameNotFoundException("Username not found");
+//        }
+        return u;
+//        return jt.queryForObject(sql, new RowMapper<User>() {
+//            public User mapRow(ResultSet row, int rowNum) throws SQLException {
+//                User u = new User();
+//                u.setId(row.getInt("user_id"));
+//                u.setUsername(row.getString("username"));
+//                u.setPassword(row.getString("password"));
+////                u.setName(row.getString("name"));
+////                u.setContact(row.getString("contact"));
+////                u.setEmail(row.getString("email"));
+////                u.setHouse_no(row.getString("house_no"));
+////                u.setStreet_name(row.getString("street_name"));
+////                u.setCity(row.getString("city"));
+////                u.setAccount_no(row.getString("account_no"));
+//                u.setRole(row.getString("role"));
+//                return u;
+//            }
+//        });
     }
 
     public List<User> getAllusers() {

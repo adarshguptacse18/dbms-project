@@ -8,11 +8,14 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.models.Address;
+import com.example.demo.models.Customer;
+import com.example.demo.models.Review;
 
 @Transactional
 @Repository
@@ -24,7 +27,7 @@ public class CustomerDao {
 		String sql="insert into customer (customer_id,gstin_number,trust_value) values (?,?,?)";
 		jt.update(sql,customer_id,gstin_number,1);
     }
-	public void updateproduct(int customer_id, int gstin_number) {
+	public void updateGSTINNumber(int customer_id, int gstin_number) {
         String sql = "update customer gstin_number=? where customer_id=?";
         jt.update(sql, customer_id,gstin_number);
     }
@@ -32,6 +35,14 @@ public class CustomerDao {
 		String sql = "update customer trust_value=trust_value + ? where customer_id=?";
         jt.update(sql, customer_id,delta_trust);
 	}
+	public Customer getCustomerByCustomerId(int id) {
+		System.out.println(id);
+		Customer c= jt.queryForObject("select GSTIN_NUMBER, customer_id,group_concat(number) as numbers  from customer LEFT JOIN phone_numbers on customer_id = user_id where customer_id = ? group by customer.customer_id ;", new Object[]{id}, new BeanPropertyRowMapper<Customer>(Customer.class));
+		return c;
+	}
+	
+	
+	
 	
 	public int getCartId(int customer_id) {
 //		return 1;
@@ -86,5 +97,8 @@ public class CustomerDao {
             }
         });
     }
-	
+	public void update(Customer customer) {
+		jt.update("update customer set GSTIN_NUMBER=? where customer_id = ?",customer.getGSTIN_NUMBER(),customer.getCustomer_id());
+		jt.update("update user set username=?,first_name=?,last_name=?,email=? where user.user_id=?",customer.getUser().getUsername(),customer.getUser().getFirst_name(),customer.getUser().getLast_name(),customer.getUser().getEmail(),customer.getCustomer_id());
+	}	
 }

@@ -1,10 +1,58 @@
 package com.example.demo.models;
 
+import java.util.List;
+
 public class User {
+	private int user_id;
     private String username;
     private String password;
-    private int id;
-//    private String passwordConfirm;
+    private String email;	
+    private String first_name;
+    @Override
+	public String toString() {
+		return "User [user_id=" + user_id + ", username=" + username + ", password=" + password + ", email=" + email
+				+ ", first_name=" + first_name + ", last_name=" + last_name + ", role=" + role + "]";
+	}
+	private String last_name;
+    private String role;
+
+    public User() {
+    	
+    }
+    public User(String username,String password,String email,String first_name,String last_name,int user_id) {
+    	this.username=username;
+    	this.password=password;
+    	this.email=email;
+    	this.last_name=last_name;
+    	this.first_name = first_name;
+    	this.user_id=user_id;
+    }
+    public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getFirst_name() {
+		return first_name;
+	}
+
+	public void setFirst_name(String first_name) {
+		this.first_name = first_name;
+	}
+
+	public String getLast_name() {
+		return last_name;
+	}
+
+	public void setLast_name(String last_name) {
+		this.last_name = last_name;
+	}
+
+  
+	//    private String passwordConfirm;
 //    private String name;
 //    private String contact;
 //    private String email;
@@ -12,7 +60,6 @@ public class User {
 //    private String street_name;
 //    private String city;
 //    private String account_no;
-    private String role;
 
     public String getUsername() {
         return this.username;
@@ -29,6 +76,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+  
 
 //    public String getPasswordConfirm() {
 //        return this.passwordConfirm;
@@ -102,11 +150,12 @@ public class User {
         this.role = role;
     }
 
-	public int getId() {
-		return id;
+
+	public int getUser_id() {
+		return user_id;
+	}
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
 }

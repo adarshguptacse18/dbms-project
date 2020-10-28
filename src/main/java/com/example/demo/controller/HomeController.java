@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,11 +28,13 @@ import com.example.demo.dao.CartDao;
 import com.example.demo.dao.CustomerDao;
 import com.example.demo.dao.ImageDao;
 import com.example.demo.dao.Ordersdao;
+import com.example.demo.dao.PhoneNumberDao;
 import com.example.demo.dao.ProductDao;
 import com.example.demo.dao.TransactionDao;
 import com.example.demo.dao.Userdao;
 import com.example.demo.models.Address;
 import com.example.demo.models.Category;
+import com.example.demo.models.Customer;
 import com.example.demo.models.Image;
 import com.example.demo.models.Message;
 import com.example.demo.models.MyUserDetails;
@@ -44,28 +47,34 @@ import com.example.demo.models.User;
 @Controller
 public class HomeController {
 	@Autowired
+	JdbcTemplate jt;
+	
+	@Autowired
     Userdao userdao;
 	
 	@Autowired
 	ProductDao productdao;
 	
 	@Autowired
-	CartDao cartdao;
+	private CartDao cartdao;
 	
 	@Autowired
-	CustomerDao custdao;
+	private CustomerDao custdao;
 	
 	@Autowired
-	Ordersdao ordersdao;
+	private Ordersdao ordersdao;
 	
 	@Autowired
-	TransactionDao transactiondao;
+	private TransactionDao transactiondao;
 	
 	@Autowired
     private HttpServletRequest request;
 
 	@Autowired
 	private ImageDao imagedao;
+	
+	@Autowired 
+	private PhoneNumberDao phonenumberdao;
 	
 	public static String uploadDirectory = System.getProperty("user.dir") + "/uploads";
 	
@@ -107,7 +116,7 @@ public class HomeController {
 //	}
 //	
 	public int getCustomerId() {
-		return ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+		return ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser_id();
 	}
 	@GetMapping("/user")
 	@ResponseBody
@@ -130,10 +139,6 @@ public class HomeController {
 	}
 	
 	
-	@GetMapping("/admin")
-	public String admin() {
-		return "Hey Admin";
-	}
 	
 	@GetMapping("/register")
 	public String register(ModelMap model) {
@@ -150,9 +155,10 @@ public class HomeController {
 	@PostMapping("/register")
 	public String userRegister(ModelMap model, User user) {
 		user.setRole("ROLE_USER");
-		userdao.save(user.getUsername(), user.getPassword(), user.getRole());
+		userdao.save(user);
+//		userdao.save(user.getUsername(), user.getPassword(), user.getRole());
 		user= userdao.findByUsername(user.getUsername());
-		custdao.save(user.getId(), 1234);
+		custdao.save(user.getUser_id(), 1234);
 		return "redirect:/";
 	}
 	@PostMapping("/registerVendor")
@@ -190,7 +196,7 @@ public class HomeController {
 		model.addAttribute("prods",p);
 		return "showProducts";
 	}
-	@GetMapping("/showOneProduct")
+	@GetMapping("/showProduct")
 	public String showOneProduct(@RequestParam("product_id") int id,ModelMap model) {
 		Product p=productdao.getproductbyId(id);
 		List<Image> images = imagedao.getAllImagesById(id);
@@ -221,7 +227,7 @@ public class HomeController {
 	
 	@GetMapping("/myCart")
 	public String showMyCart(ModelMap model) {
-		List<Product> prods = cartdao.getProducts(custdao.getCartId(((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()));
+		List<Product> prods = cartdao.getProducts(custdao.getCartId(getCustomerId()));
 		model.addAttribute("prods",prods);
 		double price=0;
 		for(Product p:prods) price+=p.getQuantity() * p.getPrice();
@@ -246,7 +252,7 @@ public class HomeController {
 	@GetMapping("/payment")
 	public String payment(ModelMap model,int address_id, Principal principal) {
 		 List<Product> err_products = new ArrayList<Product>();
-			List<Product> prods = cartdao.getProducts(custdao.getCartId(((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()));
+			List<Product> prods = cartdao.getProducts(custdao.getCartId(getCustomerId()));
 	        Double price = 0.0;
 	        for(Product p: prods) {
 	                    int product_id = p.getProduct_id();
@@ -393,12 +399,69 @@ public class HomeController {
 	public String addAddressPage(ModelMap model) {
 		return "addAddress";
 	}
+	
 	@PostMapping("/addAddress")
 	public String addAddress(ModelMap model,String house_no,String street_no,String locality_and_city,String pincode,String state) {
 		Address add= new Address(getCustomerId(), house_no, street_no, locality_and_city, pincode, state);
 		custdao.addAddress(add);
 		return "redirect:/placeOrder";
 	}
+	@GetMapping("/myProfile")
+	public String myAccountPage(ModelMap model) {
+		Customer c = custdao.getCustomerByCustomerId(getCustomerId());
+		final MyUserDetails p =(MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		final User u= new User(p.getUsername(), p.getPassword(), p.getEmail(), p.getFirst_name(), p.getLast_name(), p.getUser_id());
+		c.setUser(u);
+		model.addAttribute("customer", c);
+		return "myProfile";
+	}
+	
+	@GetMapping("/editProfile")
+	public String editProfilePage(ModelMap model) {
+		Customer c = custdao.getCustomerByCustomerId(getCustomerId());
+		final MyUserDetails p =(MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		final User u= new User(p.getUsername(), p.getPassword(), p.getEmail(), p.getFirst_name(), p.getLast_name(), p.getUser_id());
+		c.setUser(u);
+		System.out.println(c);
+		model.addAttribute("customer", c);
+		return "editProfile";
+	}
+	
+	@PostMapping("/editProfile")
+	public String editProfilePage(Customer customer) {
+		int user_id = getCustomerId();
+		customer.setCustomer_id(user_id);
+		 customer.getUser();
+		customer.setUser(new User( customer.getUser().getUsername(),  customer.getUser().getPassword(),  customer.getUser().getEmail(),  customer.getUser().getFirst_name(),  customer.getUser().getLast_name(), customer.getUser().getUser_id()));
+		custdao.update(customer);
+		return "redirect:/myProfile";
+	}
+	
+	
+	@GetMapping("/myPhoneNumbers")
+	public String myPhoneNumbersPage(ModelMap model) {
+		model.addAttribute("numbers", phonenumberdao.getAllPhoneNumbersByCustomerId(getCustomerId()));
+		return "myPhoneNumbers";
+	}
+	
+	@PostMapping("/addPhoneNumber")
+	@ResponseBody
+	public Message getPhoneNumber(@RequestParam("phone_number") String phone_number) {
+		phonenumberdao.addPhoneNumber(phone_number, getCustomerId());
+		return new Message(true,"Phone Number Added Successfully");
+	}
+	@GetMapping("/delete_number/{phone_number}")
+	public String deletePhoneNumber(@PathVariable String phone_number) {
+		phonenumberdao.deletePhoneNumber(getCustomerId(),phone_number);
+		return "redirect:/myPhoneNumbers";
+	}
+		
+//	@GetMapping("/showAddresses")
+//	public String showAddresses() {
+//		
+//	}
+	
+//	
 	
 //  	@PostMapping("/upload")
 //  	@ResponseBody

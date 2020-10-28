@@ -19,7 +19,7 @@
 	  </div>
 	</div>
 	<div class="container">
-		<h3>All Products</h3>
+		<h3><strong>All Products</strong></h3>
 	
 		<div class="row">
 			<c:forEach items="${prods}" var="prod">

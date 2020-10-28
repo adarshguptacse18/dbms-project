@@ -19,7 +19,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.models.Category;
-import com.example.demo.models.Image;
 import com.example.demo.models.Product;
 import com.example.demo.models.Review;
 
@@ -28,6 +27,7 @@ import com.example.demo.models.Review;
 public class ProductDao {
 	@Autowired
     JdbcTemplate jt;
+	
 	
 	public int save(String name, String desc, int price, int category_id) {
 		String sql="insert into product (name,description,price,category_id) values (?,?,?,?)";

@@ -2,12 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
+
 <body>
 	<nav class="navbar navbar-expand-md navbar-light">
 
@@ -22,8 +17,8 @@
     <div class="collapse navbar-collapse" id="basicExampleNav1">
   
       <ol class="navbar-nav mr-auto">
-        <li class="breadcrumb-item"><a class="waves-effect" href="/">Home</a></li>
-        <li class="breadcrumb-item"><a class="waves-effect" href="/categories">Categories</a></li>
+        <li class="breadcrumb-item"><a class="waves-effect" href="/admin">Home</a></li>
+        <li class="breadcrumb-item"><a class="waves-effect" href="/admin/addProduct">Add Product</a></li>
       </ol>
       <!-- Right -->
       <ul class="navbar-nav ml-auto">
@@ -38,9 +33,13 @@
             <i class="united kingdom flag m-0"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="/myProfile">My Account</a>
-            <a class="dropdown-item" href="/vieworders">My Orders</a>
-            <a class="dropdown-item" href="/logout">LogOut</a>
+            <a class="dropdown-item" href="/admin/allCategories">All Categories</a>
+            <a class="dropdown-item" href="/admin/addCategory">Add Category</a>
+            <a class="dropdown-item" href="/admin/allVendors">All Vendors</a>
+            <a class="dropdown-item" href="/admin/allProduct">All Products</a>
+            <a class="dropdown-item" href="/admin/addProduct">Add Product</a>
+            <a class="dropdown-item" href="/admin/allOrders">All Orders</a>
+            <a class="dropdown-item" href="/admin/allTransactions">All Orders</a>        
           </div>
         </li>
         
@@ -69,8 +68,10 @@
       </ul>
     </div>
     <!-- Links -->
-  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css">
   </nav>
 </body>
-</html>
