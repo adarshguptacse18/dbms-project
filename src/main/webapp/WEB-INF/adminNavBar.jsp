@@ -2,7 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
 <body>
 	<nav class="navbar navbar-expand-md navbar-light">
 
@@ -39,7 +44,7 @@
             <a class="dropdown-item" href="/admin/allProduct">All Products</a>
             <a class="dropdown-item" href="/admin/addProduct">Add Product</a>
             <a class="dropdown-item" href="/admin/allOrders">All Orders</a>
-            <a class="dropdown-item" href="/admin/allTransactions">All Orders</a>        
+            <a class="dropdown-item" href="/admin/allTransactions">All Transactions</a>     
           </div>
         </li>
         
@@ -68,10 +73,8 @@
       </ul>
     </div>
     <!-- Links -->
-    
-    <script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css">
   </nav>
 </body>
+</html>

@@ -71,7 +71,7 @@ public class ProductDao {
     }
 	
 	 public List<Product> showAllProducts() {
-	        String sql = "select * from product";
+	        String sql = "select P.product_id as product_id, name, quantity, category_id, description, price ,max(image_path) as image_path from product as P left join images on P.product_id = images.product_id group by P.product_id";
 	        return jt.query(sql, new RowMapper<Product>() {
 
 	            public Product mapRow(ResultSet row, int rowNum) throws SQLException {
@@ -81,12 +81,13 @@ public class ProductDao {
 	                 u.setCategory_id(row.getInt("category_id"));
 	                 u.setDescription(row.getString("description"));
 	                 u.setPrice(row.getInt("price"));
+	                 u.setQuantity(row.getInt("quantity"));
 	                 return u;
 	            }
 	        });
 	    }
 	 public List<Product> showAllProducts(int category) {
-	        String sql = "select * from product where category_id=" + category;
+	        String sql ="select P.product_id, P.name, P.category_id, P.description, P.price ,max(image_path) as image_path from product as P left join images on P.product_id = images.product_id where P.category_id = "+category+" group by P.product_id";
 	        return jt.query(sql, new RowMapper<Product>() {
 
 	            public Product mapRow(ResultSet row, int rowNum) throws SQLException {

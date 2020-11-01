@@ -1,5 +1,7 @@
 package com.example.demo.models;
 
+import java.util.List;
+
 public class Product {
 	private int product_id;
     private String name;
@@ -9,6 +11,8 @@ public class Product {
     private int quantity=0;
     private double rating;
     private int purchased_cnt;
+    List<String> image_path;
+	
 	public int getProduct_id() {
 		return product_id;
 	}
@@ -61,6 +65,12 @@ public class Product {
 	}
 	public void setPurchased_cnt(int purchased_cnt) {
 		this.purchased_cnt = purchased_cnt;
+	}
+	public List<String> getImage_path() {
+		return image_path;
+	}
+	public void setImage_path(List<String> image_path) {
+		this.image_path = image_path;
 	}
 	
     
