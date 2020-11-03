@@ -10,8 +10,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<body>	
-			<div class="container">
+ <body onload="myFunction(${prod.hide})"> 
+		<div class="container">
 			 <h3>Hey Admin</h3>
 		 	<table  class="table table-striped  table-hover">
 				<thead>
@@ -21,6 +21,7 @@
 						<th>Description</th>
 						<th>Quantity</th>
 						<th>Price</th>
+						<th></th>
 						<th></th>
 					</tr>
 				</thead>
@@ -32,7 +33,14 @@
 							<td>${prod.description}</td>
 							<td>${prod.quantity}	
 							<td>${prod.price}</td>
-							<td><a href="/admin/editProduct/${prod.product_id}" type="button" class="btn btn-warning">Edit</a></td> 		
+							<td><a href="/admin/editProduct/${prod.product_id}" type="button" class="btn btn-warning">Edit</a></td>
+							<td><span onclick="hideProduct(${prod.product_id})"  class="btn btn-warning"> 
+							<span id="hideProduct" >Hide</span>
+							<span id="showProduct" >Show</span>
+<%-- 								<c:if test="${prod.hide==false}"><span id="hideProduct">Hide</span></c:if> --%>
+<%-- 								<c:if test="${prod.hide==true }"><span id="showProduct">Show</span></c:if> --%>
+							</span></td> 		
+							 		
 						</tr>
 					</c:forEach>
 							
@@ -41,7 +49,32 @@
 			</table>
 				
 		</div>	
+		<script>
+		function myFuntion(boolean b){
+			 document.getElementById('hideProduct').hidden=!b;
+			 document.getElementById('showProduct').hidden=b;
+		}
+		function hideProduct(product_id,image_path){
+			
+			 $.ajax({
+			    url: '/admin/hideProduct',
+			    type: 'POST',
+			    dataType: 'json',
+			    data:{
+			          'product_id':product_id,
+			          },
 	
+			         })
+			  .done(function(data) {
+			  		console.log(data);
+			  		
+					 document.getElementById('hideProduct').hidden=!document.getElementById('hideProduct').hidden;
+					 document.getElementById('showProduct').hidden=!document.getElementById('showProduct').hidden;
+					 
+			  }); 
+			}
+			
+	</script>
 	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">

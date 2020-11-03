@@ -22,6 +22,8 @@ import com.example.demo.models.Category;
 import com.example.demo.models.Product;
 import com.example.demo.models.Review;
 
+
+
 @Transactional
 @Repository
 public class ProductDao {
@@ -52,22 +54,26 @@ public class ProductDao {
 
     }
 	public Product getproductbyId(int id) {
-        String sql = "select * from product where product_id='" + id + "'";
-        return jt.queryForObject(sql, new RowMapper<Product>() {
-
-            public Product mapRow(ResultSet row, int rowNum) throws SQLException {
-                Product u = new Product();
-                u.setProduct_id(row.getInt("product_id"));
-                u.setName(row.getString("name"));
-                u.setCategory_id(row.getInt("category_id"));
-                u.setDescription(row.getString("description"));
-                u.setPrice(row.getInt("price"));
-                u.setQuantity(row.getInt("quantity"));
-                u.setRating(row.getDouble("rating"));
-                u.setPurchased_cnt(row.getInt("purchased_cnt"));
-                return u;
-            }
-        });
+        String sql = "select P.product_id as rating,purchased_cnt,P.product_id, name, quantity, category_id, description, price ,group_concat(image_path)  as image_path from product as P left join images on P.product_id = images.product_id where P.product_id="+id+" group by P.product_id";
+        Product p = jt.queryForObject(sql,new BeanPropertyRowMapper<Product>(Product.class));
+        return p;
+//        return jt.queryForObject(sql, new RowMapper<Product>() {
+//
+//            public Product mapRow(ResultSet row, int rowNum) throws SQLException {
+//                Product u = new Product();
+//                u.setProduct_id(row.getInt("product_id"));
+//                u.setName(row.getString("name"));
+//                u.setCategory_id(row.getInt("category_id"));
+//                u.setDescription(row.getString("description"));
+//                u.setPrice(row.getInt("price"));
+//                u.setQuantity(row.getInt("quantity"));
+//                u.setRating(row.getDouble("rating"));
+//                u.setPurchased_cnt(row.getInt("purchased_cnt"));
+//                
+////                u.setImage_path((List<String>) row.getArray("image_path"));
+//                return u;
+//            }
+//        });
     }
 	
 	 public List<Product> showAllProducts() {
@@ -82,6 +88,7 @@ public class ProductDao {
 	                 u.setDescription(row.getString("description"));
 	                 u.setPrice(row.getInt("price"));
 	                 u.setQuantity(row.getInt("quantity"));
+	                 u.image_path.add(row.getString("image_path"));
 	                 return u;
 	            }
 	        });
@@ -91,13 +98,15 @@ public class ProductDao {
 	        return jt.query(sql, new RowMapper<Product>() {
 
 	            public Product mapRow(ResultSet row, int rowNum) throws SQLException {
-	                 Product u = new Product();
-	            	 u.setProduct_id(row.getInt("product_id"));
-	                 u.setName(row.getString("name"));
-	                 u.setCategory_id(row.getInt("category_id"));
-	                 u.setDescription(row.getString("description"));
-	                 u.setPrice(row.getInt("price"));
-	                 return u;
+	            	  Product u = new Product();
+		            	 u.setProduct_id(row.getInt("product_id"));
+		                 u.setName(row.getString("name"));
+		                 u.setCategory_id(row.getInt("category_id"));
+		                 u.setDescription(row.getString("description"));
+		                 u.setPrice(row.getInt("price"));
+		                 u.setQuantity(row.getInt("quantity"));
+		                 u.image_path.add(row.getString("image_path"));
+		                 return u;
 	            }
 	        });
 	    }
@@ -150,4 +159,11 @@ public class ProductDao {
 		List<Review> res = jt.query("select * from review where product_id = " + product_id ,new BeanPropertyRowMapper<Review>(Review.class));
 		return res;
     }
+	public void updateproduct(int product_id, Product p) {
+		jt.update("update product set name=?,description=?,price=?,category_id=?,quantity=? where product_id = ?",p.getName(),p.getDescription(),p.getPrice(),p.getCategory_id(),p.getQuantity(),product_id);
+	}
+	
+	public void hideShow(int product_id) {
+		jt.update("update product set hide=!hide where product_id=?",product_id);
+	}
 }

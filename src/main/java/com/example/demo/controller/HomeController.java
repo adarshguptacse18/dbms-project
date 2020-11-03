@@ -199,10 +199,11 @@ public class HomeController {
 	@GetMapping("/showProduct")
 	public String showOneProduct(@RequestParam("product_id") int id,ModelMap model) {
 		Product p=productdao.getproductbyId(id);
-		List<Image> images = imagedao.getAllImagesById(id);
+//		List<Image> images = imagedao.getAllImagesById(id);
 		List<Review> reviews = productdao.getReviewsByProductId(id);
 		model.addAttribute("prod",p);
-		model.addAttribute("images",images);
+		model.addAttribute("images",p.getImage_path());
+		System.out.println(p.getImage_path());
 		model.addAttribute("reviews", reviews);
 		return "showOneProduct";
 	}

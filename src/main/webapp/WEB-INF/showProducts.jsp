@@ -28,7 +28,7 @@
 					<div class="col-md-4 product-grid">
 						<div class="image">
 							<a href="/showProduct?product_id=${prod.product_id}">
-								<img src="/static/uploads/151product-500x500.jpeg" class="w-100">
+								<img src="${prod.image_path[0]}" class="w-100">
 								<div class="overlay">
 									<div class="detail">View Details</div>
 								</div>

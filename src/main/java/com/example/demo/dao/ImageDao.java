@@ -43,7 +43,7 @@ public class ImageDao {
 		System.out.println(file);
 		if (!file.isEmpty()) {
             try {
-                String uploadsDir = "static/uploads/";
+                String uploadsDir = "/static/uploads/";
                 String realPathtoUploads =  request.getServletContext().getRealPath(uploadsDir);
                 if(! new File(realPathtoUploads).exists()){
                     new File(realPathtoUploads).mkdir();
@@ -62,5 +62,8 @@ public class ImageDao {
 			} 
 		}
 		return null;
+	}
+	public void deleteImage(int product_id,String image_path) {
+		jt.update("delete from images where product_id=? and image_path=?",product_id,image_path);
 	}
 }
