@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.dao.AddressDao;
 import com.example.demo.dao.CategoryDao;import com.example.demo.dao.CustomerDao;
 import com.example.demo.dao.ImageDao;
 import com.example.demo.dao.Ordersdao;
@@ -25,6 +26,7 @@ import com.example.demo.dao.PhoneNumberDao;
 import com.example.demo.dao.ProductDao;
 import com.example.demo.dao.TransactionDao;
 import com.example.demo.dao.Userdao;
+import com.example.demo.models.Address;
 import com.example.demo.models.Category;
 import com.example.demo.models.Customer;
 import com.example.demo.models.Message;
@@ -65,6 +67,9 @@ public class AdminController {
 	
 	@Autowired
 	Userdao userDao;
+	
+	@Autowired
+	AddressDao addressDao;
 	
 	@ModelAttribute("username")
 	protected String getUsername() {
@@ -262,6 +267,30 @@ public class AdminController {
 		return new Message(true,"Phone number added");
 	}
 	
+	@GetMapping("/viewAllAddresses/{customer_id}/")
+	public String viewAllAddresses(@PathVariable("customer_id") int customer_id,ModelMap model) {
+		  List<Address> addresses = addressDao.getAddressesByCustomerId(customer_id);
+	        model.addAttribute("addresses",addresses);
+	        return "viewAddresses";
+	}
+	@GetMapping("/viewAllAddresses/{customer_id}/deleteAddress/{address_id}")
+	public String deleteAddress(@PathVariable("address_id") int address_id) {
+	    addressDao.deleteAddress(address_id);
+		return "redirect:/admin";
+	}
+	
+	@GetMapping("/viewAllAddresses/{customer_id}/addAddress")
+	public String addAddressPage(@PathVariable("customer_id") int customer_id) {
+		return "addAddress";
+	}
+
+	
+	@PostMapping("/viewAllAddresses/{customer_id}/addAddress")
+	public String addAddress(@PathVariable("customer_id") int customer_id,ModelMap model,String house_no,String street_no,String locality_and_city,String pincode,String state) {
+		Address add= new Address(customer_id, house_no, street_no, locality_and_city, pincode, state);
+		addressDao.addAddress(add);
+		return "redirect:/admin";
+	}
 	
 
 }

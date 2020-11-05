@@ -11,8 +11,9 @@
 <body>
     <jsp:include page="adminNavBar.jsp" />
 	
-	 <h3>All Orders</h3>
 		<div class="container">
+			 <h3>All Transactions</h3>
+		
 		 	<table  class="table">
 				<thead>
 					<tr>
@@ -39,9 +40,9 @@
 		
 	
 	
-	<script src="webjars/jquery/3.4.1/jquery.min.js"></script>
-    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<link href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 		<script>
 		function deleteFromCart(id){
 			var quantity= document.getElementById('prod_'+id).value;

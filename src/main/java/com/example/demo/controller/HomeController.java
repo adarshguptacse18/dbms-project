@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.dao.AddressDao;
 import com.example.demo.dao.CartDao;
 import com.example.demo.dao.CategoryDao;
 import com.example.demo.dao.CustomerDao;
-import com.example.demo.dao.ImageDao;
 import com.example.demo.dao.Ordersdao;
 import com.example.demo.dao.PhoneNumberDao;
 import com.example.demo.dao.ProductDao;
@@ -71,7 +71,7 @@ public class HomeController {
     private HttpServletRequest request;
 
 	@Autowired
-	private ImageDao imagedao;
+	private AddressDao addressDao;
 	
 	@Autowired
 	private CategoryDao categoryDao;
@@ -222,8 +222,8 @@ public class HomeController {
 	
 	@GetMapping("/placeOrder")
 	public String placeOrder(ModelMap model,Principal ppl) {
-		System.out.println(custdao.getAddressById(1));
-        List<Address> addresses = custdao.getAddressesByCustomerId(getCustomerId());
+		System.out.println(addressDao.getAddressById(1));
+        List<Address> addresses = addressDao.getAddressesByCustomerId(getCustomerId());
         Map<Integer,String> addrs= new HashMap<Integer, String>();
 		for (Address p : addresses) {
             addrs.put(p.getAddress_id(), p.toStringForDisplay());
@@ -259,7 +259,7 @@ public class HomeController {
 	       Orders o = new Orders();
 	       o.setProds(prods);
 	       o.setAmount(price);
-	       Address a = custdao.getAddressById(address_id);
+	       Address a = addressDao.getAddressById(address_id);
 	       o.setHouse_no(a.getHouse_no());
 	       o.setStreet_no(a.getStreet_no());
 	       o.setLocality_and_city(a.getLocality_and_city());
@@ -386,7 +386,7 @@ public class HomeController {
 	@PostMapping("/addAddress")
 	public String addAddress(ModelMap model,String house_no,String street_no,String locality_and_city,String pincode,String state) {
 		Address add= new Address(getCustomerId(), house_no, street_no, locality_and_city, pincode, state);
-		custdao.addAddress(add);
+		addressDao.addAddress(add);
 		return "redirect:/placeOrder";
 	}
 	@GetMapping("/myProfile")
@@ -432,7 +432,7 @@ public class HomeController {
 	@ResponseBody
 	public Message getPhoneNumber(@RequestParam("phone_number") String phone_number) {
 		phonenumberdao.addPhoneNumber(phone_number, getCustomerId());
-		return new;essage(true,"Phone Number Added Successfully");
+		return new Message(true,"Phone Number Added Successfully");
 	}
 	@GetMapping("/delete_number/{phone_number}")
 	public String deletePhoneNumber(@PathVariable String phone_number) {
@@ -440,10 +440,12 @@ public class HomeController {
 		return "redirect:/myPhoneNumbers";
 	}
 		
-//	@GetMapping("/showAddresses")
-//	public String showAddresses() {
-//		
-//	}
+	@GetMapping("/viewAddresses")
+	public String showAddresses(ModelMap model) {
+        List<Address> addresses = addressDao.getAddressesByCustomerId(getCustomerId());
+        model.addAttribute("addresses",addresses);
+        return "viewAddresses";
+	}
 	
 //	
 	
