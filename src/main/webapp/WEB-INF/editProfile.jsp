@@ -17,7 +17,7 @@
         <div class="card card-signin my-5">
           <div class="card-body">
             <h5 class="card-title text-center"><b>Edit Profile</b></h5>
-            <form:form action="/editProfile" class="form-signin" method="POST" modelAttribute="customer">
+            <form:form action="" class="form-signin" method="POST" modelAttribute="customer">
               <div class="form-group">
                 <form:label path="user.first_name">First Name</form:label>
                 <form:input path="user.first_name" type="text" class="form-control" required="required"/>
@@ -48,31 +48,8 @@
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>
-             
-<!--                <div class="form-group"> -->
-<%--                 <form:label path="price">Price</form:label> --%>
-<%--                 <form:input path="price" type="number" class="form-control" required="required"/>	 --%>
-<!--                 <div class="valid-feedback">Valid.</div> -->
-<!--                 <div class="invalid-feedback">Please fill out this field.</div> -->
-<!--               </div> -->
-<!--                 <div class="form-group"> -->
-<%--                 <form:label path="category_id">Category</form:label> --%>
-<%--                 <form:input path="category_id" type="number" class="form-control" required="required"/> --%>
-<!--                 <div class="valid-feedback">Valid.</div> -->
-<!--                 <div class="invalid-feedback">Please fill out this field.</div> -->
-<!--               </div> -->
-<!--                </div> -->
-              <%-- <div class="form-group">
-                <form:label name="file">Add Image</form:label>
-                <form:input type="file" name="file" class="form-control-file border" required="required"/>
-                <div class="valid-feedback">Valid.</div>
-                <div class="invalid-feedback">Please fill out this field.</div>
-              </div> --%>
-              <!-- <div class="form-group">
-              	<input type="file" name="file">
-              </div> -->
               <div class="form-group">
-                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Add Product</button><br><br>
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Update Profile</button><br><br>
               </div>
             </form:form>
           </div>

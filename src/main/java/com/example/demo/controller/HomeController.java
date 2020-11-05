@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dao.CartDao;
+import com.example.demo.dao.CategoryDao;
 import com.example.demo.dao.CustomerDao;
 import com.example.demo.dao.ImageDao;
 import com.example.demo.dao.Ordersdao;
@@ -35,7 +36,6 @@ import com.example.demo.dao.Userdao;
 import com.example.demo.models.Address;
 import com.example.demo.models.Category;
 import com.example.demo.models.Customer;
-import com.example.demo.models.Image;
 import com.example.demo.models.Message;
 import com.example.demo.models.MyUserDetails;
 import com.example.demo.models.Orders;
@@ -67,11 +67,14 @@ public class HomeController {
 	@Autowired
 	private TransactionDao transactiondao;
 	
-	@Autowired
+	@Autowired	
     private HttpServletRequest request;
 
 	@Autowired
 	private ImageDao imagedao;
+	
+	@Autowired
+	private CategoryDao categoryDao;
 	
 	@Autowired 
 	private PhoneNumberDao phonenumberdao;
@@ -168,27 +171,6 @@ public class HomeController {
 		return "redirect:/";
 	}
 	
-	@GetMapping("/addProduct")
-	public String addProductPage(ModelMap model) {
-		model.addAttribute("prod", new Product());
-		return "addProduct";
-	}
-	@PostMapping("/addProduct")
-	public String addProduct(ModelMap model, Product prod,MultipartFile file) {
-		int product_id = productdao.save(prod.getName(), prod.getDescription(), prod.getPrice(), prod.getCategory_id());
-		imagedao.save(file, request, product_id);
-		return "redirect:/";
-	}
-	
-	@GetMapping("/addCategory")
-	public String addCategoryPage(ModelMap model) {
-		return "addCategory";
-	}
-	@PostMapping("/addCategory")
-	public String addCategoryssssss(ModelMap model, String category_name) {
-		productdao.addCategory(category_name);
-		return "redirect:/";
-	}
 	
 	@GetMapping("/showProducts")
 	public String showProducts(@RequestParam("category_id") int category,ModelMap model) {
@@ -286,7 +268,7 @@ public class HomeController {
 	       o.setCustomer_id(getCustomerId());
 	       o.setIs_gift(false);
 	       o.setStatus("Processing");
-	       o.setDate(new Date());
+	       o.setOrder_date(new Date());
 	       int order_id = ordersdao.save(o);
 	       System.out.println(order_id);
 	       model.put("order_id", order_id);
@@ -301,7 +283,7 @@ public class HomeController {
 		ordersdao.updateorder(order_id, "SUCCESS");
 		Orders o = ordersdao.getorderbyId(order_id);
 		tr.setAmount(o.getAmount());
-		tr.setDate(o.getDate());
+		tr.setDate(o.getOrder_date());
 		tr.setPayment_method(payment_method);
 		tr.setOrder_id(o.getOrder_id());
 		int tr_id = transactiondao.save(o.getAmount(), o.getOrder_id(), o.getStatus(),payment_method);
@@ -369,15 +351,15 @@ public class HomeController {
 	@PostMapping("/rateProduct")
 	@ResponseBody
 	public String rateProduct(@RequestParam("category_name")String category_name) {
-		productdao.addCategory(category_name);
+//		productdao.addCategory(category_name);
 		return "Category Added";	
 	}
-	
 	@GetMapping("/getAllCategories")
 	@ResponseBody
 	public List<Category> getAllCategories() {
-		return productdao.showAllCategory();
+		return categoryDao.showAllCategory();
 	}
+	
 	
 	@GetMapping("/login")
 	public String login(ModelMap model,String error,String logout) {
@@ -432,8 +414,9 @@ public class HomeController {
 	public String editProfilePage(Customer customer) {
 		int user_id = getCustomerId();
 		customer.setCustomer_id(user_id);
-		 customer.getUser();
-		customer.setUser(new User( customer.getUser().getUsername(),  customer.getUser().getPassword(),  customer.getUser().getEmail(),  customer.getUser().getFirst_name(),  customer.getUser().getLast_name(), customer.getUser().getUser_id()));
+		System.out.println("asfdljasl;kdjf;lsajdfl;kjasd;lkfjsad");
+		 System.out.println(customer.getUser());
+//		customer.setUser(new User( customer.getUser().getUsername(),  customer.getUser().getPassword(),  customer.getUser().getEmail(),  customer.getUser().getFirst_name(),  customer.getUser().getLast_name(), customer.getUser().getUser_id()));
 		custdao.update(customer);
 		return "redirect:/myProfile";
 	}

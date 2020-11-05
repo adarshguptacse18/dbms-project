@@ -8,7 +8,7 @@ public class Orders {
     private int order_id;
     private String status;
     private double amount;
-    private Date date;
+    private Date order_date;
     private boolean is_gift = false;
     private String phone_number;
     private String street_no;
@@ -27,12 +27,12 @@ public class Orders {
 		this.amount = amount;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getOrder_date() {
+		return order_date;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setOrder_date(Date order_date) {
+		this.order_date = order_date;
 	}
 
 	public boolean getIs_gift() {
@@ -133,10 +133,13 @@ public class Orders {
 
 	@Override
 	public String toString() {
-		return "Orders [order_id=" + order_id + ", status=" + status + ", amount=" + amount + ", date=" + date
-				+ ", is_gift=" + is_gift + ", phone_number=" + phone_number + ", street_no=" + street_no + ", house_no="
-				+ house_no + ", locality_and_city=" + locality_and_city + ", pincode=" + pincode + ", state=" + state
-				+ ", transaction_id=" + transaction_id + ", customer_id=" + customer_id + ", prods=" + prods + "]";
+		return "Orders [order_id=" + order_id + ", status=" + status + ", amount=" + amount + ", order_date="
+				+ order_date + ", is_gift=" + is_gift + ", phone_number=" + phone_number + ", street_no=" + street_no
+				+ ", house_no=" + house_no + ", locality_and_city=" + locality_and_city + ", pincode=" + pincode
+				+ ", state=" + state + ", transaction_id=" + transaction_id + ", customer_id=" + customer_id
+				+ ", prods=" + prods + "]";
 	}
+
+	
 	
 }

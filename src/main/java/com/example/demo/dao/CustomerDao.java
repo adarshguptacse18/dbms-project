@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.models.Address;
 import com.example.demo.models.Customer;
 import com.example.demo.models.Review;
+import com.example.demo.models.User;
 
 @Transactional
 @Repository
@@ -38,6 +39,8 @@ public class CustomerDao {
 	public Customer getCustomerByCustomerId(int id) {
 		System.out.println(id);
 		Customer c= jt.queryForObject("select GSTIN_NUMBER, customer_id,group_concat(number) as numbers  from customer LEFT JOIN phone_numbers on customer_id = user_id where customer_id = ? group by customer.customer_id ;", new Object[]{id}, new BeanPropertyRowMapper<Customer>(Customer.class));
+		User u = jt.queryForObject("select * from user where user_id = "+id, new BeanPropertyRowMapper<User>(User.class));
+		c.setUser(u);
 		return c;
 	}
 	
@@ -100,5 +103,28 @@ public class CustomerDao {
 	public void update(Customer customer) {
 		jt.update("update customer set GSTIN_NUMBER=? where customer_id = ?",customer.getGSTIN_NUMBER(),customer.getCustomer_id());
 		jt.update("update user set username=?,first_name=?,last_name=?,email=? where user.user_id=?",customer.getUser().getUsername(),customer.getUser().getFirst_name(),customer.getUser().getLast_name(),customer.getUser().getEmail(),customer.getCustomer_id());
+	}
+	public List<Customer> getAllCustomers() {
+		String sql = "select * from customer as C INNER JOIN user as U on C.customer_id = U.user_id";
+		return jt.query(sql,new RowMapper<Customer>() {
+			public Customer mapRow(ResultSet row,int rowNum) throws SQLException{
+				Customer c = new Customer();
+				c.setCustomer_id(row.getInt("customer_id"));
+				c.setCart_id(row.getInt("cart_id"));
+				c.setGSTIN_NUMBER(row.getInt("GSTIN_NUMBER"));
+				c.setTrust_value(row.getDouble("trust_value"));
+				User u = new User();
+				u.setEmail(row.getString("email"));
+				u.setFirst_name(row.getString("first_name"));
+				u.setLast_name(row.getString("last_name"));
+				u.setRole(row.getString("role"));
+				u.setUsername(row.getString("username"));
+				c.setUser(u);
+				return c;
+			};
+		});
+		// TODO Auto-generated method stub
 	}	
+
+	
 }

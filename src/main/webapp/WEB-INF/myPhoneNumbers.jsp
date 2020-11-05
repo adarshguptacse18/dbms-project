@@ -50,7 +50,7 @@
 		      var phone_number= document.getElementById("number").value;
 		      
 					 $.ajax({
-					    url: '/addPhoneNumber',
+					    url: '',
 					    type: 'POST',
 					    dataType: 'json',
 					    data:{
@@ -72,9 +72,9 @@
 			
 	</script>
 	
-	<script src="webjars/jquery/3.4.1/jquery.min.js"></script>
-    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<link href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 		
 </body>
 </html>

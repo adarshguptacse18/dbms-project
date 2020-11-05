@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<jsp:include page="navbar.jsp" />
 
 <!DOCTYPE html>
 <html>
@@ -11,13 +10,15 @@
 <title>Insert title here</title>
 </head>
 <body>
+<jsp:include page="adminNavBar.jsp" />
+
 	 <div class="container">
     <div class="row">
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
         <div class="card card-signin my-5">
           <div class="card-body">
             <h5 class="card-title text-center"><b>Add Product</b></h5>
-            <form:form action="/addProduct" class="form-signin" method="POST" modelAttribute="prod" enctype = "multipart/form-data">
+            <form:form action="" class="form-signin" method="POST" modelAttribute="prod" enctype = "multipart/form-data">
               <div class="form-group">
                 <form:label path="name">Product Name</form:label>
                 <form:input path="name" type="text" class="form-control" required="required"/>

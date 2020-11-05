@@ -16,7 +16,7 @@
         <div class="card card-signin my-5">
           <div class="card-body">
             <h5 class="card-title text-center"><b>Add Product</b></h5>
-            <form action="/addCategory" class="form-signin" method="POST">
+            <form action="" class="form-signin" method="POST">
               <div class="form-group">
                 <label name="category_name">Category Name</label>
                 <input name="category_name" type="text" class="form-control" required="required"/>

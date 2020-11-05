@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-    <jsp:include page="navbar.jsp" />
     
 <!DOCTYPE html>
 <html>
@@ -10,9 +9,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+    <jsp:include page="adminNavBar.jsp" />
 	
-	 <h3>My Orders</h3>
+	 <h3>All Orders</h3>
 		<div class="container">
 		 	<table  class="table">
 				<thead>
@@ -20,6 +19,7 @@
 						<th>Order Date</th>
 						<th>Total Amount</th>
 						<th>Status</th>
+						<th>Customer ID</th>						
 						<th></th>
 					</tr>
 				</thead>
@@ -29,7 +29,8 @@
 							<td>${order.order_date}</td>
 							<td>${order.amount}</td>	
 							<td>${order.status}</td>
-							<td><a href="/viewOrder/${order.order_id}" type="button" class="btn btn-warning">View Details</span></td> 		
+							<td><a href="/admin/user/${order.customer_id}">${order.customer_id}</a></td>
+							<td><a href="/admin/viewOrder/${order.order_id}" type="button" class="btn btn-warning">View Details</span></td> 		
 						</tr>
 					</c:forEach>
 					

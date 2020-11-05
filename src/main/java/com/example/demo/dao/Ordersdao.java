@@ -92,10 +92,15 @@ public class Ordersdao {
                 u.setStatus(row.getString("status"));
                 u.setAmount(row.getInt("amount"));
                 u.setCustomer_id(row.getInt("customer_id"));                
-                u.setDate(row.getDate("order_date"));
+                u.setOrder_date(row.getDate("order_date"));
                 return u;
             }
         });
+    }
+    
+    public List<Orders> getAllOrders(){
+    	String sql = "select * from orders";
+    	return jt.query(sql, new BeanPropertyRowMapper<Orders>(Orders.class));
     }
 
     public void updateorder(int order_id,int tr_id) {

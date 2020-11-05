@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<jsp:include page="adminNavBar.jsp" />
 
 <!DOCTYPE html>
 <html>
@@ -10,7 +9,9 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
- <body onload="myFunction(${prod.hide})"> 
+<jsp:include page="adminNavBar.jsp" />
+
+ <body> 
 		<div class="container">
 			 <h3>Hey Admin</h3>
 		 	<table  class="table table-striped  table-hover">
@@ -35,8 +36,14 @@
 							<td>${prod.price}</td>
 							<td><a href="/admin/editProduct/${prod.product_id}" type="button" class="btn btn-warning">Edit</a></td>
 							<td><span onclick="hideProduct(${prod.product_id})"  class="btn btn-warning"> 
-							<span id="hideProduct" >Hide</span>
-							<span id="showProduct" >Show</span>
+							<c:if test="${prod.hide==false }">
+								<span id="hide_${prod.product_id}" >Hide</span>
+								<span id="show_${prod.product_id}" hidden >Show</span>
+							</c:if>
+							<c:if test="${prod.hide==true }">
+								<span id="hide_${prod.product_id}" hidden>Hide</span>
+								<span id="show_${prod.product_id}"  >Show</span>
+							</c:if>
 <%-- 								<c:if test="${prod.hide==false}"><span id="hideProduct">Hide</span></c:if> --%>
 <%-- 								<c:if test="${prod.hide==true }"><span id="showProduct">Show</span></c:if> --%>
 							</span></td> 		
@@ -50,9 +57,9 @@
 				
 		</div>	
 		<script>
-		function myFuntion(boolean b){
-			 document.getElementById('hideProduct').hidden=!b;
-			 document.getElementById('showProduct').hidden=b;
+		function myFunction(b){
+			document.getElementById('hideProduct').hidden=!b;
+			document.getElementById('showProduct').hidden=b;
 		}
 		function hideProduct(product_id,image_path){
 			
@@ -68,8 +75,8 @@
 			  .done(function(data) {
 			  		console.log(data);
 			  		
-					 document.getElementById('hideProduct').hidden=!document.getElementById('hideProduct').hidden;
-					 document.getElementById('showProduct').hidden=!document.getElementById('showProduct').hidden;
+					 document.getElementById('hide_'+product_id).hidden=!document.getElementById('hide_'+product_id).hidden;
+					 document.getElementById('show_'+product_id).hidden=!document.getElementById('show_'+product_id).hidden;
 					 
 			  }); 
 			}

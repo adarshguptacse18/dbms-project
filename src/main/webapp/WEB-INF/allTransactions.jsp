@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-    <jsp:include page="navbar.jsp" />
     
 <!DOCTYPE html>
 <html>
@@ -10,26 +9,26 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+    <jsp:include page="adminNavBar.jsp" />
 	
-	 <h3>My Orders</h3>
+	 <h3>All Orders</h3>
 		<div class="container">
 		 	<table  class="table">
 				<thead>
 					<tr>
-						<th>Order Date</th>
-						<th>Total Amount</th>
+						<th>Transaction Date</th>
 						<th>Status</th>
-						<th></th>
+						<th>Payment Method</th>		
+						<th>Order ID</th>										
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${orders}" var="order">
-						<tr id="prod_row_${order.order_id}">
-							<td>${order.order_date}</td>
-							<td>${order.amount}</td>	
-							<td>${order.status}</td>
-							<td><a href="/viewOrder/${order.order_id}" type="button" class="btn btn-warning">View Details</span></td> 		
+					<c:forEach items="${transactions}" var="transaction">
+						<tr>
+							<td>${transaction.date}</td>
+							<td>${transaction.status}</td>
+							<td>${transaction.payment_method}</td>	
+							<td><a href="/admin/viewOrder/${transaction.order_id}">${transaction.transaction_id}</a></td>
 						</tr>
 					</c:forEach>
 					

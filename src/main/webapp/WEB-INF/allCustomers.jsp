@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-    <jsp:include page="navbar.jsp" />
     
 <!DOCTYPE html>
 <html>
@@ -10,26 +9,36 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-	
-	 <h3>My Orders</h3>
+    <jsp:include page="adminNavBar.jsp" />
+		
+	 <h3>All Customers</h3>
 		<div class="container">
 		 	<table  class="table">
 				<thead>
 					<tr>
-						<th>Order Date</th>
-						<th>Total Amount</th>
-						<th>Status</th>
+						<th>First Name</th>
+						<th>Last Name</th>
+						<th>email</th>
+						<th>Username</th>
+						<th>GSTIN_NUMBER</th>
+						<th>Trust Value</th>
+						<th></th>
+						<th></th>
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${orders}" var="order">
-						<tr id="prod_row_${order.order_id}">
-							<td>${order.order_date}</td>
-							<td>${order.amount}</td>	
-							<td>${order.status}</td>
-							<td><a href="/viewOrder/${order.order_id}" type="button" class="btn btn-warning">View Details</span></td> 		
+					<c:forEach items="${customers}" var="customer">
+						<tr id="">
+							<td>${customer.user.first_name}</td>
+							<td>${customer.user.last_name}</td>	
+							<td>${customer.user.email}</td>
+							<td>${customer.user.username}</td>
+							<td>${customer.GSTIN_NUMBER }</td>
+							<td>${customer.trust_value }</td>		
+							<td><a href="/admin/viewEditPhoneNumber/${customer.customer_id}" type="button" class="btn btn-secondary">Phone Numbers</span></td> 																
+							<td><a href="/admin/Orders/${customer.customer_id}" type="button" class="btn btn-primary">View Orders</span></td> 									
+							<td><a href="/admin/editProfile/${customer.customer_id}/" type="button" class="btn btn-warning">Edit Profile</span></td> 		
 						</tr>
 					</c:forEach>
 					

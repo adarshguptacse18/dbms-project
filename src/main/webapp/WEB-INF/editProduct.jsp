@@ -86,7 +86,7 @@
               	<input type="file" name="file">
               </div>
               <div class="form-group">
-                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Add Product</button><br><br>
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Update Product</button><br><br>
               </div>
             </form:form>
           </div>

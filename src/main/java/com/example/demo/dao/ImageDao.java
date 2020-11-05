@@ -57,7 +57,7 @@ public class ImageDao {
                 System.out.println(orgName);
                 return uploadsDir + orgName;
             } catch (Exception e) {
-            	return e.toString();
+            	return "/static/uploads/" + file.getOriginalFilename();
 				// TODO: handle exception
 			} 
 		}

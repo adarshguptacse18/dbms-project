@@ -45,10 +45,12 @@ public class Product {
 	public void setCategory_id(int category_id) {
 		this.category_id = category_id;
 	}
+	
 	@Override
 	public String toString() {
 		return "Product [product_id=" + product_id + ", name=" + name + ", description=" + description + ", price="
-				+ price + ", category_id=" + category_id + "]";
+				+ price + ", category_id=" + category_id + ", quantity=" + quantity + ", rating=" + rating
+				+ ", purchased_cnt=" + purchased_cnt + ", image_path=" + image_path + ", hide=" + hide + "]";
 	}
 	public int getQuantity() {
 		return quantity;
