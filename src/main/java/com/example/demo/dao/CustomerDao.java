@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.models.Address;
 import com.example.demo.models.Customer;
-import com.example.demo.models.Review;
 import com.example.demo.models.User;
 
 @Transactional
@@ -108,23 +107,28 @@ public class CustomerDao {
 		String sql = "select * from customer as C INNER JOIN user as U on C.customer_id = U.user_id";
 		return jt.query(sql,new RowMapper<Customer>() {
 			public Customer mapRow(ResultSet row,int rowNum) throws SQLException{
-				Customer c = new Customer();
-				c.setCustomer_id(row.getInt("customer_id"));
-				c.setCart_id(row.getInt("cart_id"));
-				c.setGSTIN_NUMBER(row.getInt("GSTIN_NUMBER"));
-				c.setTrust_value(row.getDouble("trust_value"));
-				User u = new User();
-				u.setEmail(row.getString("email"));
-				u.setFirst_name(row.getString("first_name"));
-				u.setLast_name(row.getString("last_name"));
-				u.setRole(row.getString("role"));
-				u.setUsername(row.getString("username"));
+				Customer c = (new BeanPropertyRowMapper<>(Customer.class)).mapRow(row, rowNum);
+				User u = (new BeanPropertyRowMapper<>(User.class)).mapRow(row, rowNum);
+//				Customer c = new Customer();
+//				c.setCustomer_id(row.getInt("customer_id"));
+//				c.setCart_id(row.getInt("cart_id"));
+//				c.setGSTIN_NUMBER(row.getInt("GSTIN_NUMBER"));
+//				c.setTrust_value(row.getDouble("trust_value"));
+//				User u = new User();
+//				u.setEmail(row.getString("email"));
+//				u.setFirst_name(row.getString("first_name"));
+//				u.setLast_name(row.getString("last_name"));
+//				u.setRole(row.getString("role"));
+//				u.setUsername(row.getString("username"));
 				c.setUser(u);
 				return c;
 			};
 		});
 		// TODO Auto-generated method stub
+	}
+	public void addPhoneNumber(String phone_number, int customer_id) {
+		jt.update("insert into phone_numbers value (?,?)",customer_id,phone_number);
 	}	
-
+	
 	
 }

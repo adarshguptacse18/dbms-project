@@ -14,7 +14,7 @@ public class MyUserDetails implements UserDetails {
 	private String email;
 	private String first_name;
 	private String last_name;
-	
+	private boolean is_enabled;
 	public String getEmail() {
 		return email;
 	}
@@ -39,7 +39,7 @@ public class MyUserDetails implements UserDetails {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public MyUserDetails(int user_id,String username,String password,List<GrantedAuthority> auth,String email,String first_name,String last_name) {
+	public MyUserDetails(int user_id,String username,String password,List<GrantedAuthority> auth,String email,String first_name,String last_name,boolean is_enabled) {
 		this.user_id=user_id;
 		this.username=username;
 		this.password=password;
@@ -47,6 +47,7 @@ public class MyUserDetails implements UserDetails {
 		this.first_name=first_name;
 		this.last_name= last_name;
 		this.email = email;
+		this.is_enabled = is_enabled;
 	}
 
 	public int getUser_id() {
@@ -89,7 +90,7 @@ public class MyUserDetails implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return true;
+		return is_enabled;
 	}
 
 	@Override

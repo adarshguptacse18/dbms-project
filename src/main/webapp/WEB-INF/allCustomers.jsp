@@ -25,6 +25,7 @@
 						<th></th>
 						<th></th>
 						<th></th>
+						<th></th>						
 					</tr>
 				</thead>
 				<tbody>
@@ -36,6 +37,18 @@
 							<td>${customer.user.username}</td>
 							<td>${customer.GSTIN_NUMBER }</td>
 							<td>${customer.trust_value }</td>		
+							<td><span onclick="disableEnableUser(${customer.customer_id})"  class="btn btn-danger"> 
+							<c:if test="${customer.user.is_enabled==true }">
+								<span id="hide_${customer.customer_id}" >Disable</span>
+								<span id="show_${customer.customer_id}" hidden >Enable</span>
+							</c:if>
+							<c:if test="${customer.user.is_enabled==false }">
+								<span id="hide_${customer.customer_id}" hidden>Disable</span>
+								<span id="show_${customer.customer_id}"  >Enable</span>
+							</c:if>
+<%-- 								<c:if test="${prod.hide==false}"><span id="hideProduct">Hide</span></c:if> --%>
+<%-- 								<c:if test="${prod.hide==true }"><span id="showProduct">Show</span></c:if> --%>
+							</span></td> 																							
 							<td><a href="/admin/viewEditPhoneNumber/${customer.customer_id}" type="button" class="btn btn-secondary">Phone Numbers</span></td> 																
 							<td><a href="/admin/Orders/${customer.customer_id}" type="button" class="btn btn-primary">View Orders</span></td> 									
 							<td><a href="/admin/editProfile/${customer.customer_id}/" type="button" class="btn btn-warning">Edit Profile</span></td> 		
@@ -49,29 +62,30 @@
 		
 	
 	
-	<script src="webjars/jquery/3.4.1/jquery.min.js"></script>
-    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<link href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 		<script>
-		function deleteFromCart(id){
-			var quantity= document.getElementById('prod_'+id).value;
+		function disableEnableUser(customer_id){
 			
 			 $.ajax({
-			    url: '/addToCart',
-			    type: 'GET',
+			    url: '/admin/editProfile/disableEnableUser',
+			    type: 'POST',
 			    dataType: 'json',
 			    data:{
-			          'product_id':id,
-			          'quantity':-quantity,
+			          'user_id':customer_id,
 			          },
 	
 			         })
 			  .done(function(data) {
 			  		console.log(data);
+			  		
+					 document.getElementById('hide_'+customer_id).hidden=!document.getElementById('hide_'+customer_id).hidden;
+					 document.getElementById('show_'+customer_id).hidden=!document.getElementById('show_'+customer_id).hidden;
+					 
 			  }); 
-			 $('.toast').toast('show');
-			 document.getElementById('prod_row_'+id).hidden=true;				 
 			}
+			
 			
 	</script>
 </body>

@@ -100,5 +100,8 @@ public class Userdao {
         else
             return true;
     }
-    
+    public void disableEnableUser(int user_id) {
+		jt.update("update user set is_enabled = !is_enabled where user_id =?",user_id);
+	}
+
 }

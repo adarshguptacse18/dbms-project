@@ -24,6 +24,7 @@ import com.example.demo.dao.Ordersdao;
 import com.example.demo.dao.PhoneNumberDao;
 import com.example.demo.dao.ProductDao;
 import com.example.demo.dao.TransactionDao;
+import com.example.demo.dao.Userdao;
 import com.example.demo.models.Category;
 import com.example.demo.models.Customer;
 import com.example.demo.models.Message;
@@ -61,6 +62,9 @@ public class AdminController {
 	
 	@Autowired 
 	PhoneNumberDao phoneNumberDao;
+	
+	@Autowired
+	Userdao userDao;
 	
 	@ModelAttribute("username")
 	protected String getUsername() {
@@ -238,6 +242,13 @@ public class AdminController {
 		return "redirect:/admin/allCustomers";
 	}
 	
+	@PostMapping("editProfile/disableEnableUser")
+	@ResponseBody
+	public Message enableDisableUser(int user_id) {
+		userDao.disableEnableUser(user_id);
+		return new Message(true, "User status changed");
+	}
+	
 	@GetMapping("/viewEditPhoneNumber/{customer_id}")
 	public String viewEditPhoneNumberPage(@PathVariable("customer_id") int customer_id, ModelMap model) {
 		model.addAttribute("numbers", phoneNumberDao.getAllPhoneNumbersByCustomerId(customer_id));
@@ -247,7 +258,7 @@ public class AdminController {
 	@PostMapping("/viewEditPhoneNumber/{customer_id}")
 	@ResponseBody
 	public Message viewEditPhoneNumber(@PathVariable("customer_id") int customer_id, ModelMap model,String phone_number) {
-		phoneNumberDao.addPhoneNumber(phone_number, customer_id);
+		customerDao.addPhoneNumber(phone_number, customer_id);
 		return new Message(true,"Phone number added");
 	}
 	

@@ -61,7 +61,7 @@
 			document.getElementById('hideProduct').hidden=!b;
 			document.getElementById('showProduct').hidden=b;
 		}
-		function hideProduct(product_id,image_path){
+		function hideProduct(product_id){
 			
 			 $.ajax({
 			    url: '/admin/hideProduct',

@@ -30,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().toString());
         grantList.add(authority);
         System.out.println(user.getPassword());
-        return new MyUserDetails(user.getUser_id(), user.getUsername(), user.getPassword(), grantList,user.getEmail(),user.getFirst_name(),user.getLast_name());
+        return new MyUserDetails(user.getUser_id(), user.getUsername(), user.getPassword(), grantList,user.getEmail(),user.getFirst_name(),user.getLast_name(),user.isIs_enabled());
     }
 
 }

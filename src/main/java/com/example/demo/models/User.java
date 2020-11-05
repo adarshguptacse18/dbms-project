@@ -1,22 +1,23 @@
 package com.example.demo.models;
 
-import java.util.List;
-
 public class User {
 	private int user_id;
     private String username;
     private String password;
     private String email;	
     private String first_name;
-    @Override
-	public String toString() {
-		return "User [user_id=" + user_id + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", first_name=" + first_name + ", last_name=" + last_name + ", role=" + role + "]";
-	}
+    private boolean is_enabled;
+ 
 	private String last_name;
     private String role;
 
-    public User() {
+    @Override
+	public String toString() {
+		return "User [user_id=" + user_id + ", username=" + username + ", password=" + password + ", email=" + email
+				+ ", first_name=" + first_name + ", is_enabled=" + is_enabled + ", last_name=" + last_name + ", role="
+				+ role + "]";
+	}
+	public User() {
     	
     }
     public User(String username,String password,String email,String first_name,String last_name,int user_id) {
@@ -156,6 +157,12 @@ public class User {
 	}
 	public void setUser_id(int user_id) {
 		this.user_id = user_id;
+	}
+	public boolean isIs_enabled() {
+		return is_enabled;
+	}
+	public void setIs_enabled(boolean is_enabled) {
+		this.is_enabled = is_enabled;
 	}
 
 }
