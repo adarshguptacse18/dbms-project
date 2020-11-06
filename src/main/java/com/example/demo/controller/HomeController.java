@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -82,6 +83,7 @@ public class HomeController {
 	public static String uploadDirectory = System.getProperty("user.dir") + "/uploads";
 	
 	
+	
 	public String imageUpload(MultipartFile file) {
 		if (!file.isEmpty()) {
             try {
@@ -103,6 +105,9 @@ public class HomeController {
 		}
 		return "uploadView";
 	}
+	
+	
+	
 	@ModelAttribute("username")
 	protected String getUsername() {
 		Object p = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -112,12 +117,18 @@ public class HomeController {
 		return null;
 	}
 	
-//	@GetMapping("/")
-//	public String helloWorld() {
-//		System.out.println(productdao.showAllProducts()	);
-//		return "home";
-//	}
-//	
+	
+	@ModelAttribute("role")
+	protected String getRole() {
+		Object p = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(p instanceof MyUserDetails) {
+			SimpleGrantedAuthority a =  (SimpleGrantedAuthority) ((MyUserDetails) p).getAuthorities().toArray()[0];
+			return a.getAuthority();
+		}
+		return null;
+	}
+	
+
 	public int getCustomerId() {
 		return ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser_id();
 	}
@@ -135,13 +146,17 @@ public class HomeController {
 		return "Hi "+p.getName();
 		
 	}
-	@GetMapping("/vendor")
-	@ResponseBody
-	public String vendor() {
-		return "Hi vendor";
+	
+	@GetMapping("/")
+	public String hola() {
+		String role = getRole();
+		System.out.println(role);
+		String res ;
+		if(role==null || role.equalsIgnoreCase("ROLE_USER")) res = "redirect:/showAllProducts";
+		else if(role.equalsIgnoreCase("ROLE_VENDOR")) res = "redirect:/vendor/";
+		else res = "redirect:/admin/";
+		return res;
 	}
-	
-	
 	
 	@GetMapping("/register")
 	public String register(ModelMap model) {
@@ -149,19 +164,19 @@ public class HomeController {
 		return "UserRegister";
 	}
 	
-	@GetMapping("/registerVendor")
-	public String registerVendor(ModelMap model,Principal p) {
-		User t=new User();
-		model.addAttribute("user", t);
-		return "UserRegister";
-	}	
+//	@GetMapping("/registerVendor")
+//	public String registerVendor(ModelMap model,Principal p) {
+//		User t=new User();
+//		model.addAttribute("user", t);
+//		return "UserRegister";
+//	}	
 	@PostMapping("/register")
 	public String userRegister(ModelMap model, User user) {
 		user.setRole("ROLE_USER");
 		userdao.save(user);
 //		userdao.save(user.getUsername(), user.getPassword(), user.getRole());
 		user= userdao.findByUsername(user.getUsername());
-		custdao.save(user.getUser_id(), 1234);
+		custdao.save(user.getUser_id(), 0);
 		return "redirect:/";
 	}
 	@PostMapping("/registerVendor")
@@ -190,7 +205,7 @@ public class HomeController {
 		return "showOneProduct";
 	}
 	
-	@GetMapping({"/showAllProducts","/"})
+	@GetMapping({"/showAllProducts"})
 	public String showAllProducts(ModelMap model) {
 		List<Product> p=productdao.showAllProducts();
 		model.addAttribute("prods",p);

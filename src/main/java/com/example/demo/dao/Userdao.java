@@ -1,20 +1,26 @@
 package com.example.demo.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.models.User;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
 
 @Transactional
 @Repository
@@ -36,12 +42,34 @@ public class Userdao {
     	String sql="insert into user (username, password, role) values(?,?,?)";
     	jt.update(sql,username,password,role);
     }
-    public void save(User user) {
-    	String password = bCryptPasswordEncoder.encode(user.getPassword());
-    	user.setPassword(password);
-    	user.setRole("ROLE_USER");
-    	jt.update("insert into user (username,role,password,email,first_name,last_name) value(?,?,?,?,?,?)",user.getUsername(),user.getRole(),user.getPassword(),user.getEmail(),user.getFirst_name(),user.getLast_name());
-    }
+    public int save(User u) {
+		u.setPassword(bCryptPasswordEncoder.encode(u.getPassword()));
+		String sql = "insert into user (username,role,password,email,first_name,last_name) values (?,?,?,?,?,?)";
+        KeyHolder holder = new GeneratedKeyHolder();
+		  jt.update(new PreparedStatementCreator() {
+
+	            @Override
+	            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+	                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+	                ps.setString(1, u.getUsername());
+	                ps.setString(2, u.getRole());
+	                ps.setString(3, u.getPassword());
+	                ps.setString(4, u.getEmail());
+	                ps.setString(5, u.getFirst_name());
+	                ps.setString(6, u.getLast_name());
+	                return ps;
+	                
+	            }
+	        }, holder);
+		  int user_id = holder.getKey().intValue();
+		  return user_id;
+	}
+//    public void save(User user) {
+//    	String password = bCryptPasswordEncoder.encode(user.getPassword());
+//    	user.setPassword(password);
+//    	user.setRole("ROLE_USER");
+//    	jt.update("insert into user (username,role,password,email,first_name,last_name) value(?,?,?,?,?,?)",user.getUsername(),user.getRole(),user.getPassword(),user.getEmail(),user.getFirst_name(),user.getLast_name());
+//    }
     public User findByUsername(String username) throws UsernameNotFoundException{
         String sql = "select * from user where username='" + username + "'";
         if(jt.queryForList(sql).isEmpty()) {

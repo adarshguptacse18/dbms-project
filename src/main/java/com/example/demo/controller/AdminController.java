@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -76,6 +77,16 @@ public class AdminController {
 		Object p = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if(p instanceof MyUserDetails) {
 			return ((MyUserDetails) p).getUsername();
+		}
+		return null;
+	}
+	
+	@ModelAttribute("role")
+	protected String getRole() {
+		Object p = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(p instanceof MyUserDetails) {
+			SimpleGrantedAuthority a =  (SimpleGrantedAuthority) ((MyUserDetails) p).getAuthorities().toArray()[0];
+			return a.getAuthority();
 		}
 		return null;
 	}

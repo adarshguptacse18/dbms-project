@@ -28,11 +28,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable();
 
 		http.authorizeRequests()
+			.antMatchers("/vendor/register","/vendor/login").permitAll()
 			.antMatchers("/admin","/admin/**").hasRole("ADMIN")
 			.antMatchers("/user","/addToCart").hasAnyRole("ADMIN","USER","VENDOR")
 			.antMatchers("/vendor").hasAnyRole("ADMIN","VENDOR")
 			.antMatchers("/").permitAll()
-			.and().formLogin().loginPage("/login");
+			.and()
+			.formLogin()
+			.loginPage("/login").defaultSuccessUrl("/", true);
 	}
 	
 	@Bean
