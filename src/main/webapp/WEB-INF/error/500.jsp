@@ -9,9 +9,9 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<jsp:include page="vendorNavBar.jsp" />
 
  <body> 
+    <jsp:include page="navbar.jsp" />
 
 	
 	<div class="container-fluid custom-container">

@@ -11,13 +11,15 @@
 </head>
 
  <body> 
-    <jsp:include page="navbar.jsp" />
-
+	    <jsp:include page="navbar.jsp" />
+	
+	
 	<div class="container-fluid custom-container">
 	    <div class="div text-center" style="color: red;">
-	        You don't have permission to access <script>document.write(window.location.pathname);</script> on this server.
+	        The requested method <script>document.write(window.location.pathname);</script> not allowed.
 	    </div>
 	</div>
+
 	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">

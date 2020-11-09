@@ -178,6 +178,18 @@ public class VendorController {
 		return "vendorProfile";
 	}
 	
+	@GetMapping("/editProfile")
+	public String editProfilePage(ModelMap model) {
+		model.addAttribute("vendor", vendorDao.getVendorBySupplier_Id(getSupplierId()));
+		return "vendorEditProfile";
+	}
+	
+	@PostMapping("/editProfile")
+	public String editProfile(ModelMap model,Vendor v) {
+		v.setSupplier_id(getSupplierId());
+		vendorDao.update(v);
+		return "redirect:/vendor/myProfile";
+	}
 	
 	@GetMapping("/AllCategories")
 	public String AllCategoriesPage(ModelMap model) {
