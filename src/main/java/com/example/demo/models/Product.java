@@ -46,6 +46,7 @@ public class Product {
 		this.category_id = category_id;
 	}
 	
+	
 	@Override
 	public String toString() {
 		return "Product [product_id=" + product_id + ", name=" + name + ", description=" + description + ", price="

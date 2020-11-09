@@ -24,6 +24,7 @@ import com.example.demo.dao.PhoneNumberDao;
 import com.example.demo.dao.ProductDao;
 import com.example.demo.dao.Userdao;
 import com.example.demo.dao.VendorDao;
+import com.example.demo.models.Category;
 import com.example.demo.models.Message;
 import com.example.demo.models.MyUserDetails;
 import com.example.demo.models.Product;
@@ -118,9 +119,16 @@ public class VendorController {
 		return "allProductsForVendor";
 	}
 	
+	public List<Category> getAllCategories() {
+		return categoryDao.showAllCategory();
+	}
+	
+	
+	
 	@GetMapping("/addProduct")
 	public String addProductPage(ModelMap model) {
 		model.addAttribute("prod", new Product());
+		model.addAttribute("categories", getAllCategories());
 		return "addProduct";
 	}
 	

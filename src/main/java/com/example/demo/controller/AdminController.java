@@ -123,6 +123,8 @@ public class AdminController {
 	public String editProductPage(ModelMap model,@PathVariable("product_id") int product_id) {
 		Product p = productdao.getproductbyId(product_id);
 		model.addAttribute("prod", p);
+		model.addAttribute("categories", getAllCategories());
+
 		System.out.println(p.image_path);
 		return "editProduct";
 	}
@@ -156,6 +158,7 @@ public class AdminController {
 	@GetMapping("/addProduct")
 	public String addProductPage(ModelMap model) {
 		model.addAttribute("prod", new Product());
+		model.addAttribute("categories", getAllCategories());
 		return "addProduct";
 	}
 	

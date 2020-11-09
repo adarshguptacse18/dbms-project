@@ -31,18 +31,21 @@
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>
-               <div class="form-group">
+              <div class="form-group">
                 <form:label path="price">Price</form:label>
                 <form:input path="price" type="number" class="form-control" required="required"/>	
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>
-                <div class="form-group">
-                <form:label path="category_id">Category</form:label>
-                <form:input path="category_id" type="number" class="form-control" required="required"/>
-                <div class="valid-feedback">Valid.</div>
-                <div class="invalid-feedback">Please fill out this field.</div>
-              </div>
+               <div class="form-group">
+             	  	<form:label path="category_id">Category</form:label>	
+               	 	<form:label path="category_id">Category</form:label>
+                        <form:select path="category_id" id="category" class="form-control">
+                        	<c:forEach items="${categories}" var="category">
+                          		 <option value="${category.category_id}">${category.category_name}</option>
+							</c:forEach>                        
+                       </form:select>
+                
                </div>
               <%-- <div class="form-group">
                 <form:label name="file">Add Image</form:label>
