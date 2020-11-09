@@ -101,6 +101,7 @@ public class ProductDao {
 	            }
 	        });
 	    }
+	 
 	 public List<Product> showAllProducts(int category) {
 	        String sql ="select P.product_id, P.name, P.category_id, P.description, P.price , P.quantity as quantity ,max(image_path)as image_path from product as P left join images on P.product_id = images.product_id where P.category_id = "+category+" group by P.product_id";
 	        return jt.query(sql, new RowMapper<Product>() {

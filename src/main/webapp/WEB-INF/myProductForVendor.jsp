@@ -9,11 +9,11 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<jsp:include page="adminNavBar.jsp" />
+<jsp:include page="vendorNavBar.jsp" />
 
  <body> 
 		<div class="container">
-			 <h3>Hey Admin</h3>
+			 <h3>Hey Vendor</h3>
 		 	<table  class="table table-striped  table-hover">
 				<thead>
 					<tr>
@@ -28,27 +28,16 @@
 				</thead>
 				<tbody>
 					<c:forEach items="${prods}" var="prod">
-						<tr>
+						<tr id = "prod_${prod.product_id}">
 							<td>${prod.product_id}</td>
 							<td>${prod.name}</td>
 							<td>${prod.description}</td>
 							<td>${prod.quantity}	
 							<td>${prod.price}</td>
-							<c:if test="${role=='ROLE_ADMIN' }"><td><a href="/admin/editProduct/${prod.product_id}" type="button" class="btn btn-warning">Edit</a></td>
-							<td><span onclick="hideProduct(${prod.product_id})"  class="btn btn-warning">
-							</c:if> 
-							<c:if test="${prod.hide==false }">
-								<span id="hide_${prod.product_id}" >Hide</span>
-								<span id="show_${prod.product_id}" hidden >Show</span>
-							</c:if>
-							<c:if test="${prod.hide==true }">
-								<span id="hide_${prod.product_id}" hidden>Hide</span>
-								<span id="show_${prod.product_id}"  >Show</span>
-							</c:if>
-<%-- 								<c:if test="${prod.hide==false}"><span id="hideProduct">Hide</span></c:if> --%>
-<%-- 								<c:if test="${prod.hide==true }"><span id="showProduct">Show</span></c:if> --%>
+							<td><span onclick="deleteFromSupplies(${prod.product_id})"  class="btn btn-warning"> 
+								I don't deliver it.
 							</span></td> 		
-							 		
+							<td><a href="/vendor/viewProduct/${prod.product_id}" type="button" class="btn btn-warning">View</a></td>							 		
 						</tr>
 					</c:forEach>
 							
@@ -62,10 +51,10 @@
 			document.getElementById('hideProduct').hidden=!b;
 			document.getElementById('showProduct').hidden=b;
 		}
-		function hideProduct(product_id){
+		function deleteFromSupplies(product_id){
 			
 			 $.ajax({
-			    url: '/admin/hideProduct',
+			    url: '/vendor/delete',
 			    type: 'POST',
 			    dataType: 'json',
 			    data:{
@@ -74,13 +63,11 @@
 	
 			         })
 			  .done(function(data) {
-			  		console.log(data);
-			  		
-					 document.getElementById('hide_'+product_id).hidden=!document.getElementById('hide_'+product_id).hidden;
-					 document.getElementById('show_'+product_id).hidden=!document.getElementById('show_'+product_id).hidden;
-					 
+			  		console.log(data);		
+			  		document.getElementById('prod_'+product_id).hidden=true;			 
 			  }); 
 			}
+			
 			
 	</script>
 	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>

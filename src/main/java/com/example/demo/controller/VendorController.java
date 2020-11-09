@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,10 +14,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.dao.CategoryDao;
+import com.example.demo.dao.ImageDao;
 import com.example.demo.dao.ProductDao;
 import com.example.demo.dao.Userdao;
 import com.example.demo.dao.VendorDao;
+import com.example.demo.models.Message;
 import com.example.demo.models.MyUserDetails;
 import com.example.demo.models.Product;
 import com.example.demo.models.Vendor;
@@ -29,12 +37,17 @@ public class VendorController {
 	final ProductDao productDao;
 	final VendorDao vendorDao;
 	final Userdao userDao;
-	
+	final CategoryDao categoryDao; 
+	final ImageDao imageDao;
+	final HttpServletRequest request;
 	@Autowired
-	public VendorController(ProductDao productDao, VendorDao venderDao, Userdao userDao) {
+	public VendorController(ProductDao productDao, VendorDao venderDao, Userdao userDao,CategoryDao categoryDao,ImageDao imageDao, HttpServletRequest request) {
 		this.productDao = productDao;
 		this.vendorDao = venderDao;
 		this.userDao = userDao;
+		this.categoryDao = categoryDao;
+		this.imageDao = imageDao;
+		this.request = request;
 	}
 	
 	@ModelAttribute("username")
@@ -56,6 +69,9 @@ public class VendorController {
 		return null;
 	}
 	
+	public int getSupplierId() {
+		return ((MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser_id();
+	}
 	
 	@GetMapping({"/",""})
 	public String home() {
@@ -88,12 +104,75 @@ public class VendorController {
 		return "allProductsForVendor";
 	}
 	
+	
+	@GetMapping("/viewProducts/{category_id}")
+	public String viewProductByCategory(@PathVariable("category_id") int category_id,ModelMap model) {
+		List<Product> p=productDao.showAllProducts(category_id);
+		model.addAttribute("prods",p);
+		return "allProductsForVendor";
+	}
+	
+	@GetMapping("/addProduct")
+	public String addProductPage(ModelMap model) {
+		model.addAttribute("prod", new Product());
+		return "addProduct";
+	}
+	
+	
+	
+	@PostMapping("/addProduct")
+	public String addProduct(ModelMap model, Product prod,MultipartFile file) {
+		int product_id = productDao.save(prod.getName(), prod.getDescription(), prod.getPrice(), prod.getCategory_id());
+		imageDao.save(file, request, product_id);
+		return "redirect:/admin";
+	}
+	
+	
 	@GetMapping("/viewProduct/{product_id}")
 	public String viewProduct(ModelMap model, @PathVariable("product_id") int product_id) {
 		Product p = productDao.getproductbyId(product_id);
+		System.out.println(p.getImage_path());
 		model.addAttribute("prod", p);
 		return "viewProduct";
 	}
+	
+	
+	@GetMapping("/myProducts")
+//	@ResponseBody
+	public String myProducts(ModelMap model) {
+//		System.out.println(getSupplierId());
+//		vendorDao.getMyProducts(17);
+		List<Product> prods = vendorDao.getMyProducts(getSupplierId());
+		model.addAttribute("prods", prods);
+		return "myProductForVendor";
+	}
+	
+	
+	@PostMapping("/supply")
+	@ResponseBody
+	public Message addToSupply(@RequestParam("product_id") int product_id) {
+		vendorDao.addToSupplied(product_id, getSupplierId());
+		return new Message(true,"added to the supplied");
+	}
+	
+	
+	@PostMapping("/delete")
+	@ResponseBody
+	public Message deleteFromSupply(@RequestParam("product_id") int product_id) {
+		vendorDao.deleteFromSupplied(product_id, getSupplierId());
+		return new Message(true,"added to the supplied");
+	}
+	
+	
+	
+	@GetMapping("/AllCategories")
+	public String AllCategoriesPage(ModelMap model) {
+			model.addAttribute("cat", categoryDao.showAllCategory());
+			return "allCategories";
+	}
+	
+	
+	
 	
 
 }

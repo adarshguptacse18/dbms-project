@@ -11,7 +11,7 @@
 <jsp:include page="finalNavBar.jsp" />
 
 			<div class="container">
-			 <h3>Hey Admin</h3>
+			 <h3>Hey Vendor</h3>
 		 	<table  class="table table-striped  table-hover">
 				<thead>
 					<tr>
@@ -22,37 +22,16 @@
 				<tbody>
 						<tr>
 							<td>Show All Products</td>
-							<td><a href="/admin/AllProducts" type="button" class="btn btn-warning">Go To</a></td>	
+							<td><a href="/vendor/viewProducts" type="button" class="btn btn-warning">Go To</a></td>	
 						</tr>
 						<tr>
 							<td>Show All Categories</td>
-							<td><a href="/admin/AllCategories" type="button" class="btn btn-warning">Go To</a></td>	
-						</tr>
+							<td><a href="/vendor/AllCategories" type="button" class="btn btn-warning">Go To</a></td>	
+						</tr>	
 						<tr>
-							<td>Show All Orders</td>
-							<td><a href="/admin/Orders" type="button" class="btn btn-warning">Go To</a></td>	
-						</tr>
-						<tr>
-							<td>Show All Transactions</td>
-							<td><a href="/admin/Transactions" type="button" class="btn btn-warning">Go To</a></td>	
-						</tr>
-						<tr >
-							<td>Show All Vendors</td>
-							<td><a href="/admin/Vendors" type="button" class="btn btn-warning">Go To</a></td>	
-						</tr>
-						<tr>
-							<td>Add Products</td>
-							<td><a href="/admin/addProduct" type="button" class="btn btn-warning">Go To</a></td>	
-						</tr>
-						<tr>
-							<td>Add Categories</td>
-							<td><a href="/admin/addCategory" type="button" class="btn btn-warning">Go To</a></td>	
-						</tr>
-						
-						<tr>
-							<td>Show All Customers</td>
-							<td><a href="/admin/allCustomers" type="button" class="btn btn-warning">Go To</a></td>	
-						</tr>
+							<td>Your Products</td>
+							<td><a href="/vendor/myProducts" type="button" class="btn btn-warning">Go To</a></td>	
+						</tr>						
 				</tbody>
 			</table>
 				

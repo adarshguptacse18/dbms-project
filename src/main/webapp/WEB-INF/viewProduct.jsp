@@ -16,7 +16,7 @@
 		    <div class="col-md-6">
 		      <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
 		        <div class="carousel-inner">
-		        <c:forEach items="${images}" var="image">
+		        <c:forEach items="${prod.image_path}" var="image">
    			          <div class="carousel-item active"> <img class="d-block" src="${image}"> </div>
 		        </c:forEach>
 		        </div>
@@ -30,7 +30,7 @@
 		        <h1><i class="fa fa-inr" aria-hidden="true"></i>Rs.${prod.price}</h1>
 		      </div>
 		      <div class="row">
-		        <h5>${prod.rating==0? 'Not Rated' : prod.rating}</h5>
+		        <h5>Rating : ${prod.rating==0? 'Not Rated' : prod.rating}</h5>
 		      </div>
 		      <div class="row">
 		      	<div class="text-secondary">
@@ -41,19 +41,7 @@
 		        <h3 class="text-info"><i class="fa fa-map-marker" aria-hidden="true"></i></h3>
 		        <p style="font-size: 20px"> &nbsp; Get Delivery  &nbsp; <span class="text-success">FREE</span> </p>
 		     </div>
-		     <div class="row">
-				<input type="number" min="1" max="5" class="col-sm-3" id="prod_${prod.product_id}" placeholder="Quantity" name="quantity" value = 1>
-				<span class="col-sm-5 btn buy text-primary" onclick="addToCart(${prod.product_id})" type="button" class="btn btn-warning">
-					<c:if test="${empty username}">
-						<a href="/login" data-toggle="popover" title="Login to continue">
-							Add To Cart
-						</a>	
-					</c:if>
-					<c:if test="${not empty username}">
-							Add To Cart
-					</c:if>
-				</span>
-			</div>
+		     
 		  </div>
 		
 		</div>
@@ -79,18 +67,7 @@
 			 </table>
 			
 		</div>
-		<div class="container">
-			<div class="alert alert-success" id="result_message" hidden=true>
-			  <strong>Review Added!!</strong> Refresh The Page to see the result
-			</div>
-		  <span class="btn btn-warning" onclick="showReview()">Add Review</span>
-		    <div class="form-group" id="addreview"  hidden=false>
-		    
-		      <textarea class="form-control" rows="5" id="message" name="message"></textarea>
-     		    <button type="submit" onclick="addReview(${prod.product_id})" class="btn btn-primary">Submit</button>
-		      
-		    </div>
-		</div>
+		
 	</div>
 	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
