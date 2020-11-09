@@ -78,6 +78,30 @@ public class VendorDao {
 		jt.update("update vendor set company_name=? , pancard_no = ? where supplier_id = ?",v.getCompany_name(),v.getPancard_no(),v.getSupplier_id());;
 		jt.update("update user set username=?,first_name=?,last_name=?,email=? where user.user_id=?",v.getUser().getUsername(),v.getUser().getFirst_name(),v.getUser().getLast_name(),v.getUser().getEmail(),v.getSupplier_id());
 	}
+
+	public List<Vendor> getVendorByEmail(String email) {
+		String sql = "select * from vendor as V INNER JOIN user as U on V.supplier_id = U.user_id and U.email>= ?";	
+		return jt.query(sql,new Object[] {email},new RowMapper<Vendor>() {
+			public Vendor mapRow(ResultSet row,int rowNum) throws SQLException{
+				Vendor c = (new BeanPropertyRowMapper<>(Vendor.class)).mapRow(row, rowNum);
+				User u = (new BeanPropertyRowMapper<>(User.class)).mapRow(row, rowNum);
+				c.setUser(u);
+				return c;
+			};
+		});
+	}
+
+	public List<Vendor> getVendorByUsername(String username) {
+		String sql = "select * from vendor as V INNER JOIN user as U on V.supplier_id = U.user_id and U.username>=?";	
+		return jt.query(sql,new Object[] {username}, new RowMapper<Vendor>() {
+			public Vendor mapRow(ResultSet row,int rowNum) throws SQLException{
+				Vendor c = (new BeanPropertyRowMapper<>(Vendor.class)).mapRow(row, rowNum);
+				User u = (new BeanPropertyRowMapper<>(User.class)).mapRow(row, rowNum);
+				c.setUser(u);
+				return c;
+			};
+		});		
+	}
 	
 	
 }

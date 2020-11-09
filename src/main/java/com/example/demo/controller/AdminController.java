@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -355,6 +356,78 @@ public class AdminController {
 		complaintsDao.resolve(complaint_id);
 		return "redirect:/admin/allComplaints";
 	}
+	
+	@GetMapping("/findCustomer")
+	public String findCustomerPage() {
+		return "findCustomer";
+	}
+	@GetMapping("/findCustomerById")
+	public String findCustomerById(ModelMap model,@RequestParam("user_id") int user_id) {
+		try {
+			Customer c = customerDao.getCustomerByCustomerId(user_id);
+			List<Customer> temp = new ArrayList<>();
+			if(c!=null)
+				temp.add(c);
+			model.addAttribute("customers",temp);
+			return "allCustomers";
+		} catch(Exception e) {
+			return "allCustomers";
+		}
+	}
+	
+	@GetMapping("/findCustomerByEmail")
+	public String findCustomerByEmail(ModelMap model,@RequestParam("email") String email) {
+		List<Customer> c= customerDao.getCustomerByCustomerEmail(email);
+			model.addAttribute("customers",c);
+			return "allCustomers";
+		
+	}
+	
+	@GetMapping("/findCustomerByUsername")
+	public String findCustomerByUsername(ModelMap model,@RequestParam("username") String username) {
+		List<Customer> c= customerDao.getCustomerByUsername(username);
+			model.addAttribute("customers",c);
+			return "allCustomers";
+		
+	}
+	
+	@GetMapping("/findVendors")
+	public String findVendorsPage() {
+		return "findVendor";
+	}
+	
+	@GetMapping("/findVendorById")
+    public String findVendorById(ModelMap model,@RequestParam("user_id") int user_id) {
+        try {
+            Vendor c = vendorDao.getVendorBySupplier_Id(user_id);
+            List<Vendor> temp = new ArrayList<>();
+            if(c!=null)
+                temp.add(c);
+            model.addAttribute("vendors",temp);
+            return "allVendors";
+        } catch(Exception e) {
+            return "allVendors";
+        }
+    }
+    
+    @GetMapping("/findVendorByEmail")
+    public String findVendorByEmail(ModelMap model,@RequestParam("email") String email) {
+        List<Vendor> c= vendorDao.getVendorByEmail(email);
+            model.addAttribute("vendors",c);
+            return "allVendors";
+        
+    }
+    
+    @GetMapping("/findVendorByUsername")
+    public String findVendorByUsername(ModelMap model,@RequestParam("username") String username) {
+        List<Vendor> c= vendorDao.getVendorByUsername(username);
+            model.addAttribute("vendors",c);
+            return "allVendors";
+        
+    }
+    
+	
+	
 	
 	
 

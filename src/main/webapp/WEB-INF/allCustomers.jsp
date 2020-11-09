@@ -11,8 +11,8 @@
 <body>
     <jsp:include page="adminNavBar.jsp" />
 		
-	 <h3>All Customers</h3>
 		<div class="container">
+			 <h3>Customers</h3>
 		 	<table  class="table">
 				<thead>
 					<tr>

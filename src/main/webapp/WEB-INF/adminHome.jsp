@@ -54,8 +54,16 @@
 							<td><a href="/admin/allCustomers" type="button" class="btn btn-warning">Go To</a></td>	
 						</tr>
 						<tr>
+							<td>Find Customers</td>
+							<td><a href="/admin/findCustomer" type="button" class="btn btn-warning">Go To</a></td>	
+						</tr>
+						<tr>
 							<td>View All Complaints</td>
 							<td><a href="/admin/allComplaints" type="button" class="btn btn-warning">Go To</a></td>	
+						</tr>
+						<tr>
+							<td>Find Vendors</td>
+							<td><a href="/admin/findVendors" type="button" class="btn btn-warning">Go To</a></td>	
 						</tr>
 				</tbody>
 			</table>
