@@ -83,9 +83,7 @@ public class CustomerDao {
 		});
 		// TODO Auto-generated method stub
 	}
-	public void addPhoneNumber(String phone_number, int customer_id) {
-		jt.update("insert into phone_numbers value (?,?)",customer_id,phone_number);
-	}	
+	
 	
 	
 }

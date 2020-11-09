@@ -49,10 +49,10 @@
 <%-- 								<c:if test="${prod.hide==false}"><span id="hideProduct">Hide</span></c:if> --%>
 <%-- 								<c:if test="${prod.hide==true }"><span id="showProduct">Show</span></c:if> --%>
 							</span></td> 																							
-							<td><a href="/admin/viewEditPhoneNumber/${customer.customer_id}" type="button" class="btn btn-secondary">Phone Numbers</span></td>
-							<td><a href="/admin/viewAllAddresses/${customer.customer_id}/" type="button" class="btn btn-secondary">Addresses</span></td> 																						 																
-							<td><a href="/admin/Orders/${customer.customer_id}" type="button" class="btn btn-primary">View Orders</span></td> 									
-							<td><a href="/admin/editProfile/${customer.customer_id}/" type="button" class="btn btn-warning">Edit Profile</span></td> 		
+							<td><a href="/admin/viewEditPhoneNumber/${customer.customer_id}" type="button" class="btn btn-secondary">Phone Numbers</a></td>
+							<td><a href="/admin/viewAllAddresses/${customer.customer_id}/" type="button" class="btn btn-secondary">Addresses</a></td> 																						 																
+							<td><a href="/admin/Orders/${customer.customer_id}" type="button" class="btn btn-primary">View Orders</a></td> 									
+							<td><a href="/admin/editProfile/${customer.customer_id}/" type="button" class="btn btn-warning">Edit Profile</a></td> 		
 						</tr>
 					</c:forEach>
 					

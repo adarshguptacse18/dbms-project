@@ -1,12 +1,16 @@
 package com.example.demo.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.models.Customer;
 import com.example.demo.models.Product;
 import com.example.demo.models.User;
 import com.example.demo.models.Vendor;
@@ -32,6 +36,17 @@ public class VendorDao {
 	}
 	
 	
+	public List<Vendor> getAllVendors(){
+		String sql = "select * from vendor as V INNER JOIN user as U on V.supplier_id = U.user_id";
+		return jt.query(sql,new RowMapper<Vendor>() {
+			public Vendor mapRow(ResultSet row,int rowNum) throws SQLException{
+				Vendor c = (new BeanPropertyRowMapper<>(Vendor.class)).mapRow(row, rowNum);
+				User u = (new BeanPropertyRowMapper<>(User.class)).mapRow(row, rowNum);
+				c.setUser(u);
+				return c;
+			};
+		});
+	}
 	public void addToSupplied(final int product_id,final int supplier_id) {
 		String sql = "insert into supplies (supplier_id,product_id) value (?,?)";
 		jt.update(sql,supplier_id,product_id);	
@@ -51,6 +66,23 @@ public class VendorDao {
 //	   jt.execute(sql);
 //		return null;
 		return jt.query(sql, new BeanPropertyRowMapper<Product>(Product.class));
+	}
+
+	public Vendor getVendorBySupplier_Id(int supplier_id) {
+		String sql = "select * from vendor as V INNER JOIN user as U on V.supplier_id = U.user_id and V.supplier_id = "+supplier_id;
+		return jt.queryForObject(sql,new RowMapper<Vendor>() {
+			public Vendor mapRow(ResultSet row,int rowNum) throws SQLException{
+				Vendor c = (new BeanPropertyRowMapper<>(Vendor.class)).mapRow(row, rowNum);
+				User u = (new BeanPropertyRowMapper<>(User.class)).mapRow(row, rowNum);
+				c.setUser(u);
+				return c;
+			};
+		});
+	}
+
+	public void update(Vendor v) {
+		jt.update("update vendor set company_name=? , pancard_no = ? where supplier_id = ?",v.getCompany_name(),v.getPancard_no(),v.getSupplier_id());;
+		jt.update("update user set username=?,first_name=?,last_name=?,email=? where user.user_id=?",v.getUser().getUsername(),v.getUser().getFirst_name(),v.getUser().getLast_name(),v.getUser().getEmail(),v.getSupplier_id());
 	}
 	
 	

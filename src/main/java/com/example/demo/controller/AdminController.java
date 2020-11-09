@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,13 +19,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dao.AddressDao;
-import com.example.demo.dao.CategoryDao;import com.example.demo.dao.CustomerDao;
+import com.example.demo.dao.CategoryDao;
+import com.example.demo.dao.CustomerDao;
 import com.example.demo.dao.ImageDao;
 import com.example.demo.dao.Ordersdao;
 import com.example.demo.dao.PhoneNumberDao;
 import com.example.demo.dao.ProductDao;
 import com.example.demo.dao.TransactionDao;
 import com.example.demo.dao.Userdao;
+import com.example.demo.dao.VendorDao;
 import com.example.demo.models.Address;
 import com.example.demo.models.Category;
 import com.example.demo.models.Customer;
@@ -34,7 +35,7 @@ import com.example.demo.models.Message;
 import com.example.demo.models.MyUserDetails;
 import com.example.demo.models.Orders;
 import com.example.demo.models.Product;
-import com.example.demo.models.User;
+import com.example.demo.models.Vendor;
 
 @Controller
 @RequestMapping("/admin")
@@ -71,6 +72,10 @@ public class AdminController {
 	
 	@Autowired
 	AddressDao addressDao;
+	
+	@Autowired 
+	VendorDao vendorDao;
+	
 	
 	@ModelAttribute("username")
 	protected String getUsername() {
@@ -274,7 +279,7 @@ public class AdminController {
 	@PostMapping("/viewEditPhoneNumber/{customer_id}")
 	@ResponseBody
 	public Message viewEditPhoneNumber(@PathVariable("customer_id") int customer_id, ModelMap model,String phone_number) {
-		customerDao.addPhoneNumber(phone_number, customer_id);
+		userDao.addPhoneNumber(phone_number, customer_id);
 		return new Message(true,"Phone number added");
 	}
 	
@@ -302,6 +307,33 @@ public class AdminController {
 		addressDao.addAddress(add);
 		return "redirect:/admin";
 	}
+	
+	@GetMapping("/allVendors")
+	public String allVendors(ModelMap model) {
+		model.addAttribute("vendors",vendorDao.getAllVendors());
+		return "allVendors";
+	}
+	
+	@GetMapping("/editVendorProfile/{supplier_id}")
+	public String editVendorProfilePage(ModelMap model,@PathVariable("supplier_id") int supplier_id) {
+		Vendor v = vendorDao.getVendorBySupplier_Id(supplier_id);
+		model.addAttribute("vendor", v);
+		return "editVendorProfile";
+	}
+	@PostMapping("/editVendorProfile/{supplier_id}")
+	public String editVendorProfile(ModelMap model, @PathVariable("supplier_id") int supplier_id,Vendor v) {
+		v.setSupplier_id(supplier_id);
+		vendorDao.update(v);
+		return "redirect:/admin/allVendors";
+	}
+	
+	@GetMapping("/productsByVendor/{supplier_id}")
+	public String myProducts(ModelMap model,@PathVariable("supplier_id") int supplier_id) {
+		List<Product> prods = vendorDao.getMyProducts(supplier_id);
+		model.addAttribute("prods", prods);
+		return "myProductForVendor";
+	}
+	
 	
 
 }

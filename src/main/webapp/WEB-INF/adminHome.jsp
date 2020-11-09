@@ -38,7 +38,7 @@
 						</tr>
 						<tr >
 							<td>Show All Vendors</td>
-							<td><a href="/admin/Vendors" type="button" class="btn btn-warning">Go To</a></td>	
+							<td><a href="/admin/allVendors" type="button" class="btn btn-warning">Go To</a></td>	
 						</tr>
 						<tr>
 							<td>Add Products</td>

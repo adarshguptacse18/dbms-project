@@ -132,4 +132,7 @@ public class Userdao {
 		jt.update("update user set is_enabled = !is_enabled where user_id =?",user_id);
 	}
 
+    public void addPhoneNumber(String phone_number, int customer_id) {
+		jt.update("insert into phone_numbers value (?,?)",customer_id,phone_number);
+	}	
 }
