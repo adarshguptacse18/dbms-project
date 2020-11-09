@@ -25,7 +25,9 @@
 						<th></th>
 						<th></th>
 						<th></th>
+						<th></th>
 						<th></th>						
+												
 					</tr>
 				</thead>
 				<tbody>
@@ -51,7 +53,8 @@
 							</span></td> 																							
 							<td><a href="/admin/viewEditPhoneNumber/${customer.customer_id}" type="button" class="btn btn-secondary">Phone Numbers</a></td>
 							<td><a href="/admin/viewAllAddresses/${customer.customer_id}/" type="button" class="btn btn-secondary">Addresses</a></td> 																						 																
-							<td><a href="/admin/Orders/${customer.customer_id}" type="button" class="btn btn-primary">View Orders</a></td> 									
+							<td><a href="/admin/Orders/${customer.customer_id}" type="button" class="btn btn-primary">View Orders</a></td>
+							<td><a href="/admin/complaints/${customer.customer_id}/" type="button" class="btn btn-warning">View All Complaints</a></td> 									 									
 							<td><a href="/admin/editProfile/${customer.customer_id}/" type="button" class="btn btn-warning">Edit Profile</a></td> 		
 						</tr>
 					</c:forEach>

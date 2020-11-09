@@ -33,7 +33,10 @@
             <a class="dropdown-item" href="/vendor/allCategories">All Categories</a>
             <a class="dropdown-item" href="/vendor/allVendors">All Vendors</a>
             <a class="dropdown-item" href="/vendor/allProduct">All Products</a>
-            <a class="dropdown-item" href="/vendor/addProduct">Add Product</a>
+            <a class="dropdown-item" href="/addComplaint">Add Complaint</a>
+            <a class="dropdown-item" href="/viewComplaints">View Complaints</a>
+            <a class="dropdown-item" href="/logout">LogOut</a>
+            
           </div>
         </li>
         

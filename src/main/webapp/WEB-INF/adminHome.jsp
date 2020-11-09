@@ -53,6 +53,10 @@
 							<td>Show All Customers</td>
 							<td><a href="/admin/allCustomers" type="button" class="btn btn-warning">Go To</a></td>	
 						</tr>
+						<tr>
+							<td>View All Complaints</td>
+							<td><a href="/admin/allComplaints" type="button" class="btn btn-warning">Go To</a></td>	
+						</tr>
 				</tbody>
 			</table>
 				

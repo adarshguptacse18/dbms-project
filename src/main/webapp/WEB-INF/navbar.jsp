@@ -40,7 +40,10 @@
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="/myProfile">My Account</a>
             <a class="dropdown-item" href="/vieworders">My Orders</a>
-            <a class="dropdown-item" href="/logout">LogOut</a>
+            <a class="dropdown-item" href="/addComplaint">Add Complaint</a>
+            <a class="dropdown-item" href="/viewComplaints">View Complaints</a>
+             <a class="dropdown-item" href="/logout">LogOut</a>
+            
           </div>
         </li>
         

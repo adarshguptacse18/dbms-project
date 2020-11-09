@@ -84,7 +84,7 @@ public class ProductDao {
 		 if(all==true)
 	        sql = "select P.hide as hide, P.product_id as product_id, name, quantity, category_id, description, price ,max(image_path) as image_path from product as P left join images on P.product_id = images.product_id group by P.product_id";
 		 else
-	        sql = "select P.hide as hide, P.product_id as product_id, name, quantity, category_id, description, price ,max(image_path) as image_path from product as P left join images on P.product_id = images.product_id where hide=false group by P.product_id";
+	        sql = "select P.hide as hide, P.product_id as product_id, name, quantity, category_id, description, price ,max(image_path) as image_path from product as P left join images on P.product_id = images.product_id where hide=false  and P.quantity > 0 group by P.product_id";
 	        return jt.query(sql, new RowMapper<Product>() {
 
 	            public Product mapRow(ResultSet row, int rowNum) throws SQLException {

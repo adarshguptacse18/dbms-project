@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dao.AddressDao;
 import com.example.demo.dao.CategoryDao;
+import com.example.demo.dao.ComplaintsDao;
 import com.example.demo.dao.CustomerDao;
 import com.example.demo.dao.ImageDao;
 import com.example.demo.dao.Ordersdao;
@@ -76,6 +77,8 @@ public class AdminController {
 	@Autowired 
 	VendorDao vendorDao;
 	
+	@Autowired
+	ComplaintsDao complaintsDao;
 	
 	@ModelAttribute("username")
 	protected String getUsername() {
@@ -332,6 +335,25 @@ public class AdminController {
 		List<Product> prods = vendorDao.getMyProducts(supplier_id);
 		model.addAttribute("prods", prods);
 		return "myProductForVendor";
+	}
+	
+	
+	@GetMapping("/allComplaints")
+	public String allComplaints(ModelMap model) {
+		model.addAttribute("complaints", complaintsDao.getAllComplaints());
+		return "complaintsPage";
+	}
+	
+	@GetMapping("/complaints/{user_id}")
+	public String complaints(ModelMap model,@PathVariable("user_id") int user_id) {
+		model.addAttribute("complaints", complaintsDao.getComplaintsByUserId(user_id));
+		return "complaintsPage";
+	}
+	
+	@GetMapping("/resolve/{complaint_id}")
+	public String resolveComplaint(ModelMap model,@PathVariable("complaint_id") int complaint_id) {
+		complaintsDao.resolve(complaint_id);
+		return "redirect:/admin/allComplaints";
 	}
 	
 	

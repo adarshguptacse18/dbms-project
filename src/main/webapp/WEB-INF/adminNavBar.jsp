@@ -36,7 +36,10 @@
             <a class="dropdown-item" href="/admin/allProduct">All Products</a>
             <a class="dropdown-item" href="/admin/addProduct">Add Product</a>
             <a class="dropdown-item" href="/admin/allOrders">All Orders</a>
-            <a class="dropdown-item" href="/admin/allTransactions">All Transactions</a>     
+            <a class="dropdown-item" href="/admin/allTransactions">All Transactions</a>
+            <a class="dropdown-item" href="/viewComplaints">View Complaints</a>
+            <a class="dropdown-item" href="/logout">LogOut</a>
+	                 
           </div>
         </li>
         

@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.dao.AddressDao;
 import com.example.demo.dao.CartDao;
 import com.example.demo.dao.CategoryDao;
+import com.example.demo.dao.ComplaintsDao;
 import com.example.demo.dao.CustomerDao;
 import com.example.demo.dao.Ordersdao;
 import com.example.demo.dao.PhoneNumberDao;
@@ -36,6 +37,7 @@ import com.example.demo.dao.TransactionDao;
 import com.example.demo.dao.Userdao;
 import com.example.demo.models.Address;
 import com.example.demo.models.Category;
+import com.example.demo.models.Complaints;
 import com.example.demo.models.Customer;
 import com.example.demo.models.Message;
 import com.example.demo.models.MyUserDetails;
@@ -79,6 +81,9 @@ public class HomeController {
 	
 	@Autowired 
 	private PhoneNumberDao phonenumberdao;
+	
+	@Autowired
+	private ComplaintsDao complaintsDao;
 	
 	public static String uploadDirectory = System.getProperty("user.dir") + "/uploads";
 	
@@ -461,6 +466,30 @@ public class HomeController {
         model.addAttribute("addresses",addresses);
         return "viewAddresses";
 	}
+	
+	@GetMapping("/addComplaint")
+	public String addComplaintPage(ModelMap model) {
+		try {
+			getCustomerId();
+			model.addAttribute("complaint", new Complaints());
+		} catch(Exception e) {
+			return "redirect:/login";
+		}
+        return "addComplaint";
+	}
+	@PostMapping("/addComplaint")
+	public String addComplaint(ModelMap model,Complaints c) {
+		c.setUser_id(getCustomerId());
+		complaintsDao.save(c);
+		return "redirect:/";
+	}
+	
+	@GetMapping("/viewComplaints")
+	public String allComplaints(ModelMap model) {
+		model.addAttribute("complaints", complaintsDao.getComplaintsByUserId(getCustomerId()));
+		return "complaintsPage";
+	}
+
 	
 //	
 	

@@ -48,7 +48,8 @@
 						</c:if>
 						</span></td>
 						<td><a href="/admin/viewEditPhoneNumber/${vendor.supplier_id}" type="button" class="btn btn-secondary">Phone Numbers</a></td>						
-						<td><a href="/admin/productsByVendor/${vendor.supplier_id}" type="button" class="btn btn-primary">Products</a></td> 									
+						<td><a href="/admin/productsByVendor/${vendor.supplier_id}" type="button" class="btn btn-primary">Products</a></td>
+						<td><a href="/admin/complaints/${vendor.supplier_id}/" type="button" class="btn btn-warning">View All Complaints</a></td> 									 															 									
 						<td><a href="/admin/editVendorProfile/${vendor.supplier_id}/" type="button" class="btn btn-warning">Edit Profile</a></td> 		 
                     </tr>
                 </c:forEach>
