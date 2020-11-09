@@ -1,10 +1,14 @@
 package com.example.demo.models;
 
+import java.util.List;
+
 public class Vendor {
 	private int supplier_id;
 	private  String company_name;
 	private int pancard_no;
 	User user;
+	private List<String> numbers;
+
 	public int getSupplier_id() {
 		return supplier_id;
 	}
@@ -28,6 +32,12 @@ public class Vendor {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public List<String> getNumbers() {
+		return numbers;
+	}
+	public void setNumbers(List<String> numbers) {
+		this.numbers = numbers;
 	}
 	
 }

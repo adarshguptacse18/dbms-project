@@ -59,17 +59,11 @@ public class VendorDao {
 	
 	public List<Product> getMyProducts(int supplier_id){
 		String sql = "select P.product_id as product_id,P.name as name,P.price as price, P.category_id as category_id ,P.description description ,P.quantity quantity ,P.purchased_cnt purchased_cnt,P.hide hide from product as P right join supplies as S on S.product_id = P.product_id where S.supplier_id = " + supplier_id;
-//		String sql = "select P.product_id as product_id from product as P right join supplies as S on S.product_id = P.product_id where S.supplier_id = " + supplier_id;
-
-//		System.out.print(sql);
-//		jt.update(sql);
-//	   jt.execute(sql);
-//		return null;
 		return jt.query(sql, new BeanPropertyRowMapper<Product>(Product.class));
 	}
 
 	public Vendor getVendorBySupplier_Id(int supplier_id) {
-		String sql = "select * from vendor as V INNER JOIN user as U on V.supplier_id = U.user_id and V.supplier_id = "+supplier_id;
+		String sql = "select * from vendor as V INNER JOIN user as U on V.supplier_id = U.user_id and V.supplier_id = "+supplier_id;	
 		return jt.queryForObject(sql,new RowMapper<Vendor>() {
 			public Vendor mapRow(ResultSet row,int rowNum) throws SQLException{
 				Vendor c = (new BeanPropertyRowMapper<>(Vendor.class)).mapRow(row, rowNum);

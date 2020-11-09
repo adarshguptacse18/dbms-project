@@ -19,11 +19,10 @@
 					<tr>
 						<th>First Name</th>
 						<th>Last Name</th>
-						<th>email</th>
+						<th>Email</th>
 						<th>Username</th>
 						<th>Is Resolved</th>
 						<th>Date</th>
-										
 					</tr>
 				</thead>
 				<tbody>

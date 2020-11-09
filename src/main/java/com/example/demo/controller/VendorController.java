@@ -20,12 +20,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dao.CategoryDao;
 import com.example.demo.dao.ImageDao;
+import com.example.demo.dao.PhoneNumberDao;
 import com.example.demo.dao.ProductDao;
 import com.example.demo.dao.Userdao;
 import com.example.demo.dao.VendorDao;
 import com.example.demo.models.Message;
 import com.example.demo.models.MyUserDetails;
 import com.example.demo.models.Product;
+import com.example.demo.models.User;
 import com.example.demo.models.Vendor;
 
 @Controller
@@ -40,14 +42,16 @@ public class VendorController {
 	final CategoryDao categoryDao; 
 	final ImageDao imageDao;
 	final HttpServletRequest request;
+	final PhoneNumberDao phoneNumberDao;
 	@Autowired
-	public VendorController(ProductDao productDao, VendorDao venderDao, Userdao userDao,CategoryDao categoryDao,ImageDao imageDao, HttpServletRequest request) {
+	public VendorController(ProductDao productDao, VendorDao venderDao, Userdao userDao,CategoryDao categoryDao,ImageDao imageDao, HttpServletRequest request,PhoneNumberDao phoneNumberDao) {
 		this.productDao = productDao;
 		this.vendorDao = venderDao;
 		this.userDao = userDao;
 		this.categoryDao = categoryDao;
 		this.imageDao = imageDao;
 		this.request = request;
+		this.phoneNumberDao = phoneNumberDao;
 	}
 	
 	@ModelAttribute("username")
@@ -95,6 +99,8 @@ public class VendorController {
 		vendorDao.save(v);
 		return "redirect:/vendor/login";	
 	}
+	
+	
 	
 	@GetMapping("/viewProducts")
 	public String viewProducts(ModelMap model) {
@@ -163,6 +169,14 @@ public class VendorController {
 		return new Message(true,"added to the supplied");
 	}
 	
+	@GetMapping("/myProfile")
+	public String myProfile(ModelMap model) {
+		Vendor v = vendorDao.getVendorBySupplier_Id(getSupplierId());
+		List<String> ph = phoneNumberDao.getAllPhoneNumbersByCustomerId(getSupplierId());
+		model.addAttribute("vendor", v);
+		model.addAttribute("phone_number", ph);
+		return "vendorProfile";
+	}
 	
 	
 	@GetMapping("/AllCategories")
