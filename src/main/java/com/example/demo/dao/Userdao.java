@@ -10,6 +10,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -19,6 +20,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.models.User;
 
@@ -98,6 +100,24 @@ public class Userdao {
 //            }
 //        });
     }
+    public User findUserByUserId(int user_id) throws UsernameNotFoundException{
+        String sql = "select * from user where user_id='" + user_id + "'";
+        if(jt.queryForList(sql).isEmpty()) {
+        	 throw new UsernameNotFoundException("user_id");
+        }
+        User u =(User) jt.queryForObject(sql,new BeanPropertyRowMapper<User>(User.class));
+        return u;
+    }
+
+    public User findUserByEmail(String email) {
+        String sql = "select * from user where email='" + email + "'";
+        if(jt.queryForList(sql).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email");
+        }
+        User u =(User) jt.queryForObject(sql,new BeanPropertyRowMapper<User>(User.class));
+        return u;
+    }
+
 
     public List<User> getAllusers() {
         String sql = "select * from user";
@@ -135,4 +155,11 @@ public class Userdao {
     public void addPhoneNumber(String phone_number, int customer_id) {
 		jt.update("insert into phone_numbers value (?,?)",customer_id,phone_number);
 	}	
+    
+    public void updatePassword(int user_id,String password) {
+    	String encrypted = bCryptPasswordEncoder.encode(password);
+    	String sql = "update user set password = ? where user_id = ?";
+//    	System.out.println(z		);
+    	jt.update(sql,encrypted,user_id);
+    }
 }

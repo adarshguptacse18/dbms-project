@@ -60,5 +60,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         message += " by going to " + getHostAddressAndPort() + "/login" + "\n\nThank you!";
         emailSendService.sendEmail(email, subject, message);
     }
-
+    
+    public void sendPasswordResetEmail(User user) {
+        String email = user.getEmail();
+        String subject = "Password Reset Email";
+        String message = "";
+        String token = user.getToken();
+        message += "Hello " + user.getFirst_name() + " " + user.getLast_name() + ",\n\n";
+        message += "Please go to " + getHostAddressAndPort() + "/reset-password?token=" + token;
+        message += " to reset your password. Thereafter, you can login using your username '" + user.getUsername()
+                + "'";
+        message += " by going to " + getHostAddressAndPort() + "/user/login" + "\n\nThank you!";
+        emailSendService.sendEmail(email, subject, message);
+    }
 }
