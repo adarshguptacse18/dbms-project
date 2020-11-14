@@ -7,7 +7,7 @@ public class User {
     private String email;	
     private String first_name;
     private boolean is_enabled;
- 
+    private String token;
 	private String last_name;
     private String role;
 
@@ -163,6 +163,12 @@ public class User {
 	}
 	public void setIs_enabled(boolean is_enabled) {
 		this.is_enabled = is_enabled;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 }

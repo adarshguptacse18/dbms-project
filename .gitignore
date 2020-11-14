@@ -8,6 +8,7 @@ target/
 .apt_generated
 .classpath
 .factorypath
+./src/main/resources/application.properties
 .project
 .settings
 .springBeans

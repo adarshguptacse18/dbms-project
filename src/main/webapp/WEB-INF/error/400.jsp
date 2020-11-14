@@ -11,7 +11,7 @@
 </head>
 
  <body>
-     <jsp:include page="navbar.jsp" />
+     <jsp:include page="/navbar.jsp" />
   
 	<div class="container-fluid custom-container">
 	    <div class="div text-center" style="color: red;">

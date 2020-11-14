@@ -163,27 +163,27 @@ public class HomeController {
 		return res;
 	}
 	
-	@GetMapping("/register")
-	public String register(ModelMap model) {
-		model.addAttribute("user", new User());
-		return "UserRegister";
-	}
+//	@GetMapping("/register")
+//	public String register(ModelMap model) {
+//		model.addAttribute("user", new User());
+//		return "UserRegister";
+//	}
 	
 //	@GetMapping("/registerVendor")
 //	public String registerVendor(ModelMap model,Principal p) {
 //		User t=new User();
 //		model.addAttribute("user", t);
 //		return "UserRegister";
-//	}	
-	@PostMapping("/register")
-	public String userRegister(ModelMap model, User user) {
-		user.setRole("ROLE_USER");
-		userdao.save(user);
-//		userdao.save(user.getUsername(), user.getPassword(), user.getRole());
-		user= userdao.findByUsername(user.getUsername());
-		custdao.save(user.getUser_id(), 0);
-		return "redirect:/";
-	}
+////	}	
+//	@PostMapping("/register")
+//	public String userRegister(ModelMap model, User user) {
+//		user.setRole("ROLE_USER");
+//		userdao.save(user);
+////		userdao.save(user.getUsername(), user.getPassword(), user.getRole());
+//		user= userdao.findByUsername(user.getUsername());
+//		custdao.save(user.getUser_id(), 0);
+//		return "redirect:/";
+//	}
 	@PostMapping("/registerVendor")
 	public String vendorRegister(ModelMap model, User user) {
 		user.setRole("ROLE_VENDOR");
@@ -381,16 +381,7 @@ public class HomeController {
 	}
 	
 	
-	@GetMapping("/login")
-	public String login(ModelMap model,String error,String logout) {
-		if(error!=null) {
-			model.addAttribute("error", "Invalid Credentials");
-		}
-		if(logout!=null) {
-			model.addAttribute("logout", "You have been logged out successfully");
-		}
-		return "login";
-	}
+	
 	
 	 
 	@GetMapping("/upload")
@@ -436,8 +427,12 @@ public class HomeController {
 		customer.setCustomer_id(user_id);
 		System.out.println("asfdljasl;kdjf;lsajdfl;kjasd;lkfjsad");
 		 System.out.println(customer.getUser());
-//		customer.setUser(new User( customer.getUser().getUsername(),  customer.getUser().getPassword(),  customer.getUser().getEmail(),  customer.getUser().getFirst_name(),  customer.getUser().getLast_name(), customer.getUser().getUser_id()));
+		customer.setUser(new User( customer.getUser().getUsername(),  customer.getUser().getPassword(),  customer.getUser().getEmail(),  customer.getUser().getFirst_name(),  customer.getUser().getLast_name(), customer.getUser().getUser_id()));
 		custdao.update(customer);
+		final MyUserDetails p =(MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		p.setEmail(customer.getUser().getEmail());
+		p.setFirst_name(customer.getUser().getFirst_name());
+		p.setLast_name(customer.getUser().getLast_name());
 		return "redirect:/myProfile";
 	}
 	
@@ -448,9 +443,10 @@ public class HomeController {
 		return "myPhoneNumbers";
 	}
 	
-	@PostMapping("/addPhoneNumber")
+	@PostMapping("/myPhoneNumbers")
 	@ResponseBody
 	public Message getPhoneNumber(@RequestParam("phone_number") String phone_number) {
+		
 		phonenumberdao.addPhoneNumber(phone_number, getCustomerId());
 		return new Message(true,"Phone Number Added Successfully");
 	}

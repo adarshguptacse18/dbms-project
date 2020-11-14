@@ -24,11 +24,11 @@
 							    ${error}
 						    </div>
 					</c:if>
-					<c:if test="${not empty logout}">
-							 <div class="alert alert-warning alert-dismissible fade show">
-							    <button type="button" class="close" data-dismiss="alert">&times;</button>
-							    ${logout}
-						    </div>
+					<c:if test="${not empty successmessage}">
+							  <div class="alert alert-success alert-dismissible">
+                                   <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                   ${successmessage}
+                              </div>
 					</c:if>
                  	
                     <div class="form-group">
