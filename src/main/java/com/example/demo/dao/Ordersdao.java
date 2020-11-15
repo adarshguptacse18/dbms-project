@@ -67,6 +67,7 @@ public class Ordersdao {
     }
 
     public Orders getorderbyId(int id) {
+    	System.out.println("Order is being fetched");
         String sql = "select * from orders where order_id='" + id + "'";
         return jt.queryForObject(sql, new RowMapper<Orders>() {
 
@@ -104,10 +105,12 @@ public class Ordersdao {
     }
 
     public void updateorder(int order_id,int tr_id) {
+    	System.out.println("Order is being updated");
         String sql = "update orders set status='placed', transaction_id = ? where order_id=?";
         jt.update(sql, order_id,tr_id);
     }
     public void updateorder(int order_id,String status) {
+    	System.out.println("Update order is called");
         String sql = "update orders set status=? where order_id=?";
         jt.update(sql, status, order_id);
     }
@@ -128,6 +131,7 @@ public class Ordersdao {
     }
 
     public List<Product> getItemsByOrderId(int order_id) {
+    	System.out.println("Items are being retrieved");
         String sql = "select * from order_items where order_id='" + order_id + "'";
         return jt.query(sql, new RowMapper<Product>() {
 

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.EmailSendService;
 import com.example.demo.dao.AddressDao;
 import com.example.demo.dao.CartDao;
 import com.example.demo.dao.CategoryDao;
@@ -84,6 +85,12 @@ public class HomeController {
 	
 	@Autowired
 	private ComplaintsDao complaintsDao;
+	
+	@Autowired
+	private EmailSendService emailService;
+	
+	@Autowired
+	private Userdao userDao;
 	
 	public static String uploadDirectory = System.getProperty("user.dir") + "/uploads";
 	
@@ -297,6 +304,14 @@ public class HomeController {
 		return "payment";
 	}
 	
+	@GetMapping("/vieworders")
+	public String getAllOrders(ModelMap m) {
+		int cust_id = getCustomerId();
+		List<Orders> orders = ordersdao.getOrderByCustomer_id(cust_id);
+		m.addAttribute("orders", orders);
+		return "myOrders";
+	}
+	
 	@RequestMapping(value="/processpayment")
 	public String processPayment(ModelMap map,@RequestParam("payment_method") String payment_method, @RequestParam("order_id") int order_id) {
 		Transaction tr= new Transaction();
@@ -311,17 +326,22 @@ public class HomeController {
 		List<Product> prods = ordersdao.getItemsByOrderId(order_id);
 		for(Product p : prods) {
 			productdao.updateProductquantity(p.getProduct_id(), -p.getQuantity());
+			Product t = productdao.getproductbyId(p.getProduct_id());
+			if(t.getQuantity()<5) {
+//				System.out.println(p.getSupplier_id());		
+				try {
+					emailService.sendMailToVendor(userDao.findUserByUserId(p.getSupplier_id()), p);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
 		}
+	
+
 		return "redirect:/vieworders";
 	}
 	
-	@GetMapping("/vieworders")
-	public String getAllOrders(ModelMap m) {
-		int cust_id = getCustomerId();
-		List<Orders> orders = ordersdao.getOrderByCustomer_id(cust_id);
-		m.addAttribute("orders", orders);
-		return "myOrders";
-	}
+	
 	
 	
 	
@@ -335,6 +355,10 @@ public class HomeController {
 	public String cancelOrder(@PathVariable("order_id") int order_id,ModelMap model) {
 		ordersdao.updateorder(order_id,"CANCELLED");
 		Orders o = ordersdao.getorderbyId(order_id);
+		List<Product> prods = ordersdao.getItemsByOrderId(order_id);
+		for(Product p:prods) {
+			productdao.updateProductquantity(p.getProduct_id(),p.getQuantity());
+		}
 		model.addAttribute("order",o);
 		return "viewOrders";
 	}

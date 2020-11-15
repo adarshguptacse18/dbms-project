@@ -47,6 +47,17 @@ public class VendorDao {
 			};
 		});
 	}
+	public List<Vendor> getActiveVendors(){
+		String sql = "select * from vendor as V INNER JOIN user as U on V.supplier_id = U.user_id where U.is_enabled=true";
+		return jt.query(sql,new RowMapper<Vendor>() {
+			public Vendor mapRow(ResultSet row,int rowNum) throws SQLException{
+				Vendor c = (new BeanPropertyRowMapper<>(Vendor.class)).mapRow(row, rowNum);
+				User u = (new BeanPropertyRowMapper<>(User.class)).mapRow(row, rowNum);
+				c.setUser(u);
+				return c;
+			};
+		});
+	}
 	public void addToSupplied(final int product_id,final int supplier_id) {
 		String sql = "insert into supplies (supplier_id,product_id) value (?,?)";
 		jt.update(sql,supplier_id,product_id);	

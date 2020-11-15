@@ -129,6 +129,17 @@ public class AdminController {
 		return "editProduct";
 	}
 	
+	@GetMapping("/chooseVendor/{product_id}")
+	public String chooseVendorPage(ModelMap model,@PathVariable("product_id") int product_id) {
+		model.addAttribute("vendors",vendorDao.getActiveVendors());
+		return "chooseVendor";
+	}
+	@GetMapping("/chooseVendor/{product_id}/{supplier_id}")
+	public String chooseVendor(ModelMap model,@PathVariable("product_id") int product_id,@PathVariable("supplier_id") int supplier_id) {
+		productdao.setVendor(product_id, supplier_id);
+		return "redirect:/admin/AllProducts";
+	}
+	
 	@PostMapping("/editProduct/{product_id}")
 	public String editProduct(@PathVariable("product_id") int product_id, Product p,MultipartFile file) {
 		productdao.updateproduct(product_id,p);

@@ -54,7 +54,7 @@ public class ProductDao {
 
     }
 	public Product getproductbyId(int id) {
-        String sql = "select P.product_id as rating,purchased_cnt,P.product_id, name, quantity, category_id, description, price ,group_concat(image_path)  as image_path from product as P left join images on P.product_id = images.product_id where P.product_id="+id+" group by P.product_id";
+        String sql = "select P.product_id as rating,purchased_cnt,P.product_id, P.supplier_id as supplier_id, name, quantity, category_id, description, price ,group_concat(image_path)  as image_path from product as P left join images on P.product_id = images.product_id where P.product_id="+id+" group by P.product_id";
         Product p = jt.queryForObject(sql,new BeanPropertyRowMapper<Product>(Product.class));
         return p;
 //        return jt.queryForObject(sql, new RowMapper<Product>() {
@@ -82,9 +82,9 @@ public class ProductDao {
 	 public List<Product> showAllProducts(boolean all) {
 		 String sql;
 		 if(all==true)
-	        sql = "select P.hide as hide, P.product_id as product_id, name, quantity, category_id, description, price ,max(image_path) as image_path from product as P left join images on P.product_id = images.product_id group by P.product_id";
+	        sql = "select P.hide as hide, P.product_id as product_id,P.supplier_id as supplier_id, name, quantity, category_id, description, price ,max(image_path) as image_path from product as P left join images on P.product_id = images.product_id group by P.product_id";
 		 else
-	        sql = "select P.hide as hide, P.product_id as product_id, name, quantity, category_id, description, price ,max(image_path) as image_path from product as P left join images on P.product_id = images.product_id where hide=false  and P.quantity > 0 group by P.product_id";
+	        sql = "select P.hide as hide, P.product_id as product_id, P.supplier_id as supplier_id, name, quantity, category_id, description, price ,max(image_path) as image_path from product as P left join images on P.product_id = images.product_id where hide=false  and P.quantity > 0 group by P.product_id";
 	        return jt.query(sql, new RowMapper<Product>() {
 
 	            public Product mapRow(ResultSet row, int rowNum) throws SQLException {
@@ -97,6 +97,7 @@ public class ProductDao {
 	                 u.setQuantity(row.getInt("quantity"));
 	                 u.image_path.add(row.getString("image_path"));
 	                 u.setHide(row.getBoolean("hide"));
+	                 u.setSupplier_id(row.getInt("supplier_id"));
 	                 return u;
 	            }
 	        });
@@ -165,5 +166,14 @@ public class ProductDao {
 	
 	public void hideShow(int product_id) {
 		jt.update("update product set hide = !hide where product_id=?",product_id);
+	}
+	public List<String> getVendorEmailByProductId() {
+		return jt.query("select user.email as email from user INNER JOIN supplies on user.user_id = supplies.supplier_id",new BeanPropertyRowMapper<>(String.class));
+	}
+	
+	public void setVendor(int product_id,int supplier_id) {
+		String sql = "update product set supplier_id=? where product_id = ?";
+		jt.update(sql,supplier_id,product_id);
+		
 	}
 }

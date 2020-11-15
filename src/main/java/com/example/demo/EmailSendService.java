@@ -1,12 +1,18 @@
 package com.example.demo;
 
+import java.util.List;
+
+import javax.mail.internet.InternetAddress;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.models.Product;
 import com.example.demo.models.User;
+import com.example.demo.models.Vendor;
 
 @Transactional
 @Service
@@ -57,6 +63,24 @@ public class EmailSendService {
         message += " by going to " + getHostAddressAndPort() + "/user/login" + "\n\nThank you!";
         sendEmail(email, subject, message);
     }
+    
+	public void sendMailToVendor(User u,Product p) {
+		System.out.println("Email is being sent");
+		String subject = "Item Required";
+		String message="Hello "+ u.getFirst_name() + " " + u.getLast_name() + "!!\n We require the product " + getHostAddressAndPort() + "/showProduct?product_id=" + p.getProduct_id();
+		message += ".\nFor futher process please contact us. 99xxxxxxxx. Thank You";
+		System.out.println(message);
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setFrom("adarshgupta564444@gmail.com");
+//        String a[]=(String[]) mails.toArray();
+//        String a[] = mails.toArray();
+        msg.setTo(u.getEmail());
+        msg.setSubject(subject);
+        msg.setText(message);
+        javaMailSender.send(msg);
+        System.out.println("Mail Sent");
+			
+	}
 
 }
 

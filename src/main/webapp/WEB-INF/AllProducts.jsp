@@ -24,6 +24,8 @@
 						<th>Price</th>
 						<th></th>
 						<th></th>
+						<th>Supplier ID</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -36,7 +38,6 @@
 							<td>${prod.price}</td>
 							<c:if test="${role=='ROLE_ADMIN' }"><td><a href="/admin/editProduct/${prod.product_id}" type="button" class="btn btn-warning">Edit</a></td>
 							<td><span onclick="hideProduct(${prod.product_id})"  class="btn btn-warning">
-							</c:if> 
 							<c:if test="${prod.hide==false }">
 								<span id="hide_${prod.product_id}" >Hide</span>
 								<span id="show_${prod.product_id}" hidden >Show</span>
@@ -47,7 +48,18 @@
 							</c:if>
 <%-- 								<c:if test="${prod.hide==false}"><span id="hideProduct">Hide</span></c:if> --%>
 <%-- 								<c:if test="${prod.hide==true }"><span id="showProduct">Show</span></c:if> --%>
-							</span></td> 		
+							</span></td>
+							<c:if test="${not empty prod.supplier_id and prod.supplier_id!=0}">
+								<td><a href="/admin/editVendorProfile/${prod.supplier_id}" type="button" class="btn btn-warning">${prod.supplier_id}</a></td>
+							</c:if>
+							<c:if test="${ empty prod.supplier_id or prod.supplier_id==0}">
+								<td><a href="#" type="button" class="btn btn-warning">Not Set</a></td>
+							</c:if>
+							
+ 							<td><a href="/admin/chooseVendor/${prod.product_id}" type="button" class="btn btn-warning">Choose Vendor</a></td>							 	
+							 
+							</c:if> 
+								
 							 		
 						</tr>
 					</c:forEach>
