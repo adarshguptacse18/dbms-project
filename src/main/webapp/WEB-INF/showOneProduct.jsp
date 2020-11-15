@@ -11,6 +11,8 @@
 <link rel="stylesheet" type="text/css" href="/static/css/style.css">
 </head>
 <body>
+	<jsp:include page="finalNavBar.jsp" />
+
 	<div class="container">
 		  <div class="row">
 		    <div class="col-md-6">

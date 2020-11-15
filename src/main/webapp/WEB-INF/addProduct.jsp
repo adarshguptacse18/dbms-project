@@ -10,7 +10,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<jsp:include page="adminNavBar.jsp" />
+<jsp:include page="finalNavBar.jsp" />
 
 	 <div class="container">
     <div class="row">

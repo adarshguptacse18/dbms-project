@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<jsp:include page="navbar.jsp" />
 
 <!DOCTYPE html>
 <html>
@@ -11,6 +10,8 @@
 <title>Insert title here</title>
 </head>
 <body>
+<jsp:include page="finalNavBar.jsp" />
+
 	 <div class="container">
     <div class="row">
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">

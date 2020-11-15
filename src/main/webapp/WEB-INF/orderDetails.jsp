@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-    <jsp:include page="adminNavBar.jsp" />
+	<jsp:include page="finalNavBar.jsp" />
 
 		<div class="container">
 			 <h5>Order Id : ${order.order_id }</h5>

@@ -9,6 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+		<jsp:include page="finalNavBar.jsp" />
 	
 	 <h3>Choose The Address</h3>
 		<div class="container">

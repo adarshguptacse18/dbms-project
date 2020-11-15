@@ -9,9 +9,10 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<jsp:include page="vendorNavBar.jsp" />
 
  <body> 
+ 	<jsp:include page="finalNavBar.jsp" />
+ 
 		<div class="container">
 			 <h3>Hey Vendor</h3>
 		 	<table  class="table table-striped  table-hover">

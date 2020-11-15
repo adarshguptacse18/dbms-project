@@ -9,7 +9,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<jsp:include page="vendorNavBar.jsp" />
+<jsp:include page="finalNavBar.jsp" />
 
  <body> 
 		<div class="container">

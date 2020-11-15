@@ -12,6 +12,8 @@
 
 </head>
 <body>
+		<jsp:include page="finalNavBar.jsp" />
+	
 	
 	<div class="toast">
 	  <div class="toast-header">

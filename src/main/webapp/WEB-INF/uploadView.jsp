@@ -9,6 +9,7 @@
 <title>	User Registration </title>
 </head>
 <body>
+			<jsp:include page="finalNavBar.jsp" />
 		
 	<form action="/upload" method="POST" enctype = "multipart/form-data">
 		<input type="file" name="file">

@@ -12,6 +12,7 @@
 
 </head>
 <body>
+    	<jsp:include page="finalNavBar.jsp" />
     
     <body class="bg-light">
     <div class="container">

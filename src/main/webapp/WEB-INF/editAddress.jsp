@@ -11,12 +11,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<c:if test="${username !='admin' }">
-   		 <jsp:include page="navbar.jsp" />
-    </c:if>
-    <c:if test="${username =='admin' }">
-   		 <jsp:include page="adminNavBar.jsp" />
-    </c:if>
+	<jsp:include page="finalNavBar.jsp" />
 
 	<div class="container">
 	    <div class="row">

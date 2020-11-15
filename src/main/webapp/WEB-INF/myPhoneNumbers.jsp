@@ -11,6 +11,7 @@
 </head>
 <body>
 
+	<jsp:include page="finalNavBar.jsp" />
 	
 	 <h3>My Phone Numbers</h3>
 		<div class="container">

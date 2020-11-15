@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-    <jsp:include page="navbar.jsp" />
     
 <!DOCTYPE html>
 <html>
@@ -10,6 +9,8 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<jsp:include page="finalNavBar.jsp" />
+
 		<div class="container">
 			 <h5>Order Id : ${order.order_id }</h5>
 			 <dl> Total Amount: Rs.${order.amount }</dl>

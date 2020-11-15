@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<jsp:include page="navbar.jsp" />
 
 <!DOCTYPE html>
 <html>
@@ -10,6 +9,8 @@
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="/static/css/style.css">
 </head>
+    <jsp:include page="finalNavBar.jsp" />
+
 <body>
 	<div class="container">
 		  <div class="row">

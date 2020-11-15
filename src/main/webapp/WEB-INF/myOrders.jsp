@@ -11,6 +11,7 @@
 </head>
 <body>
 
+	<jsp:include page="finalNavBar.jsp" />
 	
 	 <h3>My Orders</h3>
 		<div class="container">

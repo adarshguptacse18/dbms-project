@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-    <jsp:include page="navbar.jsp" />
     
 <!DOCTYPE html>
 <html>
@@ -11,6 +10,7 @@
 </head>
 <body>
 	
+	<jsp:include page="finalNavBar.jsp" />
 	
 		<div class="container">
 			 <dl class="text text-danger">Error

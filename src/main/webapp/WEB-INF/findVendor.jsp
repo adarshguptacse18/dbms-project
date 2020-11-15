@@ -10,6 +10,8 @@
 <title>Insert title here</title>
 </head>
 <body>
+<jsp:include page="finalNavBar.jsp" />
+
 	 <div class="container">
 	 	<form action="/admin/findVendorById"="GET">
             <div class="form-group">

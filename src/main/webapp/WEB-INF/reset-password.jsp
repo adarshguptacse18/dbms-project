@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 </head>
 <body>
+		<jsp:include page="finalNavBar.jsp" />
 	
 	<div class="container">
         <div class="row">
