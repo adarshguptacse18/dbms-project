@@ -16,7 +16,7 @@
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
         <div class="card card-signin my-5">
           <div class="card-body">
-            <h5 class="card-title text-center"><b>Edit Profile</b></h5>
+            <h5 class="card-title text-center"><b>Register Customer</b></h5>
             <form:form action="" class="form-signin" method="POST" modelAttribute="customer">
               <div class="form-group">
                 <form:label path="user.first_name">First Name</form:label>
@@ -55,7 +55,7 @@
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>
               <div class="form-group">
-                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Update Profile</button><br><br>
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button><br><br>
               </div>
             </form:form>
           </div>

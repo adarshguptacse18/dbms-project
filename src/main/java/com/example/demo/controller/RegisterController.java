@@ -1,12 +1,10 @@
 package com.example.demo.controller;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,17 +12,18 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.EmailSendService;
 import com.example.demo.UserDetailsServiceImpl;
 import com.example.demo.dao.CustomerDao;
 import com.example.demo.dao.UserTokenDao;
 import com.example.demo.dao.Userdao;
+import com.example.demo.dao.VendorDao;
 import com.example.demo.models.Customer;
 import com.example.demo.models.MyUserDetails;
 import com.example.demo.models.User;
 import com.example.demo.models.UserToken;
+import com.example.demo.models.Vendor;
 
 @Transactional
 @Controller
@@ -35,13 +34,15 @@ public class RegisterController {
 	final EmailSendService emailSendService;
 	final UserDetailsServiceImpl userService;
 	final UserTokenDao userTokenDao;
+	final VendorDao vendorDao;
 	@Autowired
-	public RegisterController(Userdao userDao,CustomerDao customerDao,EmailSendService emailSendService,UserDetailsServiceImpl userDetailsServiceImpl,UserTokenDao userTokenDao){
+	public RegisterController(Userdao userDao,CustomerDao customerDao,EmailSendService emailSendService,UserDetailsServiceImpl userDetailsServiceImpl,UserTokenDao userTokenDao,VendorDao vendorDao){
 		this.userDao = userDao;
 		this.customerDao = customerDao;
 		this.emailSendService = emailSendService;
 		this.userService = userDetailsServiceImpl;
 		this.userTokenDao = userTokenDao;
+		this.vendorDao = vendorDao;
 	}
 	
 	
@@ -78,11 +79,10 @@ public class RegisterController {
 		customerDao.save(user.getUser_id(), cust.getGSTIN_NUMBER());
 		UserToken u = new UserToken();
 		u.setUser_id(user.getUser_id());
-//        UUID token = UUID.fromString(u.getUser_id() + user.getUsername()); 
         u.setToken(UUID.randomUUID().toString());
 		userTokenDao.save(u);
 		user.setToken(u.getToken());
-		userService.sendVerificationEmail(user);
+		emailSendService.sendVerificationEmail(user);
 
         return "redirect:/login?verificationEmailSent";
     }
@@ -139,13 +139,16 @@ public class RegisterController {
     public String forget_password(String email) {
 		if(getUsername()!=null) return "redirect:/";
 		User user = userDao.findUserByEmail(email);
+		if(user.isIs_enabled()==false) {
+			return "redirect:/login?error";
+		}
 		UserToken u = new UserToken();
 		u.setUser_id(user.getUser_id());
 		u.setToken(UUID.randomUUID().toString());
 		user.setToken(u.getToken());
 		userTokenDao.delete(user.getUser_id());
 		userTokenDao.save(u);
-		userService.sendPasswordResetEmail(user);
+		emailSendService.sendPasswordResetEmail(user);
         return "redirect:/login?resetMailSent";
     }
 
@@ -154,6 +157,10 @@ public class RegisterController {
 		if(getUsername()!=null) return "redirect:/";
 		Integer user_id =userTokenDao.getUserIdByToken(token);
 		if(user_id==null) {
+			return "redirect:/login?error";
+		}
+		User u = userDao.findUserByUserId(user_id);
+		if(u.isIs_enabled()==false) {
 			return "redirect:/login?error";
 		}
 		model.addAttribute("submit_url","/reset-password?token="+token);
@@ -173,6 +180,28 @@ public class RegisterController {
 			return "reset-password";
 		}
 		userDao.updatePassword(user_id, password);
+		userTokenDao.delete(user_id);
 		return "redirect:/login?passwordChanged";
+	}
+	
+	
+	
+	@GetMapping("/vendor/register")
+	public String registerPage(ModelMap model) {
+		model.addAttribute("vendor", new Vendor());
+		return "registerVendor";
+	}
+	@PostMapping("/vendor/register")
+	public String registerVendor(Vendor v) {
+		vendorDao.save(v);
+		User user= userDao.findByUsername(v.getUser().getUsername());
+		UserToken u = new UserToken();
+		u.setUser_id(user.getUser_id());
+        u.setToken(UUID.randomUUID().toString());
+		userTokenDao.save(u);
+		user.setToken(u.getToken());
+		emailSendService.sendVerificationEmail(user);
+
+		return "redirect:/login?verificationEmailSent";	
 	}
 }

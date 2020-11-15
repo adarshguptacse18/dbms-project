@@ -84,22 +84,14 @@ public class VendorController {
 	}
 	
 	
-	@GetMapping("/register")
-	public String registerPage(ModelMap model) {
-		model.addAttribute("vendor", new Vendor());
-		return "registerVendor";
-	}
+	
 	
 	@GetMapping("/login")
 	public String login() {
 		return "login";
 	}
 	
-	@PostMapping("/register")
-	public String registerVendor(Vendor v) {
-		vendorDao.save(v);
-		return "redirect:/vendor/login";	
-	}
+	
 	
 	
 	
@@ -115,7 +107,7 @@ public class VendorController {
 	@GetMapping("/viewProducts/{category_id}")
 	public String viewProductByCategory(@PathVariable("category_id") int category_id,ModelMap model) {
 		List<Product> p=productDao.showAllProducts(category_id);
-		model.addAttribute("prods",p);
+		model	.addAttribute("prods",p);
 		return "allProductsForVendor";
 	}
 	
@@ -199,7 +191,7 @@ public class VendorController {
 		return "redirect:/vendor/myProfile";
 	}
 	
-	@GetMapping("/AllCategories")
+	@GetMapping("/allCategories")
 	public String AllCategoriesPage(ModelMap model) {
 			model.addAttribute("cat", categoryDao.showAllCategory());
 			return "allCategories";

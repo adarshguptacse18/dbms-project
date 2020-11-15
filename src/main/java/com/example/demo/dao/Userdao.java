@@ -158,7 +158,7 @@ public class Userdao {
     
     public void updatePassword(int user_id,String password) {
     	String encrypted = bCryptPasswordEncoder.encode(password);
-    	String sql = "update user set password = ? where user_id = ?";
+    	String sql = "update user set password = ? where user_id = ? and is_enabled=false";
 //    	System.out.println(z		);
     	jt.update(sql,encrypted,user_id);
     }

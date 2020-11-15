@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Register Vendor</title>
 </head>
 <body>
 <jsp:include page="adminNavBar.jsp" />
