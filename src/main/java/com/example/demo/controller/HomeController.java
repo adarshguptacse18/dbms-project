@@ -528,6 +528,29 @@ public class HomeController {
 			model.addAttribute("cat", getAllCategories());
 			return "allCategories";
 	}
+	
+	@GetMapping("/filters")
+	public String filterPage() {
+		return "filters";
+	}
+	
+	@GetMapping("/filter/price")
+	public String filterByPrice(ModelMap model,@RequestParam("min_price")int min_price,@RequestParam("max_price") int max_price) {
+		List<Product> p=productdao.filterByPrice(min_price,max_price);
+		model.addAttribute("prods",p);
+		return "showProducts";	
+	}
+	
+	
+	@GetMapping("/filter/rating")
+	public String filterByRating(ModelMap model,@RequestParam("min_rating")int min_rating,@RequestParam("max_rating") int max_rating) {
+		List<Product> p=productdao.filterByRating(min_rating,max_rating);
+		model.addAttribute("prods",p);
+		return "showProducts";	
+	}
+	
+	
+	
 //	
 	
 //  	@PostMapping("/upload")

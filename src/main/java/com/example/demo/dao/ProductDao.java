@@ -185,4 +185,45 @@ public class ProductDao {
 		String sql = "update product set purchased_cnt = purchased_cnt+1 where product_id = ?";
 		jt.update(sql,product_id);
 	}
+	
+	public List<Product> filterByPrice(int min_price, int max_price) {
+		String sql;
+        sql = "select P.hide as hide, P.product_id as product_id, P.supplier_id as supplier_id, name, quantity, category_id, description, price ,max(image_path) as image_path from product as P left join images on P.product_id = images.product_id where hide=false and price>=? and price<=? and P.quantity > 0 group by P.product_id";
+        return jt.query(sql,new Object[] {min_price,max_price}, new RowMapper<Product>() {
+
+            public Product mapRow(ResultSet row, int rowNum) throws SQLException {
+                 Product u = new Product();
+            	 u.setProduct_id(row.getInt("product_id"));
+                 u.setName(row.getString("name"));
+                 u.setCategory_id(row.getInt("category_id"));
+                 u.setDescription(row.getString("description"));
+                 u.setPrice(row.getInt("price"));
+                 u.setQuantity(row.getInt("quantity"));
+                 u.image_path.add(row.getString("image_path"));
+                 u.setHide(row.getBoolean("hide"));
+                 u.setSupplier_id(row.getInt("supplier_id"));	                 return u;
+            }
+        });
+//		return jt.query(sql, new Object[] {min_price,max_price},new BeanPropertyRowMapper<>(Product.class));
+	}
+	
+	public List<Product> filterByRating(int min_rating, int max_rating) {
+		// TODO Auto-generated method stub
+		String sql;
+        sql = "select P.hide as hide, P.product_id as product_id, P.supplier_id as supplier_id, name, quantity, category_id, description, price ,max(image_path) as image_path from product as P left join images on P.product_id = images.product_id where hide=false and rating>=? and rating<=? and P.quantity > 0 group by P.product_id";
+        return jt.query(sql,new Object[] {min_rating,max_rating}, new RowMapper<Product>() {
+
+            public Product mapRow(ResultSet row, int rowNum) throws SQLException {
+                 Product u = new Product();
+            	 u.setProduct_id(row.getInt("product_id"));
+                 u.setName(row.getString("name"));
+                 u.setCategory_id(row.getInt("category_id"));
+                 u.setDescription(row.getString("description"));
+                 u.setPrice(row.getInt("price"));
+                 u.setQuantity(row.getInt("quantity"));
+                 u.image_path.add(row.getString("image_path"));
+                 u.setHide(row.getBoolean("hide"));
+                 u.setSupplier_id(row.getInt("supplier_id"));	                 return u;
+            }
+        });	}
 }

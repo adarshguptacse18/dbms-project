@@ -24,6 +24,8 @@
       <ol class="navbar-nav mr-auto">
         <li class="breadcrumb-item"><a class="waves-effect" href="/">Home</a></li>
         <li class="breadcrumb-item"><a class="waves-effect" href="/categories">Categories</a></li>
+        <li class="breadcrumb-item"><a class="waves-effect" href="/filters">Filters</a></li>
+        
       </ol>
       <!-- Right -->
       <ul class="navbar-nav ml-auto">
