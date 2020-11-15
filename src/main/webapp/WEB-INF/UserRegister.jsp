@@ -58,6 +58,8 @@
                 <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Register</button><br><br>
               </div>
             </form:form>
+                        <small><p class="text-center">Are you a vendor <a href="/vendor/register"><b>Register Now!</b></a></p></small>
+            
           </div>
         </div>
       </div>

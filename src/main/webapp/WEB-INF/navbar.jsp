@@ -61,7 +61,7 @@
 	          </a>
 	        </li>
 	         <li class="nav-item pl-2 mb-2 mb-md-0">
-	          <a href="#!" type="button"
+	          <a href="/register" type="button"
 	            class="btn btn-outline-info btn-md btn-rounded btn-navbar waves-effect waves-light">Sign up</a>
 	        </li>
         </c:if>

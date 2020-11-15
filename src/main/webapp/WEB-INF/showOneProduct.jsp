@@ -33,6 +33,9 @@
 		        <h5>${prod.rating==0? 'Not Rated' : prod.rating}</h5>
 		      </div>
 		      <div class="row">
+		        <h5>${prod.quantity<=0? 'Out Of Stock' : 'In Stock'}</h5>
+		      </div>
+		      <div class="row">
 		      	<div class="text-secondary">
 		      		${prod.description}
 		      	</div>

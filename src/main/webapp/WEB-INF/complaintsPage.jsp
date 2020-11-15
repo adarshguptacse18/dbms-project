@@ -35,8 +35,11 @@
 							<c:if test="${complaint.is_resolved==true }">
 								<td class="btn btn-success">Resolved</td> 
 							</c:if>
-							<c:if test="${complaint.is_resolved==false }">
+							<c:if test="${complaint.is_resolved==false and role=='ROLE_ADMIN' }">
 								<td><a href="/admin/resolve/${complaint.complaint_id}" class="btn btn-warning">Resolve This</a></td> 
+							</c:if>
+							<c:if test="${complaint.is_resolved==false and role!='ROLE_ADMIN' }">
+								<td><span class="btn btn-warning">Not Resolved</a></td> 
 							</c:if>
 							<td>${complaint.date}</td>						
 						</tr>
