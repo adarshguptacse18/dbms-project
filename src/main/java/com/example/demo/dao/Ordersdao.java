@@ -138,6 +138,7 @@ public class Ordersdao {
             public Product mapRow(ResultSet row, int rowNum) throws SQLException {
                 Product u = productdao.getproductbyId(row.getInt("product_id"));
                 u.setQuantity(row.getInt("quantity"));
+                u.setRating(row.getDouble("rating"));
                 return u;
             }
         });

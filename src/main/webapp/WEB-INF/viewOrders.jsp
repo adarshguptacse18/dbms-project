@@ -21,6 +21,7 @@
 						<th>Description</th>
 						<th>Quantity</th>
 						<th>Price</th>
+						<th>Rating</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -30,11 +31,15 @@
 							<td>${prod.description}</td>	
 							<td><input type="number" class="form-control" id="prod_${prod.product_id}" placeholder="190" name="password" value = ${prod.quantity} disabled></td>														
 							<td>${prod.price}</td>
+							<td>${prod.rating}</td>
+							<td><a href="/rateOrder/${order.order_id}/${prod.product_id}" type="button" class="btn btn-warning">Rate Product</a></td> 		
+							
 						</tr>
 					</c:forEach>
 					
 				</tbody>
 			</table>
+			
 			<c:if test="${order.status!='CANCELLED' }">
 				<a href="/cancelOrder/${order.order_id}" type="button" class="btn btn-danger">Cancel Order</a>
 			</c:if>
@@ -47,25 +52,7 @@
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 		<script>
-		function deleteFromCart(id){
-			var quantity= document.getElementById('prod_'+id).value;
-			
-			 $.ajax({
-			    url: '/addToCart',
-			    type: 'GET',
-			    dataType: 'json',
-			    data:{
-			          'product_id':id,
-			          'quantity':-quantity,
-			          },
-	
-			         })
-			  .done(function(data) {
-			  		console.log(data);
-			  }); 
-			 $('.toast').toast('show');
-			 document.getElementById('prod_row_'+id).hidden=true;				 
-			}
+		
 			
 	</script>
 </body>

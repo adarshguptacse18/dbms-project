@@ -191,7 +191,7 @@ public class VendorController {
 		return "redirect:/vendor/myProfile";
 	}
 	
-	@GetMapping("/allCategories")
+	@GetMapping("/AllCategories")
 	public String AllCategoriesPage(ModelMap model) {
 			model.addAttribute("cat", categoryDao.showAllCategory());
 			return "allCategories";

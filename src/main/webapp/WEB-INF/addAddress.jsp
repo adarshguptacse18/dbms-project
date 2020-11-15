@@ -48,7 +48,7 @@
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>
               <div class="form-group">
-                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Add Product</button><br><br>
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Add Address</button><br><br>
               </div>
             </form>
           </div>

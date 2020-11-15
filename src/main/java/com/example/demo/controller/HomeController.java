@@ -199,9 +199,9 @@ public class HomeController {
 	}
 	
 	
-	@GetMapping("/showProducts")
-	public String showProducts(@RequestParam("category_id") int category,ModelMap model) {
-		List<Product> p=productdao.showAllProducts(category);
+	@GetMapping("/viewProduct/{category_id)}")
+	public String showProducts(@RequestParam("category_id") int category_id,ModelMap model) {
+		List<Product> p=productdao.showAllProducts(category_id);
 		model.addAttribute("prods",p);
 		return "showProducts";
 	}
@@ -326,9 +326,9 @@ public class HomeController {
 		List<Product> prods = ordersdao.getItemsByOrderId(order_id);
 		for(Product p : prods) {
 			productdao.updateProductquantity(p.getProduct_id(), -p.getQuantity());
+			productdao.incrementPurchase(p.getProduct_id());
 			Product t = productdao.getproductbyId(p.getProduct_id());
 			if(t.getQuantity()<5) {
-//				System.out.println(p.getSupplier_id());		
 				try {
 					emailService.sendMailToVendor(userDao.findUserByUserId(p.getSupplier_id()), p);
 				} catch (Exception e) {
@@ -341,6 +341,19 @@ public class HomeController {
 		return "redirect:/vieworders";
 	}
 	
+	
+	@GetMapping("/rateOrder/{order_id}/{product_id}")
+	public String updateRatingPage(@PathVariable("order_id") int order_id,@PathVariable("product_id") int product_id,ModelMap model) {
+		model.addAttribute("order_id", order_id);
+		model.addAttribute("product_id",product_id);
+		return "rateProduct";
+	}
+	@PostMapping("/rateOrder/{order_id}/{product_id}")
+	public String updateRatingPage(@PathVariable("order_id") int order_id,@PathVariable("product_id") int product_id,ModelMap model,int rating) {
+		ordersdao.updateRating(order_id, product_id, rating);
+		return "redirect:/viewOrder/"+order_id;
+		
+	}
 	
 	
 	
@@ -385,19 +398,19 @@ public class HomeController {
 		return "review updated";
     }
 	
-	@PostMapping("/rateOrder/{order_id}/{product_id}")
-	@ResponseBody
-	public String rateProduct(@PathVariable("order_id") int order_id, @PathVariable("product_id") int product_id,int rating) {
-		ordersdao.updateRating(order_id, product_id, rating);
-		return "updated";
-	}
-	
-	@PostMapping("/rateProduct")
-	@ResponseBody
-	public String rateProduct(@RequestParam("category_name")String category_name) {
-//		productdao.addCategory(category_name);
-		return "Category Added";	
-	}
+//	@PostMapping("/rateOrder/{order_id}/{product_id}")
+//	@ResponseBody
+//	public String rateProduct(@PathVariable("order_id") int order_id, @PathVariable("product_id") int product_id,int rating) {
+//		ordersdao.updateRating(order_id, product_id, rating);
+//		return "updated";
+//	}
+//	
+//	@PostMapping("/rateProduct")
+//	@ResponseBody
+//	public String rateProduct(@RequestParam("category_name")String category_name) {
+////		productdao.addCategory(category_name);
+//		return "Category Added";	
+//	}
 	@GetMapping("/getAllCategories")
 	@ResponseBody
 	public List<Category> getAllCategories() {
@@ -422,7 +435,7 @@ public class HomeController {
 	public String addAddress(ModelMap model,String house_no,String street_no,String locality_and_city,String pincode,String state) {
 		Address add= new Address(getCustomerId(), house_no, street_no, locality_and_city, pincode, state);
 		addressDao.addAddress(add);
-		return "redirect:/placeOrder";
+		return "redirect:/";
 	}
 	@GetMapping("/myProfile")
 	public String myAccountPage(ModelMap model) {
@@ -510,7 +523,11 @@ public class HomeController {
 		return "complaintsPage";
 	}
 
-	
+	@GetMapping("/categories")
+	public String AllCategoriesPage(ModelMap model) {
+			model.addAttribute("cat", getAllCategories());
+			return "allCategories";
+	}
 //	
 	
 //  	@PostMapping("/upload")

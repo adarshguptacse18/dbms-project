@@ -54,8 +54,9 @@ public class ProductDao {
 
     }
 	public Product getproductbyId(int id) {
-        String sql = "select P.product_id as rating,purchased_cnt,P.product_id, P.supplier_id as supplier_id, name, quantity, category_id, description, price ,group_concat(image_path)  as image_path from product as P left join images on P.product_id = images.product_id where P.product_id="+id+" group by P.product_id";
+        String sql = "select P.product_id as product_id,P.rating as rating,purchased_cnt,P.product_id, P.supplier_id as supplier_id, name, quantity, category_id, description, price ,group_concat(image_path)  as image_path from product as P left join images on P.product_id = images.product_id where P.product_id="+id+" group by P.product_id";
         Product p = jt.queryForObject(sql,new BeanPropertyRowMapper<Product>(Product.class));
+        
         return p;
 //        return jt.queryForObject(sql, new RowMapper<Product>() {
 //
@@ -98,6 +99,10 @@ public class ProductDao {
 	                 u.image_path.add(row.getString("image_path"));
 	                 u.setHide(row.getBoolean("hide"));
 	                 u.setSupplier_id(row.getInt("supplier_id"));
+//	                 double rating = u.getRating();
+//	                 if(p.getPurchased_cnt()>0) {
+//	                 	rating = rating/u.getPurchased_cnt();
+//	                 }
 	                 return u;
 	            }
 	        });
@@ -175,5 +180,9 @@ public class ProductDao {
 		String sql = "update product set supplier_id=? where product_id = ?";
 		jt.update(sql,supplier_id,product_id);
 		
+	}
+	public void incrementPurchase(int product_id) {
+		String sql = "update product set purchased_cnt = purchased_cnt+1 where product_id = ?";
+		jt.update(sql,product_id);
 	}
 }
