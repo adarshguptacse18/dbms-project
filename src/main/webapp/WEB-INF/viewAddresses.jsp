@@ -35,7 +35,7 @@
 				</tbody>
 			</table>
 			<div class="btn btn-primary">
-				<a href = "addAddress/" style="color:white">Add Address</a>
+				<a href = "/addAddress" style="color:white">Add Address</a>
 			</div>
 						
 		</div>	

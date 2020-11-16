@@ -64,7 +64,7 @@ public class AddressDao {
         });
     }
 	
-	public void deleteAddress(int address_id) {
-		jt.update("delete from address where address_id = ?",address_id);
+	public void deleteAddress(int address_id,int customer_id) {
+		jt.update("delete from address where address_id = ? and customer_id=?",address_id,customer_id);
 	}
 }

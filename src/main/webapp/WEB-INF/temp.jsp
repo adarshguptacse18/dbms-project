@@ -11,7 +11,7 @@
 <body>	
 	
 		<div class="container">
-			 <h3>Hey Admin</h3>
+ 				<jsp:include page="finalGreeting.jsp" />
 		 	<table  class="table table-striped  table-hover">
 				<thead>
 					<tr>

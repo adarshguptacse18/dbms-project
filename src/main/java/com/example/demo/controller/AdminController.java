@@ -308,8 +308,8 @@ public class AdminController {
 	        return "viewAddresses";
 	}
 	@GetMapping("/viewAllAddresses/{customer_id}/deleteAddress/{address_id}")
-	public String deleteAddress(@PathVariable("address_id") int address_id) {
-	    addressDao.deleteAddress(address_id);
+	public String deleteAddress(@PathVariable("address_id") int address_id,@PathVariable("customer_id") int customer_id) {
+	    addressDao.deleteAddress(address_id,customer_id);
 		return "redirect:/admin";
 	}
 	

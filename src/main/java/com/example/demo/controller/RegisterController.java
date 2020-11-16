@@ -156,6 +156,7 @@ public class RegisterController {
 	public String reset_password(ModelMap model,String token) {
 		if(getUsername()!=null) return "redirect:/";
 		Integer user_id =userTokenDao.getUserIdByToken(token);
+		System.out.println(user_id);
 		if(user_id==null) {
 			return "redirect:/login?error";
 		}
@@ -172,6 +173,7 @@ public class RegisterController {
             @RequestParam("confirm_password") String confirmPassword, Model model, String token) {
 		if(getUsername()!=null) return "redirect:/";
 		Integer user_id =userTokenDao.getUserIdByToken(token);
+		System.out.println(user_id);
 		if(user_id==null) {
 			return "redirect:/login?error";
 		}

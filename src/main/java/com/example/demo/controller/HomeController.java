@@ -437,6 +437,13 @@ public class HomeController {
 		addressDao.addAddress(add);
 		return "redirect:/";
 	}
+	
+	@GetMapping("/deleteAddress/{address_id}")
+	public String deleteAddress(ModelMap model,@PathVariable("address_id") int address_id) {
+		
+		addressDao.deleteAddress(address_id,getCustomerId());
+		return "redirect:/";
+	}
 	@GetMapping("/myProfile")
 	public String myAccountPage(ModelMap model) {
 		Customer c = custdao.getCustomerByCustomerId(getCustomerId());

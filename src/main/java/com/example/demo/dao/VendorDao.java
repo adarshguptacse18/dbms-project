@@ -1,13 +1,20 @@
 package com.example.demo.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.models.Customer;
@@ -20,11 +27,13 @@ public class VendorDao {
 	
 	final private JdbcTemplate jt;
     final private Userdao userDao;
-    
+    final private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 	@Autowired
-	VendorDao(JdbcTemplate jt,Userdao userDao){
+	public VendorDao(JdbcTemplate jt,Userdao userDao,BCryptPasswordEncoder b){
 		this.jt = jt;
 		this.userDao = userDao;
+		this.bCryptPasswordEncoder = b;
 	}
 	
 	public void save(Vendor v) {
@@ -112,6 +121,29 @@ public class VendorDao {
 				return c;
 			};
 		});		
+	}
+	
+	public int save(User u) {
+		u.setPassword(bCryptPasswordEncoder.encode(u.getPassword()));
+		String sql = "insert into user (username,role,password,email,first_name,last_name) values (?,?,?,?,?,?)";
+        KeyHolder holder = new GeneratedKeyHolder();
+		  jt.update(new PreparedStatementCreator() {
+
+	            @Override
+	            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+	                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+	                ps.setString(1, u.getUsername());
+	                ps.setString(2, u.getRole());
+	                ps.setString(3, u.getPassword());
+	                ps.setString(4, u.getEmail());
+	                ps.setString(5, u.getFirst_name());
+	                ps.setString(6, u.getLast_name());
+	                return ps;
+	                
+	            }
+	        }, holder);
+		  int user_id = holder.getKey().intValue();
+		  return user_id;
 	}
 	
 	

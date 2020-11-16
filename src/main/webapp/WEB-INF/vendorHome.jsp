@@ -11,7 +11,7 @@
 <jsp:include page="finalNavBar.jsp" />
 
 			<div class="container">
-			 <h3>Hey Vendor</h3>
+ 				<jsp:include page="finalGreeting.jsp" />
 		 	<table  class="table table-striped  table-hover">
 				<thead>
 					<tr>

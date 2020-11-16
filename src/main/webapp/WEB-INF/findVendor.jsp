@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<jsp:include page="navbar.jsp" />
 
 <!DOCTYPE html>
 <html>
@@ -22,7 +21,7 @@
              </div>
              
              <div>
-                <button class="btn btn-lg btn-primary  text-uppercase" type="submit">Find User</button><br><br>
+                <button class="btn btn-lg btn-primary  text-uppercase" type="submit">Find Vendor</button><br><br>
              </div>
          </form>
    
@@ -37,7 +36,7 @@
              </div>
              
              <div>
-                <button class="btn btn-lg btn-primary  text-uppercase" type="submit">Find User</button><br><br>
+                <button class="btn btn-lg btn-primary  text-uppercase" type="submit">Find Vendor</button><br><br>
              </div>
          </form>
    
@@ -52,7 +51,7 @@
              </div>
              
              <div>
-                <button class="btn btn-lg btn-primary  text-uppercase" type="submit">Find User</button><br><br>
+                <button class="btn btn-lg btn-primary  text-uppercase" type="submit">Find Vendor</button><br><br>
              </div>
          </form>
    

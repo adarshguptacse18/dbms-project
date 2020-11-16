@@ -17,10 +17,10 @@
 		 	<table  class="table">
 				<thead>
 					<tr>
-						<th>First Name</th>
-						<th>Last Name</th>
+						<th>Complaint Id</th>
+						<th>User Id</th>
 						<th>Email</th>
-						<th>Username</th>
+						<th>Message</th>
 						<th>Is Resolved</th>
 						<th>Date</th>
 					</tr>

@@ -17,7 +17,7 @@
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
         <div class="card card-signin my-5">
           <div class="card-body">
-            <h5 class="card-title text-center"><b>Add Product</b></h5>
+            <h5 class="card-title text-center"><b>Add Complaint</b></h5>
             <form:form action="" class="form-signin" method="POST" modelAttribute="complaint" enctype = "multipart/form-data">
               <div class="form-group">
                 <form:label path="email_id">Email</form:label>
