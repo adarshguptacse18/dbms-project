@@ -64,7 +64,7 @@
 		
 		<div class="container">
 			<h3>Reviews:</h3>
-			 <table class="table table-striped ">
+			 <table id = "reviews" class="table table-striped ">
 			 	<thead>
 			      <tr>
 			        <th></th>
@@ -133,12 +133,16 @@
 					  		console.log(data);
 					  }); 
 					  document.getElementById('addreview').hidden=true;
-					  document.getElementById('result_message').hidden=false;// 					 document.getElementById("message").value = ''; 
+					  document.getElementById('result_message').hidden=false;// 					 document.getElementById("message").value = '';
+					  var markup = "<tr><th class='text-secondary'>"+message+"</th></tr>";
+					  console.log(markup);
+					  $("table tbody").append(markup); 
 						  
 			}
 			function showReview(){
 				document.getElementById('addreview').hidden=false;
 			}
+			
 		
 			
 	</script>

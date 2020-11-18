@@ -202,7 +202,8 @@ public class ProductDao {
                  u.setQuantity(row.getInt("quantity"));
                  u.image_path.add(row.getString("image_path"));
                  u.setHide(row.getBoolean("hide"));
-                 u.setSupplier_id(row.getInt("supplier_id"));	                 return u;
+                 u.setSupplier_id(row.getInt("supplier_id"));	                 
+                 return u;
             }
         });
 //		return jt.query(sql, new Object[] {min_price,max_price},new BeanPropertyRowMapper<>(Product.class));
@@ -224,7 +225,8 @@ public class ProductDao {
                  u.setQuantity(row.getInt("quantity"));
                  u.image_path.add(row.getString("image_path"));
                  u.setHide(row.getBoolean("hide"));
-                 u.setSupplier_id(row.getInt("supplier_id"));	                 return u;
+                 u.setSupplier_id(row.getInt("supplier_id"));	                 
+                 return u;
             }
         });	}
 }

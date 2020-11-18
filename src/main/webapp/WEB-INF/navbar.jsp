@@ -50,7 +50,7 @@
         </li>
         
         <li class="nav-item">
-          <a href="#!" class="nav-link waves-effect">
+          <a href="/contactUs" class="nav-link waves-effect">
             Contact Us
           </a>
         </li>

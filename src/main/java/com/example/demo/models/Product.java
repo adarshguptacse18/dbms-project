@@ -10,7 +10,7 @@ public class Product {
     private int price;
     private int category_id;
     private int quantity=0;
-    private double rating;
+    private Double rating;
     private int purchased_cnt;
     public List<String> image_path = new ArrayList<>();
 	private boolean hide;
@@ -60,10 +60,10 @@ public class Product {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public double getRating() {
+	public Double getRating() {
 		return rating;
 	}
-	public void setRating(double rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 	public int getPurchased_cnt() {

@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,6 +35,7 @@ import com.example.demo.dao.CustomerDao;
 import com.example.demo.dao.Ordersdao;
 import com.example.demo.dao.PhoneNumberDao;
 import com.example.demo.dao.ProductDao;
+import com.example.demo.dao.RequestDao;
 import com.example.demo.dao.TransactionDao;
 import com.example.demo.dao.Userdao;
 import com.example.demo.models.Address;
@@ -44,6 +46,7 @@ import com.example.demo.models.Message;
 import com.example.demo.models.MyUserDetails;
 import com.example.demo.models.Orders;
 import com.example.demo.models.Product;
+import com.example.demo.models.Request;
 import com.example.demo.models.Review;
 import com.example.demo.models.Transaction;
 import com.example.demo.models.User;
@@ -63,11 +66,12 @@ public class HomeController {
 	final private ComplaintsDao complaintsDao;
 	final private JdbcTemplate jt;
 	final private EmailSendService emailService;
-	
+	final private RequestDao requestDao;
 	@Autowired
 	public HomeController(JdbcTemplate jt,Userdao userDao,ProductDao productDao,CartDao cartDao,CustomerDao custDao,Ordersdao ordresDao,TransactionDao transactionDao,
-			HttpServletRequest request,AddressDao addressDao,CategoryDao categoryDao,PhoneNumberDao  phonenumberDao,ComplaintsDao complaintsDao,EmailSendService emailService) {
+			HttpServletRequest request,AddressDao addressDao,CategoryDao categoryDao,PhoneNumberDao  phonenumberDao,ComplaintsDao complaintsDao,EmailSendService emailService,RequestDao requestDao) {
 		
+		this.requestDao = requestDao;
 		this.jt=jt;
 		this.userDao = userDao;
 		this.productDao =productDao;
@@ -499,6 +503,35 @@ public class HomeController {
 		List<Product> p=productDao.filterByRating(min_rating,max_rating);
 		model.addAttribute("prods",p);
 		return "showProducts";	
+	}
+	
+	@GetMapping("/contactUs")
+	public String contactUsPage(Model model,String error,String success) {
+		if(error!=null)
+			model.addAttribute("error", "Please Fill all the details");
+//		System.out.println(success!=null);
+		if(success!=null) {
+			model.addAttribute("successmessage","Thank you!!! We will Contact you shortly");
+		}
+	
+		return "contactUsPage";
+	}
+	
+	@PostMapping("/submitRequest")
+	public String addRequest(ModelMap model,@RequestParam("name") String name,@RequestParam("email_id") String email_id,@RequestParam("subject") String subject,@RequestParam("message") String message) {
+		Request r = new Request();
+
+		if(name.equals("") || email_id.equals("") || subject.equals("") || message.equals("")) {
+//			model.addAttribute("error", "Please Fill all the details");
+			return "redirect:/contactUs?error";
+		}
+		r.setEmail_id(email_id);
+		r.setName(name);
+		r.setMessage(message);
+		r.setSubject(subject);
+		requestDao.save(r);
+//		model.addAttribute("success	","Thank you!!! We will Contact you shortly");
+		return "redirect:/contactUs?success";
 	}
 	
 }

@@ -10,7 +10,6 @@
 </head>
 <body>
     <jsp:include page="finalNavBar.jsp" />
-		
 		<div class="container">
 			 <h3>Complaints</h3>
 		

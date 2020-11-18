@@ -27,6 +27,7 @@ import com.example.demo.dao.ImageDao;
 import com.example.demo.dao.Ordersdao;
 import com.example.demo.dao.PhoneNumberDao;
 import com.example.demo.dao.ProductDao;
+import com.example.demo.dao.RequestDao;
 import com.example.demo.dao.TransactionDao;
 import com.example.demo.dao.Userdao;
 import com.example.demo.dao.VendorDao;
@@ -37,6 +38,7 @@ import com.example.demo.models.Message;
 import com.example.demo.models.MyUserDetails;
 import com.example.demo.models.Orders;
 import com.example.demo.models.Product;
+import com.example.demo.models.Request;
 import com.example.demo.models.Vendor;
 
 @Controller
@@ -57,9 +59,10 @@ public class AdminController {
 	final private AddressDao addressDao;
 	final private VendorDao vendorDao;
 	final private ComplaintsDao complaintsDao;
+	final private RequestDao requestDao;
 	
 	@Autowired
-	public AdminController(ProductDao productDao,CategoryDao categroyDao,ImageDao imageDao,HttpServletRequest request, TransactionDao transactionDao, Ordersdao ordersDao,CustomerDao customerDao,PhoneNumberDao phonenumberDao, Userdao userDao,AddressDao addressDao, VendorDao vendorDao, ComplaintsDao complaintsDao) {
+	public AdminController(ProductDao productDao,CategoryDao categroyDao,ImageDao imageDao,HttpServletRequest request, TransactionDao transactionDao, Ordersdao ordersDao,CustomerDao customerDao,PhoneNumberDao phonenumberDao, Userdao userDao,AddressDao addressDao, VendorDao vendorDao, ComplaintsDao complaintsDao,RequestDao requestDao) {
 		this.productDao = productDao;
 		this.categoryDao = categroyDao;
 		this.imageDao = imageDao;
@@ -71,6 +74,7 @@ public class AdminController {
 		this.userDao = userDao;
 		this.addressDao = addressDao;
 		this.vendorDao = vendorDao;
+		this.requestDao = requestDao;
 		this.complaintsDao = complaintsDao;
 	}
 	
@@ -432,6 +436,56 @@ public class AdminController {
             return "allVendors";
         
     }
+    
+    @GetMapping("/allRequests")
+	public String allRequests(ModelMap model) {
+    	List<Request> requests = requestDao.getAllRequests();
+    	model.addAttribute("requests",requests);
+		return "allRequests";
+	}
+    
+    @PostMapping("/deleteRequest")
+    @ResponseBody
+    public Message deleteRequest(ModelMap model,@RequestParam("request_id") int request_id) {
+    	Message m = new Message();
+    	try {
+    		requestDao.deleteRequest(request_id);
+    		m.setStatus(true);
+    		m.setMessage("Request Successfully Deleted");
+    	} catch (Exception e) {
+    		m.setStatus(false);
+    		m.setMessage(e.getMessage());
+		}
+    	return m;
+    }
+    
+    @GetMapping("/findRequests")
+	public String findRequestsPage() {
+		return "findRequest";
+	}
+    
+    @GetMapping("/findRequestByEmailId")
+    public String findRequestByEmailId(ModelMap model,@RequestParam("email_id")String email) {
+    	List<Request> requests = requestDao.findRequestByEmailId(email);
+    	model.addAttribute("requests", requests);
+    	return "allRequests";
+    }
+    @GetMapping("/findRequestByRequestId")
+    public String findRequestByRequestId(ModelMap model,@RequestParam("request_id") int request_id) {
+    	List<Request> requests = requestDao.findRequestById(request_id);
+    	System.out.println(requests);
+    	model.addAttribute("requests", requests);
+
+    	return "allRequests";
+    }
+    
+    @GetMapping("/temp")
+    public String temp() {
+    	return "temp";
+    }
+    
+    
+    
     
 	
 	

@@ -19,11 +19,7 @@
       </ol>
       <!-- Right -->
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a href="/myCart" class="nav-link navbar-link-2 waves-effect">
-            <i class="fas fa-shopping-cart pl-0"></i>
-          </a>
-        </li>
+       
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle waves-effect" id="navbarDropdownMenuLink3" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="true">
@@ -44,7 +40,7 @@
         </li>
         
         <li class="nav-item">
-          <a href="#!" class="nav-link waves-effect">
+          <a href="/contactUs" class="nav-link waves-effect">
             Contact Us
           </a>
         </li>
