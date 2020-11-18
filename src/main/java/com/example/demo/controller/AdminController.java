@@ -45,41 +45,34 @@ import com.example.demo.models.Vendor;
 public class AdminController {
 
 	
-	@Autowired
-	ProductDao productdao;
-	
-	@Autowired 
-	CategoryDao categorydao;
-	
-	@Autowired
-	ImageDao imagedao;
-	
-	@Autowired
-	HttpServletRequest request;
-	
-	@Autowired
-	TransactionDao transactiondao;
+	final private ProductDao productDao;
+	final private CategoryDao categoryDao;
+	final private ImageDao imageDao;
+	final private HttpServletRequest request;
+	final private TransactionDao transactionDao;
+	final private Ordersdao ordersDao;
+	final private CustomerDao customerDao;
+	final private PhoneNumberDao phoneNumberDao;
+	final private Userdao userDao;
+	final private AddressDao addressDao;
+	final private VendorDao vendorDao;
+	final private ComplaintsDao complaintsDao;
 	
 	@Autowired
-	Ordersdao ordersdao;
-	
-	@Autowired
-	CustomerDao customerDao;
-	
-	@Autowired 
-	PhoneNumberDao phoneNumberDao;
-	
-	@Autowired
-	Userdao userDao;
-	
-	@Autowired
-	AddressDao addressDao;
-	
-	@Autowired 
-	VendorDao vendorDao;
-	
-	@Autowired
-	ComplaintsDao complaintsDao;
+	public AdminController(ProductDao productDao,CategoryDao categroyDao,ImageDao imageDao,HttpServletRequest request, TransactionDao transactionDao, Ordersdao ordersDao,CustomerDao customerDao,PhoneNumberDao phonenumberDao, Userdao userDao,AddressDao addressDao, VendorDao vendorDao, ComplaintsDao complaintsDao) {
+		this.productDao = productDao;
+		this.categoryDao = categroyDao;
+		this.imageDao = imageDao;
+		this.request = request;
+		this.transactionDao = transactionDao;
+		this.ordersDao = ordersDao;
+		this.customerDao = customerDao;
+		this.phoneNumberDao = phonenumberDao;
+		this.userDao = userDao;
+		this.addressDao = addressDao;
+		this.vendorDao = vendorDao;
+		this.complaintsDao = complaintsDao;
+	}
 	
 	@ModelAttribute("username")
 	protected String getUsername() {
@@ -107,7 +100,7 @@ public class AdminController {
 	
 	@GetMapping("/AllProducts")
 	public String inventory(ModelMap model) {
-		List<Product> p=productdao.showAllProducts(true);
+		List<Product> p=productDao.showAllProducts(true);
 		System.out.println(p);
 		model.addAttribute("prods",p);
 		return "AllProducts";
@@ -115,13 +108,13 @@ public class AdminController {
 	
 	@GetMapping("/viewProducts/{category_id}")
 	public String viewProductByCategory(@PathVariable("category_id") int category_id,ModelMap model) {
-		List<Product> p=productdao.showAllProducts(category_id);
+		List<Product> p=productDao.showAllProducts(category_id);
 		model.addAttribute("prods",p);
 		return "AllProducts";
 	}
 	@GetMapping("/editProduct/{product_id}")
 	public String editProductPage(ModelMap model,@PathVariable("product_id") int product_id) {
-		Product p = productdao.getproductbyId(product_id);
+		Product p = productDao.getproductbyId(product_id);
 		model.addAttribute("prod", p);
 		model.addAttribute("categories", getAllCategories());
 
@@ -136,15 +129,15 @@ public class AdminController {
 	}
 	@GetMapping("/chooseVendor/{product_id}/{supplier_id}")
 	public String chooseVendor(ModelMap model,@PathVariable("product_id") int product_id,@PathVariable("supplier_id") int supplier_id) {
-		productdao.setVendor(product_id, supplier_id);
+		productDao.setVendor(product_id, supplier_id);
 		return "redirect:/admin/AllProducts";
 	}
 	
 	@PostMapping("/editProduct/{product_id}")
 	public String editProduct(@PathVariable("product_id") int product_id, Product p,MultipartFile file) {
-		productdao.updateproduct(product_id,p);
+		productDao.updateproduct(product_id,p);
 		if(file!=null) {
-			imagedao.save(file, request,product_id);
+			imageDao.save(file, request,product_id);
 		}
 		return "redirect:/admin/AllProducts";
 	}
@@ -152,7 +145,7 @@ public class AdminController {
 	@PostMapping("/deleteImage")
 	@ResponseBody
 	public Message deleteImage(int product_id,String image_path) {
-		imagedao.deleteImage(product_id, image_path);
+		imageDao.deleteImage(product_id, image_path);
 		return new Message(true, "Image Deleted");
 	}
 	
@@ -160,7 +153,7 @@ public class AdminController {
 	@PostMapping("/hideProduct")
 	@ResponseBody
 	public Message hideProduct(@RequestParam("product_id")int product_id) {
-		productdao.hideShow(product_id);
+		productDao.hideShow(product_id);
 		return new Message(true, "Updated");
 	}
 	
@@ -177,8 +170,8 @@ public class AdminController {
 	
 	@PostMapping("/addProduct")
 	public String addProduct(ModelMap model, Product prod,MultipartFile file) {
-		int product_id = productdao.save(prod.getName(), prod.getDescription(), prod.getPrice(), prod.getCategory_id());
-		imagedao.save(file, request, product_id);
+		int product_id = productDao.save(prod.getName(), prod.getDescription(), prod.getPrice(), prod.getCategory_id());
+		imageDao.save(file, request, product_id);
 		return "redirect:/admin";
 	}
 	
@@ -186,7 +179,7 @@ public class AdminController {
 	@GetMapping("/getAllCategories")
 	@ResponseBody
 	public List<Category> getAllCategories() {
-		return categorydao.showAllCategory();
+		return categoryDao.showAllCategory();
 	}
 	
 	@GetMapping("/AllCategories")
@@ -198,13 +191,13 @@ public class AdminController {
 	@GetMapping("/editCategory/{category_id}")
 //	@ResponseBody
 	public String editCategoryPage(ModelMap model,@PathVariable("category_id") int category_id) {
-		Category cat = categorydao.getCategoyById(category_id);
+		Category cat = categoryDao.getCategoyById(category_id);
 		model.addAttribute("cat", cat);
 		return "editCategory";
 	}
 	@PostMapping("/editCategory/{category_id}")
 	public String editCategory(ModelMap model, @PathVariable("category_id") int category_id,Category cat) {
-		categorydao.updateCategoryName(category_id, cat.getCategory_name());
+		categoryDao.updateCategoryName(category_id, cat.getCategory_name());
 		return "redirect:/admin/AllCategories";
 	}
 //	
@@ -216,47 +209,47 @@ public class AdminController {
 	
 	@PostMapping("/addCategory")
 	public String addCategory(ModelMap model, String category_name) {
-		categorydao.addCategory(category_name);
+		categoryDao.addCategory(category_name);
 		return "redirect:/";
 	}
 	
 	@GetMapping("/Orders")
 	public String ordersPage(ModelMap model) {
-		List<Orders> ord = ordersdao.getAllOrders(); 		
+		List<Orders> ord = ordersDao.getAllOrders(); 		
 		model.addAttribute("orders", ord);
 		return "allOrders";
 	}
 	
 	@GetMapping("/Orders/{customer_id}")
 	public String customerOrders(ModelMap model,@PathVariable("customer_id") int customer_id) {
-		model.addAttribute("orders", ordersdao.getOrderByCustomer_id(customer_id));
+		model.addAttribute("orders", ordersDao.getOrderByCustomer_id(customer_id));
 		return "allOrders";
 	}
 	
 	@GetMapping("/viewOrder/{order_id}")
 	public String getOrder(@PathVariable("order_id") int order_id,ModelMap model) {
-		Orders o = ordersdao.getorderbyId(order_id);
+		Orders o = ordersDao.getorderbyId(order_id);
 		model.addAttribute("order",o);
 		return "orderDetails";
 	}
 	
 	@GetMapping("/viewOrder/cancelOrder/{order_id}")
 	public String cancelOrder(@PathVariable("order_id") int order_id,ModelMap model) {
-		ordersdao.updateorder(order_id,"CANCELLED");
-		Orders o = ordersdao.getorderbyId(order_id);
+		ordersDao.updateorder(order_id,"CANCELLED");
+		Orders o = ordersDao.getorderbyId(order_id);
 		model.addAttribute("order",o);
 		return "redirect:/admin/viewOrder/"+order_id;
 	}
 	
 	@GetMapping("/viewOrder/refundOrder/{order_id}")
 	public String refundOrder(@PathVariable("order_id") int order_id, ModelMap model){
-		ordersdao.updateorder(order_id, "REFUNDED");
+		ordersDao.updateorder(order_id, "REFUNDED");
 		return "redirect:/admin/viewOrder/" + order_id;
 	}
 	
 	@GetMapping("/Transactions")
 	public String transactionsPage(ModelMap model) {
-		model.addAttribute("transactions", transactiondao.getAllTransactions());
+		model.addAttribute("transactions", transactionDao.getAllTransactions());
 		return "allTransactions";
 	}
 	

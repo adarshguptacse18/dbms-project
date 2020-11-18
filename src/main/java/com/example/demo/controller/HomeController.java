@@ -50,47 +50,38 @@ import com.example.demo.models.User;
 
 @Controller
 public class HomeController {
-	@Autowired
-	JdbcTemplate jt;
+    final private Userdao userDao;
+	final private ProductDao productDao;
+	final private CartDao cartDao;
+	final private CustomerDao custDao;
+	final private Ordersdao ordersDao;
+	final private TransactionDao transactionDao;
+    final private HttpServletRequest request;
+	final private AddressDao addressDao;
+	final private CategoryDao categoryDao;
+	final private PhoneNumberDao phonenumberDao;
+	final private ComplaintsDao complaintsDao;
+	final private JdbcTemplate jt;
+	final private EmailSendService emailService;
 	
 	@Autowired
-    Userdao userdao;
-	
-	@Autowired
-	ProductDao productdao;
-	
-	@Autowired
-	private CartDao cartdao;
-	
-	@Autowired
-	private CustomerDao custdao;
-	
-	@Autowired
-	private Ordersdao ordersdao;
-	
-	@Autowired
-	private TransactionDao transactiondao;
-	
-	@Autowired	
-    private HttpServletRequest request;
-
-	@Autowired
-	private AddressDao addressDao;
-	
-	@Autowired
-	private CategoryDao categoryDao;
-	
-	@Autowired 
-	private PhoneNumberDao phonenumberdao;
-	
-	@Autowired
-	private ComplaintsDao complaintsDao;
-	
-	@Autowired
-	private EmailSendService emailService;
-	
-	@Autowired
-	private Userdao userDao;
+	public HomeController(JdbcTemplate jt,Userdao userDao,ProductDao productDao,CartDao cartDao,CustomerDao custDao,Ordersdao ordresDao,TransactionDao transactionDao,
+			HttpServletRequest request,AddressDao addressDao,CategoryDao categoryDao,PhoneNumberDao  phonenumberDao,ComplaintsDao complaintsDao,EmailSendService emailService) {
+		
+		this.jt=jt;
+		this.userDao = userDao;
+		this.productDao =productDao;
+		this.cartDao = cartDao;
+		this.custDao = custDao;
+		this.ordersDao = ordresDao;
+		this.transactionDao = transactionDao;
+		this.request = request;
+		this.addressDao = addressDao;
+		this.categoryDao = categoryDao;
+		this.phonenumberDao = phonenumberDao;
+		this.complaintsDao = complaintsDao;
+		this.emailService = emailService;
+	}
 	
 	public static String uploadDirectory = System.getProperty("user.dir") + "/uploads";
 	
@@ -147,14 +138,6 @@ public class HomeController {
 	@GetMapping("/user")
 	@ResponseBody
 	public String user(Principal p) {
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		System.out.println(auth.getAuthorities()));
-//		System.out.println(auth.getPrincipal());
-//		MyUserDetails z=  (MyUserDetails) auth.getPrincipal();
-//		System.out.println(z);
-//		System.out.println(p.getClass());
-//		auth.getDetails();
-//		auth.getDetails()
 		return "Hi "+p.getName();
 		
 	}
@@ -170,46 +153,21 @@ public class HomeController {
 		return res;
 	}
 	
-//	@GetMapping("/register")
-//	public String register(ModelMap model) {
-//		model.addAttribute("user", new User());
-//		return "UserRegister";
-//	}
-	
-//	@GetMapping("/registerVendor")
-//	public String registerVendor(ModelMap model,Principal p) {
-//		User t=new User();
-//		model.addAttribute("user", t);
-//		return "UserRegister";
-////	}	
-//	@PostMapping("/register")
-//	public String userRegister(ModelMap model, User user) {
-//		user.setRole("ROLE_USER");
-//		userdao.save(user);
-////		userdao.save(user.getUsername(), user.getPassword(), user.getRole());
-//		user= userdao.findByUsername(user.getUsername());
-//		custdao.save(user.getUser_id(), 0);
-//		return "redirect:/";
-//	}
-	@PostMapping("/registerVendor")
-	public String vendorRegister(ModelMap model, User user) {
-		user.setRole("ROLE_VENDOR");
-		userdao.save(user.getUsername(), user.getPassword(), user.getRole());
-		return "redirect:/";
-	}
+
+
 	
 	
-	@GetMapping("/viewProduct/{category_id)}")
-	public String showProducts(@RequestParam("category_id") int category_id,ModelMap model) {
-		List<Product> p=productdao.showAllProducts(category_id);
+	@GetMapping("/viewProducts/{category_id}")
+	public String showProducts(@PathVariable("category_id") int category_id,ModelMap model) {
+		List<Product> p=productDao.showAllProducts(category_id);
 		model.addAttribute("prods",p);
 		return "showProducts";
 	}
 	@GetMapping("/showProduct")
 	public String showOneProduct(@RequestParam("product_id") int id,ModelMap model) {
-		Product p=productdao.getproductbyId(id);
+		Product p=productDao.getproductbyId(id);
 //		List<Image> images = imagedao.getAllImagesById(id);
-		List<Review> reviews = productdao.getReviewsByProductId(id);
+		List<Review> reviews = productDao.getReviewsByProductId(id);
 		model.addAttribute("prod",p);
 		model.addAttribute("images",p.getImage_path());
 		System.out.println(p.getImage_path());
@@ -219,7 +177,7 @@ public class HomeController {
 	
 	@GetMapping({"/showAllProducts"})
 	public String showAllProducts(ModelMap model) {
-		List<Product> p=productdao.showAllProducts();
+		List<Product> p=productDao.showAllProducts();
 		model.addAttribute("prods",p);
 		return "showProducts";
 	}
@@ -229,15 +187,15 @@ public class HomeController {
 	@GetMapping("/addToCart")
 	@ResponseBody
 	public Message addToCart(@RequestParam("product_id") int product_id,Principal p,@RequestParam("quantity") int quantity) {
-		int cart_id = custdao.getCartId(getCustomerId());
-		cartdao.save(cart_id, product_id, quantity);
+		int cart_id = custDao.getCartId(getCustomerId());
+		cartDao.save(cart_id, product_id, quantity);
 		return new Message(true,"Product Added");
 //		return "{'status':true,Product" + cart_id + "}";
 	}
 	
 	@GetMapping("/myCart")
 	public String showMyCart(ModelMap model) {
-		List<Product> prods = cartdao.getProducts(custdao.getCartId(getCustomerId()));
+		List<Product> prods = cartDao.getProducts(custDao.getCartId(getCustomerId()));
 		model.addAttribute("prods",prods);
 		double price=0;
 		for(Product p:prods) price+=p.getQuantity() * p.getPrice();
@@ -262,12 +220,12 @@ public class HomeController {
 	@GetMapping("/payment")
 	public String payment(ModelMap model,int address_id, Principal principal) {
 		 List<Product> err_products = new ArrayList<Product>();
-			List<Product> prods = cartdao.getProducts(custdao.getCartId(getCustomerId()));
+			List<Product> prods = cartDao.getProducts(custDao.getCartId(getCustomerId()));
 	        Double price = 0.0;
 	        for(Product p: prods) {
 	                    int product_id = p.getProduct_id();
 	                    int quantity = p.getQuantity();
-	                    Product currproduct = productdao.getproductbyId(product_id);
+	                    Product currproduct = productDao.getproductbyId(product_id);
 	                    int available = currproduct.getQuantity();
 	                    if (available < quantity) {
 	                        err_products.add(currproduct);
@@ -296,7 +254,7 @@ public class HomeController {
 	       o.setIs_gift(false);
 	       o.setStatus("Processing");
 	       o.setOrder_date(new Date());
-	       int order_id = ordersdao.save(o);
+	       int order_id = ordersDao.save(o);
 	       System.out.println(order_id);
 	       model.put("order_id", order_id);
 	       model.put("items", prods);
@@ -307,7 +265,7 @@ public class HomeController {
 	@GetMapping("/vieworders")
 	public String getAllOrders(ModelMap m) {
 		int cust_id = getCustomerId();
-		List<Orders> orders = ordersdao.getOrderByCustomer_id(cust_id);
+		List<Orders> orders = ordersDao.getOrderByCustomer_id(cust_id);
 		m.addAttribute("orders", orders);
 		return "myOrders";
 	}
@@ -315,19 +273,19 @@ public class HomeController {
 	@RequestMapping(value="/processpayment")
 	public String processPayment(ModelMap map,@RequestParam("payment_method") String payment_method, @RequestParam("order_id") int order_id) {
 		Transaction tr= new Transaction();
-		ordersdao.updateorder(order_id, "SUCCESS");
-		Orders o = ordersdao.getorderbyId(order_id);
+		ordersDao.updateorder(order_id, "SUCCESS");
+		Orders o = ordersDao.getorderbyId(order_id);
 		tr.setAmount(o.getAmount());
 		tr.setDate(o.getOrder_date());
 		tr.setPayment_method(payment_method);
 		tr.setOrder_id(o.getOrder_id());
-		int tr_id = transactiondao.save(o.getAmount(), o.getOrder_id(), o.getStatus(),payment_method);
-		ordersdao.updateorder(order_id, tr_id);
-		List<Product> prods = ordersdao.getItemsByOrderId(order_id);
+		int tr_id = transactionDao.save(o.getAmount(), o.getOrder_id(), o.getStatus(),payment_method);
+		ordersDao.updateorder(order_id, tr_id);
+		List<Product> prods = ordersDao.getItemsByOrderId(order_id);
 		for(Product p : prods) {
-			productdao.updateProductquantity(p.getProduct_id(), -p.getQuantity());
-			productdao.incrementPurchase(p.getProduct_id());
-			Product t = productdao.getproductbyId(p.getProduct_id());
+			productDao.updateProductquantity(p.getProduct_id(), -p.getQuantity());
+			productDao.incrementPurchase(p.getProduct_id());
+			Product t = productDao.getproductbyId(p.getProduct_id());
 			if(t.getQuantity()<5) {
 				try {
 					emailService.sendMailToVendor(userDao.findUserByUserId(p.getSupplier_id()), p);
@@ -350,7 +308,7 @@ public class HomeController {
 	}
 	@PostMapping("/rateOrder/{order_id}/{product_id}")
 	public String updateRatingPage(@PathVariable("order_id") int order_id,@PathVariable("product_id") int product_id,ModelMap model,int rating) {
-		ordersdao.updateRating(order_id, product_id, rating);
+		ordersDao.updateRating(order_id, product_id, rating);
 		return "redirect:/viewOrder/"+order_id;
 		
 	}
@@ -360,17 +318,17 @@ public class HomeController {
 	
 	@GetMapping("/viewOrder/{order_id}")
 	public String getOrder(@PathVariable("order_id") int order_id,ModelMap model) {
-		Orders o = ordersdao.getorderbyId(order_id);
+		Orders o = ordersDao.getorderbyId(order_id);
 		model.addAttribute("order",o);
 		return "viewOrders";
 	}
 	@GetMapping("/cancelOrder/{order_id}")
 	public String cancelOrder(@PathVariable("order_id") int order_id,ModelMap model) {
-		ordersdao.updateorder(order_id,"CANCELLED");
-		Orders o = ordersdao.getorderbyId(order_id);
-		List<Product> prods = ordersdao.getItemsByOrderId(order_id);
+		ordersDao.updateorder(order_id,"CANCELLED");
+		Orders o = ordersDao.getorderbyId(order_id);
+		List<Product> prods = ordersDao.getItemsByOrderId(order_id);
 		for(Product p:prods) {
-			productdao.updateProductquantity(p.getProduct_id(),p.getQuantity());
+			productDao.updateProductquantity(p.getProduct_id(),p.getQuantity());
 		}
 		model.addAttribute("order",o);
 		return "viewOrders";
@@ -384,7 +342,7 @@ public class HomeController {
 		r.setCustomer_id(getCustomerId());
 		r.setMessage(message);
 		r.setProduct_id(product_id);
-		productdao.saveReview(r);
+		productDao.saveReview(r);
 		return new Message(true,"Review Added");
     }
 	@PostMapping("/updateReview/{product_id}")
@@ -394,23 +352,10 @@ public class HomeController {
 		r.setCustomer_id(getCustomerId());
 		r.setMessage(message);
 		r.setProduct_id(product_id);
-		productdao.updateReview(r);
+		productDao.updateReview(r);
 		return "review updated";
     }
-	
-//	@PostMapping("/rateOrder/{order_id}/{product_id}")
-//	@ResponseBody
-//	public String rateProduct(@PathVariable("order_id") int order_id, @PathVariable("product_id") int product_id,int rating) {
-//		ordersdao.updateRating(order_id, product_id, rating);
-//		return "updated";
-//	}
-//	
-//	@PostMapping("/rateProduct")
-//	@ResponseBody
-//	public String rateProduct(@RequestParam("category_name")String category_name) {
-////		productdao.addCategory(category_name);
-//		return "Category Added";	
-//	}
+
 	@GetMapping("/getAllCategories")
 	@ResponseBody
 	public List<Category> getAllCategories() {
@@ -446,7 +391,7 @@ public class HomeController {
 	}
 	@GetMapping("/myProfile")
 	public String myAccountPage(ModelMap model) {
-		Customer c = custdao.getCustomerByCustomerId(getCustomerId());
+		Customer c = custDao.getCustomerByCustomerId(getCustomerId());
 		final MyUserDetails p =(MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		final User u= new User(p.getUsername(), p.getPassword(), p.getEmail(), p.getFirst_name(), p.getLast_name(), p.getUser_id());
 		c.setUser(u);
@@ -456,7 +401,7 @@ public class HomeController {
 	
 	@GetMapping("/editProfile")
 	public String editProfilePage(ModelMap model) {
-		Customer c = custdao.getCustomerByCustomerId(getCustomerId());
+		Customer c = custDao.getCustomerByCustomerId(getCustomerId());
 		final MyUserDetails p =(MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		final User u= new User(p.getUsername(), p.getPassword(), p.getEmail(), p.getFirst_name(), p.getLast_name(), p.getUser_id());
 		c.setUser(u);
@@ -472,7 +417,7 @@ public class HomeController {
 		System.out.println("asfdljasl;kdjf;lsajdfl;kjasd;lkfjsad");
 		 System.out.println(customer.getUser());
 		customer.setUser(new User( customer.getUser().getUsername(),  customer.getUser().getPassword(),  customer.getUser().getEmail(),  customer.getUser().getFirst_name(),  customer.getUser().getLast_name(), customer.getUser().getUser_id()));
-		custdao.update(customer);
+		custDao.update(customer);
 		final MyUserDetails p =(MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		p.setEmail(customer.getUser().getEmail());
 		p.setFirst_name(customer.getUser().getFirst_name());
@@ -483,7 +428,7 @@ public class HomeController {
 	
 	@GetMapping("/myPhoneNumbers")
 	public String myPhoneNumbersPage(ModelMap model) {
-		model.addAttribute("numbers", phonenumberdao.getAllPhoneNumbersByCustomerId(getCustomerId()));
+		model.addAttribute("numbers", phonenumberDao.getAllPhoneNumbersByCustomerId(getCustomerId()));
 		return "myPhoneNumbers";
 	}
 	
@@ -491,12 +436,12 @@ public class HomeController {
 	@ResponseBody
 	public Message getPhoneNumber(@RequestParam("phone_number") String phone_number) {
 		
-		phonenumberdao.addPhoneNumber(phone_number, getCustomerId());
+		phonenumberDao.addPhoneNumber(phone_number, getCustomerId());
 		return new Message(true,"Phone Number Added Successfully");
 	}
 	@GetMapping("/delete_number/{phone_number}")
 	public String deletePhoneNumber(@PathVariable String phone_number) {
-		phonenumberdao.deletePhoneNumber(getCustomerId(),phone_number);
+		phonenumberDao.deletePhoneNumber(getCustomerId(),phone_number);
 		return "redirect:/myPhoneNumbers";
 	}
 		
@@ -543,7 +488,7 @@ public class HomeController {
 	
 	@GetMapping("/filter/price")
 	public String filterByPrice(ModelMap model,@RequestParam("min_price")int min_price,@RequestParam("max_price") int max_price) {
-		List<Product> p=productdao.filterByPrice(min_price,max_price);
+		List<Product> p=productDao.filterByPrice(min_price,max_price);
 		model.addAttribute("prods",p);
 		return "showProducts";	
 	}
@@ -551,26 +496,9 @@ public class HomeController {
 	
 	@GetMapping("/filter/rating")
 	public String filterByRating(ModelMap model,@RequestParam("min_rating")int min_rating,@RequestParam("max_rating") int max_rating) {
-		List<Product> p=productdao.filterByRating(min_rating,max_rating);
+		List<Product> p=productDao.filterByRating(min_rating,max_rating);
 		model.addAttribute("prods",p);
 		return "showProducts";	
 	}
 	
-	
-	
-//	
-	
-//  	@PostMapping("/upload")
-//  	@ResponseBody
-//  	public Boolean UploadImageProduct(@RequestParam("file") MultipartFile file) {
-//  		return imagedao.save(file,request,1);
-//  	}
-//  	
-//  	@GetMapping("/getImageById")
-//  	@ResponseBody
-//  	public String getImageById(int product_id) {
-//  		return imagedao.getByProductId(product_id).getImage_path();
-//  	}
-//  	
-//	
 }

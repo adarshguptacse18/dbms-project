@@ -14,7 +14,7 @@ public class Product {
     private int purchased_cnt;
     public List<String> image_path = new ArrayList<>();
 	private boolean hide;
-	private int supplier_id;
+	private Integer supplier_id;
 	
 	public int getProduct_id() {
 		return product_id;
@@ -84,10 +84,10 @@ public class Product {
 	public void setHide(boolean hide) {
 		this.hide = hide;
 	}
-	public int getSupplier_id() {
+	public Integer getSupplier_id() {
 		return supplier_id;
 	}
-	public void setSupplier_id(int supplier_id) {
+	public void setSupplier_id(Integer supplier_id) {
 		this.supplier_id = supplier_id;
 	}
 	
