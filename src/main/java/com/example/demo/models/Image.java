@@ -1,7 +1,10 @@
 package com.example.demo.models;
 
+import javax.validation.constraints.NotNull;
+
 public class Image {
 	private int product_id;
+	@NotNull
 	private String image_path;
 	public int getProduct_id() {
 		return product_id;

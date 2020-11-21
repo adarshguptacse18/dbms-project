@@ -1,8 +1,11 @@
 package com.example.demo.models;
 
+import javax.validation.constraints.NotNull;
+
 public class Review {
 	private int product_id;
 	private int customer_id;
+	@NotNull
 	private String message;
 	private int rating;
 	public int getProduct_id() {

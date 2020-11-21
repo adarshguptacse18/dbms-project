@@ -26,7 +26,7 @@
               </div>
              
               <div class="form-group">
-                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Add Product</button><br><br>
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Add Category</button><br><br>
               </div>
             </form>
           </div>

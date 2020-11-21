@@ -2,10 +2,19 @@ package com.example.demo.models;
 
 import java.util.List;
 
+import javax.validation.constraints.Size;
+
 public class Category {
 	private int category_id;
+	
+	@Size(min  = 3,message="Enter atleast 3 characters")
 	private String category_name;
 	private List<Product> prods;
+	
+	
+	public Category() {
+		
+	}
 	public int getCategory_id() {
 		return category_id;
 	}

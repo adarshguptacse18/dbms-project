@@ -22,24 +22,30 @@
               <div class="form-group">
                 <form:label path="name">Product Name</form:label>
                 <form:input path="name" type="text" class="form-control" required="required"/>
+                <form:errors path="name" cssClass="text-warning"/>
+                
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>
               <div class="form-group">
                 <form:label path="description">Description</form:label>
-                <form:input path="description" type="text" class="form-control" required="required"/>      
+                <form:input path="description" type="text" class="form-control" required="required"/>
+                <form:errors path="description" cssClass="text-warning"/>
+                      
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>
               <div class="form-group">
                 <form:label path="price">Price</form:label>
-                <form:input path="price" type="number" class="form-control" required="required"/>	
+                <form:input path="price" type="number" class="form-control" required="required"/>
+                <form:errors path="price" cssClass="text-warning"/>
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>
                <div class="form-group">
              	  	<form:label path="category_id">Category</form:label>	
                	 	<form:label path="category_id">Category</form:label>
+	                <form:errors path="name" cssClass="text-warning"/>           	 	
                         <form:select path="category_id" id="category" class="form-control">
                         	<c:forEach items="${categories}" var="category">
                           		 <option value="${category.category_id}">${category.category_name}</option>

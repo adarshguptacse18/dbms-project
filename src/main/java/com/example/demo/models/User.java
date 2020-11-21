@@ -1,13 +1,23 @@
 package com.example.demo.models;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class User {
 	private int user_id;
+	
+	
+	@NotNull
+	@Size(min=3)
     private String username;
     private String password;
-    private String email;	
+	@NotNull
+    private String email;
+	@NotNull
     private String first_name;
     private boolean is_enabled;
     private String token;
+	@NotNull
 	private String last_name;
     private String role;
 

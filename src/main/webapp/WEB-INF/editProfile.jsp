@@ -22,30 +22,39 @@
               <div class="form-group">
                 <form:label path="user.first_name">First Name</form:label>
                 <form:input path="user.first_name" type="text" class="form-control" required="required"/>
+                <form:errors path="user.first_name" cssClass="text-warning"/>
+                
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>
               <div class="form-group">
                 <form:label path="user.last_name">Last Name</form:label>
                 <form:input path="user.last_name" type="text" class="form-control" required="required"/>
+                <form:errors path="user.last_name" cssClass="text-warning"/>
+                
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>
               <div class="form-group">
                 <form:label path="user.username">Username</form:label>
                 <form:input path="user.username" type="text" class="form-control" required="required"/>
+                <form:errors path="user.username" cssClass="text-warning"/>
+               
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>
               <div class="form-group">
                 <form:label path="user.email">Email</form:label>
                 <form:input path="user.email" type="text" class="form-control" required="required"/>
+                 <form:errors path="user.email" cssClass="text-warning"/>
+                
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>
                <div class="form-group">
                 <form:label path="GSTIN_NUMBER">GSTIN Number</form:label>
                 <form:input path="GSTIN_NUMBER" type="text" class="form-control" required="required"/>
+                <form:errors path="GSTIN_NUMBER" cssClass="text-warning"/>
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>
               </div>

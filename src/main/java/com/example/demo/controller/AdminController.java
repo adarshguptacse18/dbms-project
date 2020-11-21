@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -173,7 +175,10 @@ public class AdminController {
 	
 	
 	@PostMapping("/addProduct")
-	public String addProduct(ModelMap model, Product prod,MultipartFile file) {
+	public String addProduct(ModelMap model,@Valid @ModelAttribute("prod") Product prod,BindingResult result, MultipartFile file) {
+		if(result.hasErrors()) {
+			return "addProduct";
+		}
 		int product_id = productDao.save(prod.getName(), prod.getDescription(), prod.getPrice(), prod.getCategory_id());
 		imageDao.save(file, request, product_id);
 		return "redirect:/admin";
@@ -200,7 +205,12 @@ public class AdminController {
 		return "editCategory";
 	}
 	@PostMapping("/editCategory/{category_id}")
-	public String editCategory(ModelMap model, @PathVariable("category_id") int category_id,Category cat) {
+	public String editCategory(ModelMap model, @PathVariable("category_id") int category_id,@Valid @ModelAttribute("cat") Category cat, BindingResult result) {
+		if(result.hasErrors()) {
+			model.addAttribute(cat);
+			model.addAttribute(result);
+			return "editCategory";
+		}
 		categoryDao.updateCategoryName(category_id, cat.getCategory_name());
 		return "redirect:/admin/AllCategories";
 	}
@@ -271,9 +281,13 @@ public class AdminController {
 		return "editProfile";
 	}
 	@PostMapping("/editProfile/{customer_id}")
-	public String editProfile(ModelMap model, @PathVariable("customer_id") int customer_id,Customer customer) {
+	public String editProfile(ModelMap model, @PathVariable("customer_id") int customer_id,@Valid @ModelAttribute("customer") Customer customer,BindingResult result) {
+		System.out.println(result.getAllErrors());
+		if(result.hasErrors()) {
+			return "editProfile";
+		}
 		customer.setCustomer_id(customer_id);
-		System.out.println(customer.getUser());
+//		System.out.println(customer.getUser());
 		customerDao.update(customer);
 		return "redirect:/admin/allCustomers";
 	}
@@ -317,9 +331,15 @@ public class AdminController {
 
 	
 	@PostMapping("/viewAllAddresses/{customer_id}/addAddress")
-	public String addAddress(@PathVariable("customer_id") int customer_id,ModelMap model,String house_no,String street_no,String locality_and_city,String pincode,String state) {
+	public String addAddress(ModelMap model,@PathVariable("customer_id") int customer_id,String house_no,String street_no,String locality_and_city,String pincode,String state) {
+		try {
 		Address add= new Address(customer_id, house_no, street_no, locality_and_city, pincode, state);
 		addressDao.addAddress(add);
+		} catch (Exception e) {
+			model.addAttribute("error", "Please Fill All Values");
+			return "addAddress";
+			// TODO: handle exception
+		}
 		return "redirect:/admin";
 	}
 	

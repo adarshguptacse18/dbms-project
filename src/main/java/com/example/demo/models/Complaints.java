@@ -2,11 +2,18 @@ package com.example.demo.models;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 public class Complaints {
 	private int complaint_id;
 	private int user_id;
+	
+	@NotNull
 	private String email_id;
+	
+	@NotNull
 	private String message;
+
 	private Boolean is_resolved;
 	private Date date;
 	public int getUser_id() {

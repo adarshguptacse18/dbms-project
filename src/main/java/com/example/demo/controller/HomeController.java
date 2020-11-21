@@ -382,8 +382,13 @@ public class HomeController {
 	
 	@PostMapping("/addAddress")
 	public String addAddress(ModelMap model,String house_no,String street_no,String locality_and_city,String pincode,String state) {
-		Address add= new Address(getCustomerId(), house_no, street_no, locality_and_city, pincode, state);
-		addressDao.addAddress(add);
+		try {
+			Address add= new Address(getCustomerId(), house_no, street_no, locality_and_city, pincode, state);
+			addressDao.addAddress(add);
+		} catch (Exception e) {
+			model.addAttribute("error","Something Wrong happened");
+			return "addAddress";
+		}
 		return "redirect:/";
 	}
 	

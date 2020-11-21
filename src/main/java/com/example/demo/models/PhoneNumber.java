@@ -1,7 +1,11 @@
 package com.example.demo.models;
 
+import com.sun.istack.NotNull;
+
 public class PhoneNumber {
 	private int custommer_id;
+	
+	@NotNull
 	private String number;
 	public int getCustommer_id() {
 		return custommer_id;

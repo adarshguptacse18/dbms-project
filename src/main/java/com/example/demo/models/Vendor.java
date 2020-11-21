@@ -2,9 +2,13 @@ package com.example.demo.models;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 public class Vendor {
 	private int supplier_id;
+	@NotNull
 	private  String company_name;
+	@NotNull
 	private int pancard_no;
 	User user;
 	private List<String> numbers;

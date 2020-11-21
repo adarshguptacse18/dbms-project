@@ -3,13 +3,26 @@ package com.example.demo.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Product {
 	private int product_id;
+	
+	@NotNull
     private String name;
+	
+	@NotNull
+	@Size(min=5)
     private String description;
+	
+	@NotNull
     private int price;
+	
+	@NotNull
     private int category_id;
     private int quantity=0;
+    
     private Double rating;
     private int purchased_cnt;
     public List<String> image_path = new ArrayList<>();

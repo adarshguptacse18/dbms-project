@@ -3,12 +3,14 @@ package com.example.demo.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -127,7 +129,10 @@ public class VendorController {
 	
 	
 	@PostMapping("/addProduct")
-	public String addProduct(ModelMap model, Product prod,MultipartFile file) {
+	public String addProduct(ModelMap model, @Valid @ModelAttribute("prod")Product prod,BindingResult result,MultipartFile file) {
+		if(result.hasErrors()) {
+			return "addProduct";
+		}
 		int product_id = productDao.save(prod.getName(), prod.getDescription(), prod.getPrice(), prod.getCategory_id());
 		imageDao.save(file, request, product_id);
 		return "redirect:/admin";

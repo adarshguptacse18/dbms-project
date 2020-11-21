@@ -1,12 +1,19 @@
 package com.example.demo.models;
 
+import javax.validation.constraints.NotNull;
+
 public class Address {
 	private int customer_id;
 	private int address_id;
+	@NotNull
 	private String house_no;
+	@NotNull
 	private String street_no;
+	@NotNull
 	private String locality_and_city;
+	@NotNull
 	private String pincode;
+	@NotNull
 	private String state;
 	
 	public Address() {};

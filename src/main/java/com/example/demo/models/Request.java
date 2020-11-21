@@ -1,5 +1,7 @@
 package com.example.demo.models;
 
+import javax.validation.constraints.NotNull;
+
 public class Request {
 	@Override
 	public String toString() {
@@ -7,9 +9,15 @@ public class Request {
 				+ subject + ", message=" + message + "]";
 	}
 	private int request_id;
+	
+	@NotNull
 	private String email_id;
+	
+	@NotNull
 	private String name;
+	@NotNull
 	private String subject;
+	@NotNull
 	private String message;
 
 	public int getRequest_id() {

@@ -2,8 +2,11 @@ package com.example.demo.models;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 public class Customer {
 	private int customer_id;
+	@Valid
 	private User user;
 	private int GSTIN_NUMBER;
 	private int cart_id;
