@@ -17,10 +17,10 @@
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
         <div class="card card-signin my-5">
           <div class="card-body">
-            <h5 class="card-title text-center"><b>Add Product</b></h5>
+            <h5 class="card-title text-center"><b>Edit Category</b></h5>
             <form:form action="" class="form-signin" method="POST" modelAttribute="cat" enctype = "multipart/form-data">
               <div class="form-group">
-                <form:label path="category_name">Product Name</form:label>
+                <form:label path="category_name">Category Name</form:label>
                 <form:input path="category_name" type="text" class="form-control" required="required"/>
                 <div class="valid-feedback">Valid.</div>
                 <div class="invalid-feedback">Please fill out this field.</div>

@@ -29,6 +29,7 @@
       </ol>
       <!-- Right -->
       <ul class="navbar-nav ml-auto">
+        <c:if test="${not empty role }">      
         <li class="nav-item">
           <a href="/myCart" class="nav-link navbar-link-2 waves-effect">
             <i class="fas fa-shopping-cart pl-0"></i>
@@ -48,6 +49,8 @@
             
           </div>
         </li>
+        </c:if>
+        
         
         <li class="nav-item">
           <a href="/contactUs" class="nav-link waves-effect">

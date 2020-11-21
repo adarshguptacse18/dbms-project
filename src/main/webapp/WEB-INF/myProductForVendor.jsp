@@ -24,7 +24,7 @@
 						<th>Quantity</th>
 						<th>Price</th>
 						<th></th>
-						<th></th>
+						<c:if test="${role=='ROLE_VENDOR' }"><th></th></c:if>
 					</tr>
 				</thead>
 				<tbody>
@@ -35,9 +35,11 @@
 							<td>${prod.description}</td>
 							<td>${prod.quantity}	
 							<td>${prod.price}</td>
+							<c:if test="${role=='ROLE_VENDOR' }">
 							<td><span onclick="deleteFromSupplies(${prod.product_id})"  class="btn btn-warning"> 
 								I don't deliver it.
-							</span></td> 		
+							</span></td> 	
+							</c:if>	
 							<td><a href="/vendor/viewProduct/${prod.product_id}" type="button" class="btn btn-warning">View</a></td>							 		
 						</tr>
 					</c:forEach>

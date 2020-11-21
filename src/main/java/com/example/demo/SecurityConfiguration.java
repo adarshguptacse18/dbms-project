@@ -28,10 +28,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable();
 
 		http.authorizeRequests()
-			.antMatchers("/","/webjars/**","/static/**","viewProducts**","/vendor/register","/login","/register","/showProduct**","/showAllProducts","/categories","/filter**","/contactUs","/submitRequest").permitAll()
+			.antMatchers("/","/webjars/**","/static/**","viewProducts**","/vendor/register","/login","/register","/showProduct**","/showAllProducts","/categories","/filter**","/contactUs","/submitRequest","/forget_password**").permitAll()
 			.antMatchers("/admin","/admin/**").hasRole("ADMIN")
 			.antMatchers("/user","/addToCart","/addPhoneNumber","/addComplaints","/viewComplaints").hasAnyRole("ADMIN","USER","VENDOR")
-			.antMatchers("/vendor","/vendor/**").hasAnyRole("VENDOR")
+			.antMatchers("/vendor","/vendor/**").hasAnyRole("VENDOR","ADMIN")
 			.antMatchers("/**").hasAnyRole("USER")
 			.and()
 			.formLogin()

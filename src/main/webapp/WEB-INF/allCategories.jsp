@@ -9,19 +9,12 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-	<c:if test =  "${role=='ROLE_ADMIN' }">
-	<jsp:include page="adminNavBar.jsp" />
-	</c:if>
-	<c:if test =  "${role=='ROLE_VENDOR' }">
-	<jsp:include page="vendorNavBar.jsp" />
-	</c:if>
-	<c:if test =  "${role!='ROLE_VENDOR' and role!='ROLE_ADMIN' }">
-	<jsp:include page="navbar.jsp" />
-	</c:if>
+<jsp:include page="finalNavBar.jsp" />
+
 
  <body> 
 		<div class="container">
-			 <h3>Hey Admin</h3>
+		<jsp:include page="finalGreeting.jsp"/>
 		 	<table  class="table table-striped  table-hover">
 				<thead>
 					<tr>

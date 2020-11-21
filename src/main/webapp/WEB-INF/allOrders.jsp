@@ -29,7 +29,7 @@
 							<td>${order.order_date}</td>
 							<td>${order.amount}</td>	
 							<td>${order.status}</td>
-							<td><a href="/admin/user/${order.customer_id}">${order.customer_id}</a></td>
+							<td><a href="/admin/editProfile/${order.customer_id}">${order.customer_id}</a></td>
 							<td><a href="/admin/viewOrder/${order.order_id}" type="button" class="btn btn-warning">View Details</span></td> 		
 						</tr>
 					</c:forEach>
