@@ -4,14 +4,8 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-	<jsp:include page="finalNavBar.jsp" />
+<jsp:include page="header.jsp" />
+
 
 	<div class="container">
 	    <div class="row">
@@ -62,9 +56,4 @@
 
 	</div>
 
-	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-		
-</body>
-</html>
+	<jsp:include page="footer.jsp" />

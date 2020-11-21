@@ -1,18 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<jsp:include page="header.jsp" />
 
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<jsp:include page="finalNavBar.jsp" />
-
-
- <body> 
 		<div class="container">
 		<jsp:include page="finalGreeting.jsp"/>
 		 	<table  class="table table-striped  table-hover">
@@ -42,8 +32,4 @@
 		<script>
 		
 	</script>
-	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-</body>
-</html>
+<jsp:include page="footer.jsp" />

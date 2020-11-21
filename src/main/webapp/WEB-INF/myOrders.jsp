@@ -2,15 +2,8 @@
     pageEncoding="UTF-8"%>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
     
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
+<jsp:include page="header.jsp" />
 
-	<jsp:include page="finalNavBar.jsp" />
 	
 	 <h3>My Orders</h3>
 		<div class="container">
@@ -65,5 +58,4 @@
 			}
 			
 	</script>
-</body>
-</html>
+<jsp:include page="footer.jsp" />
