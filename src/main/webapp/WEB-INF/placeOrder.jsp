@@ -2,11 +2,18 @@
     pageEncoding="UTF-8"%>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
     
-<jsp:include page="header.jsp" />
-
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+		<jsp:include page="finalNavBar.jsp" />
 	
-	 <h3>Choose The Address</h3>
 		<div class="container">
+			 <h3><strong>Choose The Address</strong></h3>
+		
            <div class="quiz" id="quiz" data-toggle="buttons">
 		 	
 				<c:forEach items="${addresses}" var="addr">
@@ -14,12 +21,14 @@
 				</c:forEach>
 	       </div>
 					
-				
+		<a class="btn btn-secondary" href="/addAddress">Add Address</a>
+			
 		</div>	
-		<a href="/addAddress">Add Address</a>
 		
 	
-	
+	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 		<script>
 		$(function(){
 		    var loading = $('#loadbar').hide();
@@ -53,4 +62,5 @@
 
 			
 	</script>
-<jsp:include page="footer.jsp" />
+</body>
+</html>

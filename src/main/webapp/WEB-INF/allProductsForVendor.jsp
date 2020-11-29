@@ -40,7 +40,9 @@
 				</tbody>
 			</table>
 				
-		</div>	
+		</div>
+			
+	
 		<script>
 		function myFunction(b){
 			document.getElementById('hideProduct').hidden=!b;
@@ -58,7 +60,12 @@
 	
 			         })
 			  .done(function(data) {
-			  		console.log(data);					 
+				  if(data["status"]==true)
+		  			createAlert("Product Addded To My Products","Product Added",null,"success",true,true,"pageMessages");
+				  else 	
+			  			createAlert("Already Added",data["message"],null,"warning",true,true,"pageMessages");
+				  
+					  
 			  }); 
 			}
 			

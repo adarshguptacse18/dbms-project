@@ -107,24 +107,31 @@ public class ProductDao {
 	            }
 	        });
 	    }
-	 
-	 public List<Product> showAllProducts(int category) {
-	        String sql ="select P.product_id, P.name, P.category_id, P.supplier_id as supplier_id ,P.description, P.price , P.quantity as quantity ,max(image_path)as image_path from product as P left join images on P.product_id = images.product_id where P.category_id = "+category+" group by P.product_id";
-	        return jt.query(sql, new RowMapper<Product>() {
-
-	            public Product mapRow(ResultSet row, int rowNum) throws SQLException {
-	            	  Product u = new Product();
-		            	 u.setProduct_id(row.getInt("product_id"));
-		                 u.setName(row.getString("name"));
-		                 u.setCategory_id(row.getInt("category_id"));
-		                 u.setDescription(row.getString("description"));
-		                 u.setPrice(row.getInt("price"));
-		                 u.setQuantity(row.getInt("quantity"));
-		                 u.setSupplier_id(row.getInt("supplier_id"));
-		                 u.image_path.add(row.getString("image_path"));
-		                 return u;
-	            }
-	        });
+	 public List<Product> showAllProducts(int category){
+		 return showAllProducts(category,false);
+	 }
+	 public List<Product> showAllProducts(int category,Boolean all) {
+		 
+	        String sql ="select P.hide as hide, P.product_id as product_id,P.supplier_id as supplier_id, name, quantity, category_id, description, price ,max(image_path) as image_path from product as P left join images on P.product_id = images.product_id where P.category_id = "+category+" group by P.product_id";
+	        if(all==false) {
+	        	sql = "select P.product_id, P.name, P.category_id, P.supplier_id as supplier_id ,P.description, P.price , P.quantity as quantity ,max(image_path)as image_path from product as P left join images on P.product_id = images.product_id where P.category_id = "+category+" and hide=false  and P.quantity > 0 group by P.product_id";
+	        }
+	        return jt.query(sql, new BeanPropertyRowMapper<>(Product.class));
+//	        return jt.query(sql, new RowMapper<Product>() {
+//
+//	            public Product mapRow(ResultSet row, int rowNum) throws SQLException {
+//	            	  Product u = new Product();
+//		            	 u.setProduct_id(row.getInt("product_id"));
+//		                 u.setName(row.getString("name"));
+//		                 u.setCategory_id(row.getInt("category_id"));
+//		                 u.setDescription(row.getString("description"));
+//		                 u.setPrice(row.getInt("price"));
+//		                 u.setQuantity(row.getInt("quantity"));
+//		                 u.setSupplier_id(row.getInt("supplier_id"));
+//		                 u.image_path.add(row.getString("image_path"));
+//		                 return u;
+//	            }
+//	        });
 	    }
 	public void updateproduct(int id, String name, int price, int quantity, int category_id) {
         String sql = "update product set name=?,price=?,quantity=?,category_id=? where product_id=?";

@@ -10,8 +10,9 @@
 	    Product Removed From Cart!!
 	  </div>
 	</div>
-	 <h3>MyCart</h3>
 		<div class="container">
+			 <h3>MyCart</h3>
+		
 		 	<table  class="table">
 				<thead>
 					<tr>
@@ -29,13 +30,13 @@
 							<td>${prod.description}</td>	
 							<td><input type="number" class="form-control" id="prod_${prod.product_id}" placeholder="190" name="password" value = ${prod.quantity} disabled></td>														
 							<td>${prod.price}</td>
-							<td><span onclick="deleteFromCart(${prod.product_id})" type="button" class="btn btn-warning">Delete	</span></td> 		
+							<td><span onclick="deleteFromCart(${prod.product_id}, ${prod.price * prod.quantity })" type="button" class="btn btn-warning">Delete	</span></td> 		
 						</tr>
 					</c:forEach>
 					
 				</tbody>
 			</table>
-			<p> Total amount : <strong>${price}</strong></p>
+			<p > Total amount : <strong id="finalPrice">${price}</strong></p>
 			<a  class="btn btn-dark" href="/placeOrder">Place Order</a>		
 		</div>	
 		
@@ -43,9 +44,9 @@
 	
 	
 		<script>
-		function deleteFromCart(id){
+		function deleteFromCart(id,price){
 			var quantity= document.getElementById('prod_'+id).value;
-			
+			console.log(price);
 			 $.ajax({
 			    url: '/addToCart',
 			    type: 'GET',
@@ -59,6 +60,10 @@
 			  .done(function(data) {
 			  		console.log(data);
 			  }); 
+			  var oldp = parseFloat(document.getElementById("finalPrice").innerHTML);
+			  var newp = oldp-parseFloat(price);
+			  document.getElementById("finalPrice").innerHTML=newp;
+			  console.log(oldp);
 			 $('.toast').toast('show');
 			 document.getElementById('prod_row_'+id).hidden=true;				 
 			}

@@ -145,6 +145,18 @@ public class VendorDao {
 		  int user_id = holder.getKey().intValue();
 		  return user_id;
 	}
+
+	public List<Vendor> getActiveVendorByProductId(int product_id) {
+		String sql = "select * from user as U INNER JOIN vendor V on U.user_id = V.supplier_id where U.user_id in (select V.supplier_id from vendor as V INNER JOIN supplies as S on V.supplier_id=S.supplier_id where S.product_id=?)";
+		return jt.query(sql,new Object[] {product_id},new RowMapper<Vendor>() {
+			public Vendor mapRow(ResultSet row,int rowNum) throws SQLException{
+				Vendor c = (new BeanPropertyRowMapper<>(Vendor.class)).mapRow(row, rowNum);
+				User u = (new BeanPropertyRowMapper<>(User.class)).mapRow(row, rowNum);
+				c.setUser(u);
+				return c;
+			};
+		});
+	}
 	
 	
 }

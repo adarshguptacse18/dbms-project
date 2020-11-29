@@ -30,6 +30,7 @@ import com.example.demo.models.Category;
 import com.example.demo.models.Message;
 import com.example.demo.models.MyUserDetails;
 import com.example.demo.models.Product;
+import com.example.demo.models.Review;
 import com.example.demo.models.User;
 import com.example.demo.models.Vendor;
 
@@ -143,6 +144,8 @@ public class VendorController {
 	public String viewProduct(ModelMap model, @PathVariable("product_id") int product_id) {
 		Product p = productDao.getproductbyId(product_id);
 		System.out.println(p.getImage_path());
+		List<Review> reviews = productDao.getReviewsByProductId(product_id);
+		model.addAttribute("reviews", reviews);
 		model.addAttribute("prod", p);
 		return "viewProduct";
 	}
@@ -162,8 +165,14 @@ public class VendorController {
 	@PostMapping("/supply")
 	@ResponseBody
 	public Message addToSupply(@RequestParam("product_id") int product_id) {
+		try {
 		vendorDao.addToSupplied(product_id, getSupplierId());
 		return new Message(true,"added to the supplied");
+
+		}catch (Exception e) {
+			
+		}
+		return new Message(false,"You are already selling this product");
 	}
 	
 	

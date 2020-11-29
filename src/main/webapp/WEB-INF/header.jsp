@@ -8,10 +8,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title> Benvanhi Handicraft</title>
+<link rel="stylesheet" type="text/css" href="/static/css/style.css">
 </head>
  <body> 
 <jsp:include page="finalNavBar.jsp" />
+<jsp:include page="alert.jsp"/>	
 
 		
-<jsp:include page="footer.jsp" />

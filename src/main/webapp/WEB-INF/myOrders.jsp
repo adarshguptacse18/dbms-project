@@ -5,8 +5,9 @@
 <jsp:include page="header.jsp" />
 
 	
-	 <h3>My Orders</h3>
 		<div class="container">
+			 <h3><strong>My Orders</strong></h3>
+			<br>
 		 	<table  class="table">
 				<thead>
 					<tr>

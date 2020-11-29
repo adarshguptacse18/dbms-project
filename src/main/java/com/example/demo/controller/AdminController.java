@@ -114,7 +114,7 @@ public class AdminController {
 	
 	@GetMapping("/viewProducts/{category_id}")
 	public String viewProductByCategory(@PathVariable("category_id") int category_id,ModelMap model) {
-		List<Product> p=productDao.showAllProducts(category_id);
+		List<Product> p=productDao.showAllProducts(category_id,true);
 		model.addAttribute("prods",p);
 		return "AllProducts";
 	}
@@ -130,7 +130,7 @@ public class AdminController {
 	
 	@GetMapping("/chooseVendor/{product_id}")
 	public String chooseVendorPage(ModelMap model,@PathVariable("product_id") int product_id) {
-		model.addAttribute("vendors",vendorDao.getActiveVendors());
+		model.addAttribute("vendors",vendorDao.getActiveVendorByProductId(product_id));
 		return "chooseVendor";
 	}
 	@GetMapping("/chooseVendor/{product_id}/{supplier_id}")

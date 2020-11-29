@@ -170,7 +170,6 @@ public class HomeController {
 	@GetMapping("/showProduct")
 	public String showOneProduct(@RequestParam("product_id") int id,ModelMap model) {
 		Product p=productDao.getproductbyId(id);
-//		List<Image> images = imagedao.getAllImagesById(id);
 		List<Review> reviews = productDao.getReviewsByProductId(id);
 		model.addAttribute("prod",p);
 		model.addAttribute("images",p.getImage_path());
@@ -180,7 +179,10 @@ public class HomeController {
 	}
 	
 	@GetMapping({"/showAllProducts"})
-	public String showAllProducts(ModelMap model) {
+	public String showAllProducts(ModelMap model,String NoItemInCart) {
+		if(NoItemInCart!=null) {
+			model.addAttribute("error", "Add Some Item in Cart before Placing Order");
+		}
 		List<Product> p=productDao.showAllProducts();
 		model.addAttribute("prods",p);
 		return "showProducts";
@@ -226,6 +228,7 @@ public class HomeController {
 		 List<Product> err_products = new ArrayList<Product>();
 			List<Product> prods = cartDao.getProducts(custDao.getCartId(getCustomerId()));
 	        Double price = 0.0;
+	       
 	        for(Product p: prods) {
 	                    int product_id = p.getProduct_id();
 	                    int quantity = p.getQuantity();
@@ -242,7 +245,7 @@ public class HomeController {
 	            return "errorOrder";
 	        }
 	        if(prods.size()==0) {
-	        	return "redirect:/";
+	        	return "redirect:/showAllProducts?NoItemInCart";
 	        }
 	      
 	       Orders o = new Orders();
@@ -328,8 +331,16 @@ public class HomeController {
 	}
 	@GetMapping("/cancelOrder/{order_id}")
 	public String cancelOrder(@PathVariable("order_id") int order_id,ModelMap model) {
+		Boolean isAlreadySuccess=ordersDao.getSuccessStatus(order_id);
+		
 		ordersDao.updateorder(order_id,"CANCELLED");
 		Orders o = ordersDao.getorderbyId(order_id);
+		
+
+		if(isAlreadySuccess==false) {
+			model.addAttribute("order",o);
+			return "viewOrders";
+		}
 		List<Product> prods = ordersDao.getItemsByOrderId(order_id);
 		for(Product p:prods) {
 			productDao.updateProductquantity(p.getProduct_id(),p.getQuantity());

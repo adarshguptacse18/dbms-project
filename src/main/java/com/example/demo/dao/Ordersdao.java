@@ -153,4 +153,16 @@ public class Ordersdao {
     	
     }
 
+	public Boolean getSuccessStatus(int order_id) {
+		
+	
+		String status = jt.queryForObject("select status from orders where order_id= "+ order_id,new RowMapper<String>() {
+			public String mapRow(ResultSet row,int rowNum) throws SQLException{
+				return row.getString("status");
+			}
+		});
+		if(status.equals("SUCCESS")) return true;
+		return false;
+	}
+
 }

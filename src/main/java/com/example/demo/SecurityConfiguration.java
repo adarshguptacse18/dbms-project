@@ -28,11 +28,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable();
 
 		http.authorizeRequests()
-			.antMatchers("/","/webjars/**","/static/**","viewProducts**","/vendor/register","/login","/register","/showProduct**","/showAllProducts","/categories","/filter**","/contactUs","/submitRequest","/forget_password**").permitAll()
+			.antMatchers("/","/webjars/**","/static/**","viewProducts**","/vendor/register**","/login**","/register**","/showProduct**","/showAllProducts**","/categories","/filter**","/contactUs","/submitRequest","/forget_password**","/verify-email","/reset-password**","/vendor/register**","/verify-email","/viewProducts/**","/filter/**").permitAll()
 			.antMatchers("/admin","/admin/**").hasRole("ADMIN")
 			.antMatchers("/user","/addToCart","/addPhoneNumber","/addComplaints","/viewComplaints").hasAnyRole("ADMIN","USER","VENDOR")
 			.antMatchers("/vendor","/vendor/**").hasAnyRole("VENDOR","ADMIN")
-			.antMatchers("/**").hasAnyRole("USER")
+			.antMatchers("/**").hasAnyRole("USER","VENDOR","ADMIN")
 			.and()
 			.formLogin()
 			.loginPage("/login").defaultSuccessUrl("/", true);

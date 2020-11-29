@@ -6,14 +6,18 @@
     
     
 <jsp:include page="header.jsp" />
-	
-	
+
 	<div class="toast">
 	  <div class="toast-header">
 	    Product Added to the Cart
 	  </div>
 	</div>
 	<div class="container">
+	<c:if test="${not empty error }">
+			 <div class="alert alert-danger" role="alert">
+			 	${error}
+			</div>
+		 </c:if>
 		<h3><strong>All Products</strong></h3>
 	
 		<div class="row">
@@ -52,6 +56,20 @@
 		<script>
 		function addToCart(id){
 			var quantity= document.getElementById('prod_'+id).value;
+			
+			try{
+				var q = parseInt(quantity);
+				if(q<=0){
+		  			createAlert("Error","Quantity Must be greater than 0",null,"warning",true,true,"pageMessages");	
+		  			return;
+				}
+				
+			} catch(err){
+	  			createAlert("Error","Something Unexpected occurred",null,"danger",true,true,"pageMessages");
+	  			return;	
+			}
+
+			
 			 $.ajax({
 			    url: '/addToCart',
 			    type: 'GET',
@@ -63,10 +81,29 @@
 	
 			         })
 			  .done(function(data) {
-			  		console.log(data);
-			  }); 
-		  	  $('.toast').toast('show');
-		  		document.getEelmentById('prod_'+id).value = 1; 
+				  console.log(data);
+			  		if(data['status']==true){
+			  			createAlert("Product Addded","Product Added to the cart",null,"success",true,true,"pageMessages");	
+				  	}
+			  		else{
+			  			createAlert("Product Can't be added","Please login to continue",null,"danger",true,true,"pageMessages");	
+				  		
+				  	}
+			  		
+			  })
+			  .fail(function(data) {
+				  console.log(data);
+			  		if(data['status']==true){
+			  			createAlert("Product Addded","Product Added to the cart",null,"success",true,true,"pageMessages");	
+				  	}
+			  		else{
+			  			createAlert("Product Can't be added","Please login to continue",null,"danger",true,true,"pageMessages");	
+				  		
+				  	}
+			  		
+			  });
+			 
+		  		document.getElementById('prod_'+id).value = 1; 
 				
 			}
 			
